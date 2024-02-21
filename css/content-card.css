@@ -1,0 +1,200 @@
+#content-cards-container{
+    background-color: #413D42;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    width:100vw;
+    gap:5vw;
+    padding:5vw;
+    height:fit-content;
+}
+
+.content-card{
+    background-color: white;
+    width:23vw;
+    height:60vh;
+    border-radius: 20px;
+    display: grid;
+    grid-template-rows: 3fr 1fr 1fr 2fr;
+    padding:2vw;
+    gap:2vh;
+}
+
+.property-img{
+    border-radius: 20px;
+    width:23vw;
+    height:25vh;
+    background-image: url("../img/property.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    position: relative;
+}
+
+.next-arrow, .prev-arrow{
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width:2vw;
+    height:2vh;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px;
+    cursor: pointer;
+}
+
+.next-arrow{
+    background-image: url("../img/right.png");
+    right: 10px;
+}
+
+.prev-arrow{
+    background-image: url("../img/left.png");
+    left: 10px;
+}
+
+.property-details{
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    width:23vw;
+    height:25vh;
+    font-size: 1.2rem;
+    gap:1vh;
+}
+
+.property-price{
+    font-weight: bold;
+    font-size: 1.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.property-name{
+    font-size: 1.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #0CC0DF;
+}
+
+.property-name:hover{
+    cursor: pointer;
+    color: #413D42;
+}
+
+.property-location{
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.property-details > div{
+    display: grid;
+    grid-template-columns: 1fr 2fr 3fr;
+    gap:1px;
+}
+
+.bed-icon, .bath-icon, .car-icon, .size-icon{
+    width:30px;
+    height:30px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+
+}
+
+.bed-icon{
+    background-image: url("../img/BedIcon.png");
+}
+
+.size-icon{
+    background-image: url("../img/squareFeetIcon.png");
+}
+
+.bath-icon{
+    background-image: url("../img/BathIcon.png");
+}
+
+.car-icon{
+    background-image: url("../img/CarIcon.png");
+}
+
+@media (max-width: 1700px)
+{
+    .bed-icon, .bath-icon, .car-icon, .size-icon{
+        width:25px;
+        height:25px;
+    }
+
+    .property-location{
+        font-size: 1rem;
+    }
+
+    .property-price{
+        font-size: 1.2rem;
+    }
+
+    .property-name{
+        font-size: 1.2rem;
+    }
+
+    .property-details{
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 1300px)
+{
+    .property-location{
+        font-size: 1rem;
+    }
+
+    .property-price{
+        font-size: 1.2rem;
+    }
+
+    .property-name{
+        font-size: 1.2rem;
+        color: orangered;
+    }
+
+    .property-details{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        width:23vw;
+        height:25vh;
+        font-size: 1rem;
+        gap:1vh;
+    }
+
+    .detail-name{
+        display: none;
+    }
+
+    .detail-value{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width:50px;
+        height:25px;
+    }
+
+    .content-card{
+        width:30vw;
+        height:50vh;
+        gap:2vh;
+        min-width: 300px;
+        min-height: 200px;
+    }
+
+    .property-img{
+        width:30vw;
+        min-width: 300px;
+        height:25vh;
+        min-height: 100px;
+    }
+}
