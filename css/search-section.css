@@ -5,6 +5,8 @@
     gap:3vw;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 #search-container > input[type=search]

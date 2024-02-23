@@ -10,5 +10,7 @@ footer{
 
 #content{
   background-color: white;
+  max-width: 100vw;
+  overflow: hidden;
 }
 
