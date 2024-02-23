@@ -1,0 +1,115 @@
+*{
+    margin: 0;
+    padding:0;
+    font-family: "Montserrat", sans-serif;
+}
+
+/*Header CSS*/
+header{
+    background-color: #413D42;
+    width:100vw;
+    height:fit-content;
+    min-height: 3em;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+}
+
+#logo{
+    background-image: url("../img/ApertureEstatesLogo.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height:10vh;
+    width:6vw;
+    min-height: 3vh;
+    min-width: 3vw;
+    margin-left: 3vw;
+}
+
+#nav{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: repeat(5,1fr);
+    font-size: 1.4rem;
+    color: white;
+    grid-column-gap: 1vw;
+}
+
+#nav > div > a{
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    position: relative; /* needed for pseudo-element positioning */
+    transition: color 0.3s; /* smooth transition for text color */
+    padding:14px;
+}
+
+#nav > div > a::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    box-shadow: 0 0 10px white; /* white glowing effect */
+    opacity: 0; /* start with no glow */
+    transition: opacity 0.3s; /* smooth transition glow */
+}
+
+#nav > div > a:hover::before {
+    opacity: 1; /* show the glow on hover */
+}
+
+#nav > div > a:hover{
+    color:#0CC0DF;
+}
+
+@media (max-width: 1300px)
+{
+    #nav{
+        font-size: 1.2rem;
+        width:80vw;
+    }
+    #logo{
+        height:12vh;
+        width:8vw;
+    }
+
+    header{
+        height:14vh;
+    }
+}
+
+@media (max-width: 800px)
+{
+    #nav{
+        font-size: 1rem;
+        width:80vw;
+    }
+    #logo{
+        height:12vh;
+        width:9vw;
+    }
+
+    header{
+        height:16vh;
+    }
+}
+
+@media (max-width: 550px)
+{
+    #nav{
+        font-size: 0.6rem;
+        width:70vw;
+    }
+    #logo{
+        height:12vh;
+        width:9vw;
+    }
+
+    header{
+        height:16vh;
+    }
+}

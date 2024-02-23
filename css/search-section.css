@@ -1,0 +1,50 @@
+
+#search-container{
+    width:100vw;
+    height:30vh;
+    display: flex;
+    gap:3vw;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+#search-container > input[type=search]
+{
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    background-color: #413D42;
+    font-size: 1.2rem;
+    width:25vw;
+    height:2.5rem;
+    padding:5px;
+    color:white;
+}
+
+#search-container > button{
+    border-radius: 20px;
+    border: none;
+    font-size: 1.2rem;
+    color:white;
+    height:2.5rem;
+    width:5vw;
+    cursor: pointer;
+}
+
+#search-container > #rent-search-btn{
+   background-color: darkorange;
+}
+
+#search-container > #buy-search-btn{
+    background-color: #0CC0DF;
+}
+
+#search-container > #buy-search-btn:hover{
+    background-color: #413D42;
+}
+
+#search-container > #rent-search-btn:hover {
+    background-color: #413D42;
+}

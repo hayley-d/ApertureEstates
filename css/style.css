@@ -1,0 +1,16 @@
+
+section{
+  width: 100vw;
+  height:100vh;
+}
+
+footer{
+  background-color: #413D42;
+}
+
+#content{
+  background-color: white;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
