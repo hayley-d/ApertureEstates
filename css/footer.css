@@ -10,7 +10,7 @@ footer{
     background-color: white;
 }
 
-#footer-logo{
+#footer-logo-container{
     grid-column: span 2;
     display: flex;
     justify-content: center;
@@ -118,3 +118,22 @@ hr{
 #footer-about > div > a:hover{
     color: #0CC0DF;
 }
+
+#footer-logo{
+    background-image: url("../img/ApertureEstatesLogo.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height:10vh;
+    width:6vw;
+    min-height: 3vh;
+    min-width: 3vw;
+    margin-left: 3vw;
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1440px) {
+    #footer-slogan{
+        font-size: 20px;
+    }
+}
+
