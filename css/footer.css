@@ -63,7 +63,7 @@ hr{
 }
 
 #instagram{
-    background-image: url("../img/SocialMedia/instagram-white.svg");
+    background-image: url("../img/SocialMedia/grey-instagram.png");
     background-position: center;
     background-size: contain;
     width:30px;
@@ -79,15 +79,15 @@ hr{
 }
 
 #facebook{
-    background-image: url("../img/SocialMedia/facebook-white.svg");
+    background-image: url("../img/SocialMedia/grey-facebook.png");
     background-position: center;
     background-size: contain;
     width:30px;
     height:30px;
 }
 
-#youtube{
-    background-image: url("../img/SocialMedia/youtube-white.svg");
+#x{
+    background-image: url("../img/SocialMedia/grey-x.png");
     background-position: center;
     background-size: contain;
     width:30px;
@@ -104,9 +104,9 @@ hr{
     background-image: url("../img/SocialMedia/facebook-blue.svg");
 }
 
-#youtube:hover{
+#x:hover{
     cursor: pointer;
-    background-image: url("../img/SocialMedia/youtube-blue.svg");
+    background-image: url("../img/SocialMedia/blue-x.png");
 }
 
 #footer-about > div > a{

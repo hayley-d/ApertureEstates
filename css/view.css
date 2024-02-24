@@ -1,0 +1,306 @@
+section{
+    background-color: #413D42;
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    height: fit-content;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.top-container{
+    display: grid;
+    grid-template-columns: 4fr 1fr 2fr;
+    gap:10px;
+    padding:30px;
+    width: 90vw;
+    overflow: hidden;
+}
+
+.agent-card{
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap:30px;
+    align-items: center;
+    height:45vh;
+    width:15vw;
+    padding:20px;
+}
+
+#house-image{
+    background-image: url("../img/Mock/2.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width:60vw;
+    height:45vh;
+    border-radius: 20px;
+    padding:20px;
+    display: flex;
+    position: relative;
+}
+
+#button{
+    width:60px;
+    height: 60px;
+    border-radius: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#heart{
+    background-image: url("../img/Heart/black-filled-heart.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width:40px;
+    height:40px;
+    cursor: pointer;
+}
+
+#heart:hover{
+    background-image: url("../img/Heart/red-heart.png");
+}
+
+#like-btn{
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height:45vh;
+    padding:20px;
+}
+
+#agent-logo{
+    background-image: url("../img/Mock/agent4.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width:80%;
+    height:25vh;
+    border-radius: 100%;
+}
+
+#agent-name{
+    font-size: 30px;
+    color: #413D42;
+    font-weight: normal;
+}
+
+#agent-contact > a > button{
+    border-radius: 20px;
+    border:none;
+    background-color: darkorange;
+    color: white;
+    font-size: 20px;
+    padding:10px;
+    cursor: pointer;
+}
+#agent-contact > a > button:hover{
+    background-color: #413D42;
+}
+
+
+.next-arrow, .prev-arrow{
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width:2vw;
+    height:2vh;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px;
+    cursor: pointer;
+}
+
+.next-arrow{
+    background-image: url("../img/right.png");
+    right: 10px;
+}
+
+.prev-arrow{
+    background-image: url("../img/left.png");
+    left: 10px;
+}
+
+.bottom-container{
+    display: flex;
+    flex-direction: column;
+    width:90vw;
+    height:100vh;
+
+    align-items: center;
+
+}
+.property-view-card{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap:30px;
+    width: 90%;
+    border-radius: 20px;
+    padding:30px;
+}
+
+.description{
+    width:80%;
+    font-size: 18px;
+}
+
+.Listing-name{
+    color: #0CC0DF;
+    font-size: 25px;
+}
+
+.listing-price{
+    color: #413D42;
+    font-size: 30px;
+}
+
+.location{
+    color: #413D42;
+    font-size: 25px;
+}
+
+.property-info-container{
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap:20px;
+}
+
+.property-info-container > div{
+   display: flex;
+    gap:10px;
+}
+
+.property-info-value{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#features-heading > h4{
+    font-size: 20px;
+    color: #413D42;
+    margin-bottom: 30px;
+}
+
+.features-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width:50%;
+    gap:40px;
+}
+
+.features-grid > div{
+    display: flex;
+    gap:10px;
+}
+
+.location-icon{
+    background-image: url("../img/icons/location-blue.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+}
+
+.feature{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    color: #413D42;
+}
+
+#bed-icon{
+    background-image: url("../img/icons/black-bed.png");
+}
+
+#bath-icon{
+    background-image: url("../img/icons/black-bath.png");
+}
+
+#size-icon{
+    background-image: url("../img/icons/black-area.png");
+}
+
+#car-icon{
+    background-image: url("../img/icons/black-car.png");
+}
+
+#pet-icon{
+    background-image: url("../img/icons/black-paw.png");
+}
+
+#bed-icon, #bath-icon, #size-icon, #car-icon, #pet-icon{
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+}
+
+@media (max-width: 1350px) {
+    #agent-logo{
+        width:150px;
+        height:150px;
+    }
+
+    #agent-name{
+        font-size: 20px;
+    }
+
+    #agent-contact > a > button{
+        font-size: 15px;
+    }
+
+    #button{
+        width:55px;
+        height: 55px;
+    }
+
+    #heart{
+        width:40px;
+        height:40px;
+        cursor: pointer;
+    }
+
+
+}
+
+@media (max-width: 900px) {
+    #agent-logo{
+        width:100px;
+        height:130px;
+        border-radius: 20px;
+    }
+
+    #agent-name{
+        font-size: 20px;
+    }
+
+    #agent-contact > a > button{
+        font-size: 15px;
+    }
+
+    #button{
+        width:55px;
+        height: 55px;
+    }
+
+    #heart{
+        width:40px;
+        height:40px;
+        cursor: pointer;
+    }
+
+    .agent-card{
+        min-width: 100px;
+    }
+}

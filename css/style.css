@@ -4,6 +4,11 @@ section{
   height:100vh;
 }
 
+a{
+  text-decoration: inherit;
+  color: #0CC0DF;
+}
+
 footer{
   background-color: #413D42;
 }
