@@ -7,10 +7,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aperture Listings</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/calculator.css">
   <link rel="stylesheet" href="css/header.css">
-  <link rel="stylesheet" href="css/search-section.css">
-  <link rel="stylesheet" href="css/content-card.css">
+
   <link rel="stylesheet" href="css/footer.css">
   <meta name="description" content="">
   <link rel="icon" href="./img/companion-cube.svg" sizes="any">
@@ -25,6 +24,52 @@
   <div id = "nav"><div><a href = "./Listings.html">Listings</a></div> <div><a  href = "./Agents.html">Agents</a></div> <div><a href = "./Calculators.html" style="color: #0CC0DF">Calculators</a></div> <div><a href = "./Favourites.html">Favourites</a></div></div>
 </header>
 
+<section id = "header">
+<h1>Calculators</h1>
+</section>
+
+<section>
+  <form id = "mortgage-payment-form">
+    <div class = "form-heading"><h2>Monthly Mortgage Payment</h2></div>
+    <div class = "form-label"><label for="loanAmount">Loan Amount:</label></div>
+    <div class = "form-input"><input type="number" id="loanAmount" name="loanAmount" required><br><br></div>
+
+    <div class = "form-label"><label for="interestRate">Interest Rate:</label></div>
+    <div class = "form-input"><input type="number" id="interestRate" name="interestRate" required><br><br></div>
+
+    <div class = "form-label"><label for="loanTerm">Loan Term:</label></div>
+    <div class = "form-input"><input type="number" id="loanTerm" name="loanTerm" required><br><br></div>
+
+    <div class = "form-label"><label for="downPayment">Down Payment:</label></div>
+    <div class = "form-input"><input type="number" id="downPayment" name="downPayment" required><br><br></div>
+
+    <div class = "submit-btn"><button type = "submit">Calculate</button></div>
+  </form>
+
+  <div id = "monthly-mortgage-container">
+    <div class = "form-heading"><h2>Monthly Mortgage Payment</h2></div>
+    <div class = "result-container"><p id = "mortgage-result">R 123 000</p></div>
+  </div>
+<br/>
+  <hr/>
+  <br/>
+  <form id = "property-tax-form">
+    <div class = "form-heading"><h2>Property Taxes</h2></div>
+
+    <div class = "form-label"><label for="homeValue">Assessed Home Value:</label></div>
+    <div class = "form-input"><input type="number" id="homeValue" name="homeValue" required><br><br></div>
+
+    <div class = "form-label"><label for="taxRate">Local Tax Rate:</label></div>
+    <div class = "form-input"><input type="number" id="taxRate" name="taxRate" required><br><br></div>
+
+    <div class = "submit-btn"><button type = "submit">Calculate</button></div>
+  </form>
+
+  <div id = "property-tax-container">
+    <div class = "form-heading"><h2>Property Taxes</h2></div>
+    <div class = "result-container"><p id = "tax-result">R 123 000</p></div>
+  </div>
+</section>
 
 <footer>
   <div id = "footer-logo">
