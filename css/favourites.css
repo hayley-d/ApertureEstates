@@ -1,0 +1,46 @@
+#header{
+    background-image: url("../img/search-background.png");
+    width:100vw;
+    height:20vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    flex-direction: column;
+    gap:20px;
+}
+
+h3{
+    color: #0CC0DF;
+}
+
+section{
+    background-color: #413D42;
+}
+
+
+.content-card{
+    background-color: #0CC0DF;
+    width:70vw;
+    height:30vh;
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    padding:2vw;
+    gap:2vh;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+a{
+    color: white;
+}
+
+.fav-btn{
+    background-image: url("../img/Heart/red-heart.png");
+}
+
+.fav-btn:hover{
+    background-image: url("../img/Heart/black-filled-heart.png");
+}
+
