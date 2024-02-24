@@ -1,0 +1,89 @@
+#agents-container{
+    width:100vw;
+    display: grid;
+    grid-template-rows: repeat(10,1fr);
+    padding:20px;
+    background-color: #413D42;
+    gap:80px;
+    height:fit-content;
+}
+
+.agent-card-container{
+    display: flex;
+    width:100%;
+    justify-content: center;
+}
+
+.agent-card{
+    background-color: white;
+    border-radius: 20px;
+    width:70vw;
+    height:25vh;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 3fr 1fr;
+}
+
+.agent-contact{
+    grid-column: span 2;
+    background-color: #0CC0DF;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    width:70vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.agent-contact > div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.agent-email > button{
+    border-radius: 20px;
+    border: none;
+    background-color: darkorange;
+    color: white;
+    font-size: 20px;
+    padding:10px;
+}
+
+.agent-email > button:hover{
+    cursor: pointer;
+    background-color: #413D42;
+}
+
+.agent-info{
+    padding:10px;
+    display: flex;
+    flex-direction: column;
+    gap:18px;
+    font-size: 20px;
+}
+
+.agent-heading{
+    color: #0CC0DF;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.agent-logo-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:10px;
+}
+
+.agent-logo{
+    background-image: url("../img/Mock/agent1.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width:150px;
+    height:150px;
+    border-radius: 100%;
+}
