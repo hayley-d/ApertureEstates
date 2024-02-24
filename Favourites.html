@@ -9,8 +9,8 @@
   <title>Aperture Listings</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/header.css">
-  <link rel="stylesheet" href="css/search-section.css">
   <link rel="stylesheet" href="css/content-card.css">
+  <link rel="stylesheet" href="css/favourites.css">
   <link rel="stylesheet" href="css/footer.css">
   <meta name="description" content="">
   <link rel="icon" href="./img/companion-cube.svg" sizes="any">
@@ -22,9 +22,365 @@
 <body>
 <header>
   <div id = "logo"></div>
-  <div id = "nav"><div><a href = "./Listings.html">Listings</a></div> <div><a href = "./Agents.html">Agents</a></div>  <div><a href = "./Calculators.html">Calculators</a></div> <div><a style="color: #0CC0DF" href = "./Favourites.html">Favourites</a></div></div>
+  <div id = "nav">
+    <div><a href = "./Listings.html">Listings</a></div>
+    <div><a href = "./Agents.html">Agents</a></div>
+    <div><a href = "./Calculators.html">Calculators</a></div>
+    <div><a style="color: #0CC0DF" href = "./Favourites.html">Favourites</a></div>
+    <div class = "user-profile-container">
+      <div class = "user-profile-img"></div>
+      <div class = "username"><p>Hayley</p></div>
+    </div>
+  </div>
 </header>
+<section id = "header">
+<h1>My List</h1>
+  <h3>View saved properties</h3>
+</section>
+<section id = "listings-container">
+  <!--Mock data done-->
+  <div class = "content-card-container">
+    <div class = "content-card">
 
+      <div class = "property-img" style="background-image: url('./img/Mock/2.png');">
+        <div class = "prev-arrow"></div>
+        <div class = "next-arrow"></div>
+      </div>
+      <div class = "property-info-container">
+        <div class = "property-heading">
+          <div class = "property-name"><a href = "./View.html">Companion Cube Cottage</a></div>
+          <div class = "fav-btn-container">
+            <div class = "fav-btn"></div>
+          </div>
+        </div>
+        <div class="property-location">Cape Town</div>
+        <div class="property-price"><p>$300 000 000</p></div>
+
+        <div class = "property-details">
+          <div><div class = "bed-icon"></div><div class = "detail-value">1</div></div>
+          <div><div class = "bath-icon"></div><div class = "detail-value">2</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+        </div>
+        <div class = "property-desc">
+          <p>
+            Step into Companion Cube Cottage and feel the warmth and comfort of home. Our cozy cottages are designed to make
+            you feel like you're living inside a giant, cuddly cube.
+            Don't worry, our cubes won't talk back, but they will provide a sense of companionship unlike any other.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--Mock data done-->
+  <div class = "content-card-container">
+    <div class = "content-card">
+
+      <div class = "property-img" style="background-image: url('./img/Mock/1.png')">
+        <div class = "prev-arrow"></div>
+        <div class = "next-arrow"></div>
+      </div>
+      <div class = "property-info-container">
+        <div class = "property-heading">
+          <div class = "property-name"><a href = "./View.html">Wheatley Way</a></div>
+          <div class = "fav-btn-container">
+            <div class = "fav-btn"></div>
+          </div>
+        </div>
+        <div class="property-location">Durban</div>
+        <div class="property-price"><p>$100 000 000</p></div>
+
+        <div class = "property-details">
+          <div><div class = "bed-icon"></div><div class = "detail-value">12</div></div>
+          <div><div class = "bath-icon"></div><div class = "detail-value">12</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+        </div>
+        <div class = "property-desc">
+          <p>
+            Wheatley Way is the perfect blend of modern design and old-world charm.
+            Our homes feature state-of-the-art technology, including Aperture Science's latest innovation: the Aperture
+            Science Expansion Cube. With Wheatley Way, you'll always have room to think...and live.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--mOCK DATA done-->
+  <div class = "content-card-container">
+    <div class = "content-card" style="background-color: darkorange">
+
+      <div class = "property-img" style="background-image: url('./img/Mock/3.png')">
+        <div class = "prev-arrow"></div>
+        <div class = "next-arrow"></div>
+      </div>
+      <div class = "property-info-container">
+        <div class = "property-heading">
+          <div class = "property-name"><a href = "./View.html">Test Chamber Terrace</a></div>
+          <div class = "fav-btn-container">
+            <div class = "fav-btn"></div>
+          </div>
+        </div>
+        <div class="property-location">Benoni</div>
+        <div class="property-price"><p>$500 000 000</p></div>
+
+        <div class = "property-details">
+          <div><div class = "bed-icon"></div><div class = "detail-value">3</div></div>
+          <div><div class = "bath-icon"></div><div class = "detail-value">3</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value">1000 m²</div></div>
+        </div>
+        <div class = "property-desc">
+          <p>
+            Test Chamber Terrace offers breathtaking views and luxurious living spaces.
+            Each terrace is equipped with our patented Aperture Science portal technology,
+            allowing you to step out of your living room and into a world of endless possibilities.
+            Welcome home, test subject.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--Mock data Complete-->
+  <div class = "content-card-container">
+    <div class = "content-card">
+
+      <div class = "property-img" style="background-image: url('./img/Mock/4.png')">
+        <div class = "prev-arrow"></div>
+        <div class = "next-arrow"></div>
+      </div>
+      <div class = "property-info-container">
+        <div class = "property-heading">
+          <div class = "property-name"><a href = "./View.html">GLaDOS Gatehouse</a></div>
+          <div class = "fav-btn-container">
+            <div class = "fav-btn"></div>
+          </div>
+        </div>
+        <div class="property-location">Randburg</div>
+        <div class="property-price"><p>$100 000 000</p></div>
+
+        <div class = "property-details">
+          <div><div class = "bed-icon"></div><div class = "detail-value">5</div></div>
+          <div><div class = "bath-icon"></div><div class = "detail-value">6</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value">70002 m²</div></div>
+        </div>
+        <div class = "property-desc">
+          <p>
+            Welcome to GLaDOS Gatehouse, where luxury meets technology. Our gated community is equipped with the latest
+            in Aperture Science security measures, ensuring that only the most discerning residents can gain entry.
+            Experience the future of living, supervised by GLaDOS herself.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--Done mock data-->
+  <div class = "content-card-container">
+    <div class = "content-card">
+
+      <div class = "property-img" style="background-image: url('./img/Mock/5.png')">
+        <div class = "prev-arrow"></div>
+        <div class = "next-arrow"></div>
+      </div>
+      <div class = "property-info-container">
+        <div class = "property-heading">
+          <div class = "property-name"><a href = "./View.html">Aperture Arcadia</a></div>
+          <div class = "fav-btn-container">
+            <div class = "fav-btn"></div>
+          </div>
+        </div>
+        <div class="property-location">Gauteng</div>
+        <div class="property-price"><p>$100 000 000</p></div>
+
+        <div class = "property-details">
+          <div><div class = "bed-icon"></div><div class = "detail-value">12</div></div>
+          <div><div class = "bath-icon"></div><div class = "detail-value">12</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+        </div>
+        <div class = "property-desc">
+          <p>
+            Welcome to Aperture Arcadia, where our homes defy the laws of physics and expand to
+            accommodate all your needs. Each room is equipped with our patented Aperture Science expansion technology,
+            ensuring that there's always room for more cake.
+          </p></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--mock data done-->
+  <div class = "content-card-container">
+    <div class = "content-card" style="background-color: darkorange">
+
+      <div class = "property-img" style="background-image: url('./img/Mock/6.png')">
+        <div class = "prev-arrow"></div>
+        <div class = "next-arrow"></div>
+      </div>
+      <div class = "property-info-container">
+        <div class = "property-heading">
+          <div class = "property-name"><a href = "./View.html">Chell's Chalet</a></div>
+          <div class = "fav-btn-container">
+            <div class = "fav-btn"></div>
+          </div>
+        </div>
+        <div class="property-location">Paarl</div>
+        <div class="property-price"><p>$900 000 000</p></div>
+
+        <div class = "property-details">
+          <div><div class = "bed-icon"></div><div class = "detail-value">12</div></div>
+          <div><div class = "bath-icon"></div><div class = "detail-value">12</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value">12 000 m²</div></div>
+        </div>
+        <div class = "property-desc"><p> Chell's Chalet offers the perfect mountain retreat. Our chalets are equipped
+          with all the comforts of home, including cozy fireplaces, spacious living areas, and stunning
+          views of the surrounding mountains. And don't worry, our elevators are completely safe...we promise.</p></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--mock data done-->
+  <div class = "content-card-container">
+    <div class = "content-card">
+
+      <div class = "property-img" style="background-image: url('./img/Mock/7.png')">
+        <div class = "prev-arrow"></div>
+        <div class = "next-arrow"></div>
+      </div>
+      <div class = "property-info-container">
+        <div class = "property-heading">
+          <div class = "property-name"><a href = "./View.html">The Enrichment Estate</a></div>
+          <div class = "fav-btn-container">
+            <div class = "fav-btn"></div>
+          </div>
+        </div>
+        <div class="property-location">Sandton</div>
+        <div class="property-price"><p>$100 000 000</p></div>
+
+        <div class = "property-details">
+          <div><div class = "bed-icon"></div><div class = "detail-value">2</div></div>
+          <div><div class = "bath-icon"></div><div class = "detail-value">2</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+        </div>
+        <div class = "property-desc">
+          <p>
+            The Enrichment Estate offers a life of luxury and adventure. Our homes are equipped with state-of-the-art Aperture Science enrichment suites,
+            where you can test your skills and your wits in a variety of challenging and rewarding environments. Are you ready to enrich your life?
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--Mock data done-->
+  <div class = "content-card-container">
+    <div class = "content-card" style="background-color: darkorange">
+
+      <div class = "property-img" style="background-image: url('./img/Mock/8.png')">
+        <div class = "prev-arrow"></div>
+        <div class = "next-arrow"></div>
+      </div>
+      <div class = "property-info-container">
+        <div class = "property-heading">
+          <div class = "property-name"><a href = "./View.html">Black Mesa Bungalow</a></div>
+          <div class = "fav-btn-container">
+            <div class = "fav-btn"></div>
+          </div>
+        </div>
+        <div class="property-location">Pretoria</div>
+        <div class="property-price"><p>$400 000 000</p></div>
+
+        <div class = "property-details">
+          <div><div class = "bed-icon"></div><div class = "detail-value">12</div></div>
+          <div><div class = "bath-icon"></div><div class = "detail-value">12</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+        </div>
+        <div class = "property-desc">
+          <p>
+            Black Mesa Bungalow offers a unique blend of comfort and scientific intrigue. Our homes are equipped with
+            Black Mesa's cutting-edge technology, ensuring that every day is an experiment in luxury living.
+            Experience life at the forefront of scientific discovery.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!--Mock data done-->
+  <div class = "content-card-container">
+    <div class = "content-card">
+
+      <div class = "property-img" style="background-image: url('./img/Mock/9.png')">
+        <div class = "prev-arrow"></div>
+        <div class = "next-arrow"></div>
+      </div>
+      <div class = "property-info-container">
+        <div class = "property-heading">
+          <div class = "property-name"><a href = "./View.html">Lambda Loft</a></div>
+          <div class = "fav-btn-container">
+            <div class = "fav-btn"></div>
+          </div>
+        </div>
+        <div class="property-location">London, United Kingdom</div>
+        <div class="property-price"><p>$100 000 000</p></div>
+
+        <div class = "property-details">
+          <div><div class = "bed-icon"></div><div class = "detail-value">5</div></div>
+          <div><div class = "bath-icon"></div><div class = "detail-value">6</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value">16752 m²</div></div>
+        </div>
+        <div class = "property-desc">
+          <p>
+            Lambda Loft is where science meets style. Our lofts are inspired by the groundbreaking research at the Lambda Complex,
+            with sleek design and state-of-the-art amenities. Live like a scientist, with all the comforts of home...and a few surprises from the test chamber
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class = "content-card-container">
+    <div class = "content-card">
+
+      <div class = "property-img">
+        <div class = "prev-arrow"></div>
+        <div class = "next-arrow"></div>
+      </div>
+      <div class = "property-info-container">
+        <div class = "property-heading">
+          <div class = "property-name"><a href = "./View.html">Combine Condos</a></div>
+          <div class = "fav-btn-container">
+            <div class = "fav-btn"></div>
+          </div>
+        </div>
+        <div class="property-location">Bryanston</div>
+        <div class="property-price"><p>$600 000 000</p></div>
+
+        <div class = "property-details">
+          <div><div class = "bed-icon"></div><div class = "detail-value">1</div></div>
+          <div><div class = "bath-icon"></div><div class = "detail-value">1</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+        </div>
+        <div class = "property-desc">
+          <p>
+            Combine Condos offer a glimpse into a dystopian future. Our condos are inspired by the architecture of the Combine,
+            with sleek lines and industrial accents. Live in the shadow of the Citadel, and experience life under the rule of the Combine.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
 
 <footer>
   <div id = "footer-logo">
