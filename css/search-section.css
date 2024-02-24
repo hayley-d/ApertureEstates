@@ -1,7 +1,7 @@
 
 #search-container{
     width:100vw;
-    height:30vh;
+    height:20vh;
     display: flex;
     gap:3vw;
     justify-content: center;
@@ -17,34 +17,177 @@
     outline: none;
     background-color: #413D42;
     font-size: 1.2rem;
-    width:25vw;
+    width:35vw;
     height:2.5rem;
     padding:5px;
     color:white;
 }
 
-#search-container > button{
+#minBedrooms, #maxBedrooms, #minBathrooms, #maxBathrooms, #maxPrice, #minPrice
+{
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    width:100px;
+    font-size: 18px;
+}
+
+#search-container > .button-container > button{
     border-radius: 20px;
     border: none;
     font-size: 1.2rem;
     color:white;
     height:2.5rem;
-    width:5vw;
+    width:100px;
     cursor: pointer;
 }
 
-#search-container > #rent-search-btn{
+#search-container > .button-container > #rent-search-btn{
    background-color: darkorange;
 }
 
-#search-container > #buy-search-btn{
+#search-container > .button-container > #buy-search-btn{
     background-color: #0CC0DF;
 }
 
-#search-container > #buy-search-btn:hover{
+#search-container > .button-container > #buy-search-btn:hover{
     background-color: #413D42;
 }
 
-#search-container > #rent-search-btn:hover {
+#search-container > .button-container > #rent-search-btn:hover {
     background-color: #413D42;
+}
+
+.button-container{
+    display: flex;
+    gap:3vw;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 1100px)
+{
+    #search-container{
+        width:100vw;
+        height:30vh;
+        flex-direction: column;
+    }
+}
+
+#sort-fliter-continer{
+    display: flex;
+    gap:20px;
+    justify-content: center;
+}
+
+#sort, #bedroom, #bathroom, #price{
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width:30px;
+    height:30px;
+}
+
+#sort{
+    background-image: url("../img/icons/sort.png");
+}
+
+#bedroom{
+    background-image: url("../img/icons/grey-bed.png");
+}
+
+#bathroom{
+    background-image: url("../img/icons/grey-bath.png");
+}
+
+#price{
+    background-image: url("../img/icons/price.png");
+}
+
+/*Sort dropdown button*/
+.dropbtn{
+    background-color: silver;
+    color: #413D42;
+    padding:10px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    width:160px;
+    display: flex;
+    gap:10px;
+    justify-content: center;
+    align-items: center;
+}
+
+/*Style dropdown Content*/
+.dropdown-content{
+    border-radius: 20px;
+    display: none;
+    position: absolute;
+    background-color: silver;
+    min-width: 160px;
+    max-width: 160px;
+    z-index: 1;
+}
+
+/*Style dropdown links*/
+.dropdown-content a{
+    color: #413D42;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/*show dropdown on hover*/
+.dropdown:hover .dropdown-content{
+    display: block;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.dropdown:hover .dropbtn{
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.bedroom-dropdown > .dropdown-content, .bathroom-dropdown > .dropdown-content , .price-dropdown > .dropdown-content{
+    flex-direction: column;
+    gap:5px;
+    justify-content: center;
+    align-items: center;
+    padding-bottom:3px;
+
+}
+
+.bedroom-dropdown:hover .dropdown-content , .bathroom-dropdown:hover .dropdown-content,.price-dropdown:hover .dropdown-content{
+    display: flex;
+
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.bedroom-dropdown:hover .dropbtn , .bathroom-dropdown:hover .dropbtn ,.price-dropdown:hover .dropbtn{
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.dropdown-content a:hover{
+    background-color: grey;
+    cursor: pointer;
+}
+
+.dropdown:hover .dropbtn{
+    background-color: #0CC0DF;
 }
