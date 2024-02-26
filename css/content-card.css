@@ -5,7 +5,6 @@
     grid-template-rows: repeat(10,1fr);
     width:100vw;
     gap:5vh;
-
     height:fit-content;
     overflow: hidden;
     max-width: 100%;
@@ -23,32 +22,35 @@
 .content-card{
     background-color: white;
     width:70vw;
-    height:30vh;
+    height:fit-content;
     border-radius: 20px;
     display: grid;
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: 1fr 3fr;
     padding:2vw;
     gap:2vh;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-height: 200px;
+    overflow: hidden;
 }
 
 .property-img{
     border-radius: 20px;
     width:25vw;
-    height:30vh;
+    height:100%;
     background-image: url("../img/property.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     display: flex;
     position: relative;
+    min-height: 200px;
 }
 
 .property-info-container{
     display: grid;
-    grid-template-rows: repeat(5,1fr) ;
-    height:30vh;
-
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    height:fit-content;
+    gap:5px;
 }
 
 .next-arrow, .prev-arrow{
@@ -84,6 +86,7 @@
     margin-top:30px;
     margin-bottom: 30px;
 
+    margin:0;
 }
 
 .property-price{
@@ -94,10 +97,12 @@
     align-items: center;
     margin-top:20px;
     margin-bottom:10px;
+
+    margin:0;
 }
 
 .property-name{
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -190,145 +195,55 @@
 }
 
 .property-desc{
+    display: flex;
     color: black;
     width:100%;
-    height:40px;
+    height:fit-content;
+    grid-column: 1 / -1; /* Span across all columns */
 }
 
-@media (max-width: 1700px)
-{
-    .bed-icon, .bath-icon, .car-icon, .size-icon{
-        width:25px;
-        height:25px;
-    }
-
-    .property-location{
-        font-size: 1rem;
-    }
-
-    .property-price{
-        font-size: 1.2rem;
-    }
-
-    .property-name{
-        font-size: 1.2rem;
-    }
-
-    .property-details{
-        font-size: 1rem;
-    }
+.property-desc > p{
+    height:fit-content;
 }
 
-/*@media (max-width: 1500px) {
-    .property-location {
-        font-size: 1rem;
-    }
-
-    .property-price {
-        font-size: 1.2rem;
-    }
-
-    .property-name {
-        font-size: 1.2rem;
-        color: orangered;
-    }
-
-    .property-details {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        width: 23vw;
-        height: 25vh;
-        font-size: 1rem;
-        gap: 1vh;
-    }
-
-    .detail-name {
-        display: none;
-    }
-
-    .detail-value {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 50px;
-        height: 25px;
-    }
-
-    .content-card {
-        width: 70vw;
-        height: 50vh;
-        gap: 2vh;
-        min-width: 300px;
-        min-height: 200px;
-    }
-
-    .property-img {
-        width: 30vw;
-        min-width: 300px;
-        height: 25vh;
-        min-height: 100px;
-    }
-}*/
-
-@media only screen and (min-width: 1024px) and (max-width: 1840px) {
+@media (min-width: 1500px)  {
     .content-card{
-        width:80vw;
-        height:40vh;
-        padding-bottom:30px;
-    }
-
-    .property-img{
-        width:25vw;
-        height:100%;
+        width:70vw;
+        height:30vh;
+        min-height: 200px;
+        overflow: hidden;
     }
 
     .property-info-container{
         display: grid;
-        grid-template-rows: repeat(5,1fr) ;
-        height:20vh;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+        height:30vh;
+        gap:5px;
     }
 
-    .property-details{
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        width:90%;
-        height:30px;
-        font-size: 1.2rem;
-        gap:20px;
-    }
 
-    .detail-value{
-        height:30px;
-        text-align: left;
-        width: fit-content;
-    }
 }
-
-@media (max-width: 1200px) {
+@media (max-width: 1500px)  {
     .content-card{
-        width:80vw;
-        height:40vh;
-        padding-bottom:30px;
-        min-width: 400px;
+        width:70vw;
+        height:30vh;
+        min-height: 200px;
+        overflow: hidden;
     }
+
+    .property-info-container{
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+        height:30vh;
+        gap:5px;
+    }
+
     .property-desc{
         display: none;
-    }
-
-    .property-img{
-        width:25vw;
-        height:100%;
-    }
-
-    .detail-value{
-        height:30px;
-        text-align: left;
-        width: 100px;
-    }
-
-    .property-details{
+        color: black;
         width:100%;
-        height:30px;
+        height:fit-content;
+        grid-column: 1 / -1; /* Span across all columns */
     }
 }
 

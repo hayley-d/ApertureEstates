@@ -44,17 +44,5 @@ a{
     background-image: url("../img/Heart/black-filled-heart.png");
 }
 
-@media only screen and (min-width: 1024px) and (max-width: 1440px) {
-    .content-card{
-        background-color: #0CC0DF;
-        width:80vw;
-        height:300px;
-        border-radius: 20px;
-        display: grid;
-        grid-template-columns: 2fr 3fr;
-        padding:2vw;
-        gap:2vh;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-}
+
 

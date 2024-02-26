@@ -15,7 +15,7 @@ footer{
 
 #content{
   background-color: white;
-  max-width: 98%;
+  width: 100%;
   overflow: hidden;
   background-image: url("../img/search-background.png");
   background-size: cover;
@@ -31,6 +31,7 @@ footer{
   flex-direction: column;
   gap:10px;
   align-items: center;
+
 }
 
 #house{
@@ -53,7 +54,6 @@ h4{
 
 @media only screen and (min-width: 1024px) and (max-width: 1440px) {
   #content{
-    max-width: 95vw;
     height:fit-content;
     padding:20px;
   }
