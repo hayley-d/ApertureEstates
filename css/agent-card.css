@@ -1,5 +1,9 @@
+body{
+    overflow-x: hidden;
+}
+
 #agents-container{
-    width:100vw;
+    width:98%;
     display: grid;
     grid-template-rows: repeat(10,1fr);
     padding:20px;
@@ -12,6 +16,7 @@
     display: flex;
     width:100%;
     justify-content: center;
+    height:fit-content;
 }
 
 .agent-card{
@@ -22,6 +27,7 @@
     display: grid;
     grid-template-columns: 3fr 1fr;
     grid-template-rows: 3fr 1fr;
+    height:fit-content;
 }
 
 .agent-contact{
@@ -86,4 +92,21 @@
     width:150px;
     height:150px;
     border-radius: 100%;
+}
+
+@media  (max-width: 1440px) {
+    .agent-card{
+        width:70vw;
+        height:fit-content;
+
+    }
+    #agents-container{
+        width:100%;
+        display: grid;
+        grid-template-rows: repeat(10,1fr);
+        background-color: #413D42;
+        gap:80px;
+        height:fit-content;
+    }
+
 }

@@ -163,8 +163,8 @@
     gap:5px;
     justify-content: center;
     align-items: center;
-    padding-bottom:3px;
-
+    padding-bottom:10px;
+    padding-top:10px;
 }
 
 .bedroom-dropdown:hover .dropdown-content , .bathroom-dropdown:hover .dropdown-content,.price-dropdown:hover .dropdown-content{
@@ -189,5 +189,17 @@
 }
 
 .dropdown:hover .dropbtn{
+    background-color: #0CC0DF;
+}
+
+.bedroom-dropdown:hover .dropbtn{
+    background-color: #0CC0DF;
+}
+
+.bathroom-dropdown:hover .dropbtn{
+    background-color: #0CC0DF;
+}
+
+.price-dropdown:hover .dropbtn{
     background-color: #0CC0DF;
 }

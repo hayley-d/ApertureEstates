@@ -15,12 +15,13 @@ footer{
 
 #content{
   background-color: white;
-  max-width: 100vw;
+  width: 100%;
   overflow: hidden;
   background-image: url("../img/search-background.png");
   background-size: cover;
   background-repeat: no-repeat;
-  height:80vh;
+  height:fit-content;
+  padding:20px;
 }
 
 #greeting-container{
@@ -30,6 +31,7 @@ footer{
   flex-direction: column;
   gap:10px;
   align-items: center;
+
 }
 
 #house{
@@ -48,6 +50,21 @@ h1{
 h4{
   font-size: 20px;
   color: #0CC0DF;
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1440px) {
+  #content{
+    height:fit-content;
+    padding:20px;
+  }
+
+  h1{
+    font-size: 3rem;
+  }
+
+  h4{
+    font-size: 15px;
+  }
 }
 
 @media (max-width: 1100px)
