@@ -247,8 +247,10 @@
     }
 
     .detail-value{
-        width:60px;
-        
+        width:30px;
+    }
+   .squareMeter{
+        width:130px;
     }
 }
 
