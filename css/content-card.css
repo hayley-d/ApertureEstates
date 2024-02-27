@@ -235,7 +235,7 @@
         display: grid;
         grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
         height:30vh;
-        gap:5px;
+        gap:20px;
     }
 
     .property-desc{
@@ -244,6 +244,11 @@
         width:100%;
         height:fit-content;
         grid-column: 1 / -1; /* Span across all columns */
+    }
+
+    .detail-value{
+        width:60px;
+        
     }
 }
 
