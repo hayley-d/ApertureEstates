@@ -1,17 +1,7 @@
 
-function createContentCard(listingName, location, price, bedCount,bathCount,size,desc,images)
+//function takes in a property object and creates a property card for the object
+function createContentCard(property)
 {
-    const property = {
-        "name" : listingName,
-        "location" : location,
-        "price": price,
-        "number-of-beds":bedCount,
-        "number-of-bath":bathCount,
-        "size":size,
-        "description":desc,
-        "images":images
-    }
-
     /*Create the container for the card*/
     const cardContainer = document.createElement('div');
     cardContainer.classList.add('content-card-container');
@@ -21,7 +11,26 @@ function createContentCard(listingName, location, price, bedCount,bathCount,size
 
     const propertyImage = document.createElement('div');
     propertyImage.classList.add('property-img');
-    propertyImage.style.backgroundImage = `url('${images[0]}')`;
+    propertyImage.style.backgroundImage = `url('${property.images[0]}')`;
+    let currentImageIndex = 0;
+    /*Create inner arrows*/
+    const prevArrow = document.createElement('div');
+    prevArrow.classList.add('prev-arrow');
+    const nextArrow = document.createElement('div');
+    prevArrow.classList.add('next-arrow');
+
+    /*add event listners*/
+    prevArrow.addEventListener('click', () =>{
+        currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
+        propertyImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
+    });
+
+    nextArrow.addEventListener('click', () =>{
+        currentImageIndex = (currentImageIndex + 1) % property.images.length;
+        propertyImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
+    });
+    //append arrows to the image div
+    propertyImage.append(prevArrow,nextArrow);
 
     const propertyInfoContainer = document.createElement('div');
     propertyInfoContainer.classList.add('property-info-container');
@@ -31,8 +40,7 @@ function createContentCard(listingName, location, price, bedCount,bathCount,size
 
     /*Property Name Section of the card*/
     const propertyName = document.createElement('a');
-    propertyName.href = '#';
-    propertyName.textContent = listingName;
+    propertyName.textContent = property.title;
     propertyName.onclick = function(){
         viewProperty(property);
     };
@@ -52,20 +60,20 @@ function createContentCard(listingName, location, price, bedCount,bathCount,size
     /*Property Location element*/
     const propertyLocationDiv = document.createElement('div');
     propertyLocationDiv.classList.add('property-location');
-    propertyLocationDiv.textContent = location;
+    propertyLocationDiv.textContent = property.location;
 
     /*Property Price element*/
     const propertyPriceDiv = document.createElement('div');
     propertyPriceDiv.classList.add('property-price');
-    propertyPriceDiv.innerHTML = `<p>${price}</p>`
+    propertyPriceDiv.innerHTML = `<p>R ${property.price}</p>`
 
     /*Property detains Elements*/
     const propertyDetails = document.createElement('div');
     propertyDetails.classList.add('property-details');
     const details = [
-        { iconClass: 'bed-icon', value: bedCount },
-        { iconClass: 'bath-icon', value: bathCount },
-        { iconClass: 'size-icon', value: size }
+        { iconClass: 'bed-icon', value: property.bedrooms },
+        { iconClass: 'bath-icon', value: property.bathrooms },
+        { iconClass: 'car-icon', value: property.parking_spaces }
     ];
     details.forEach(detail=>{
         const detailDiv = document.createElement('div');
@@ -83,7 +91,7 @@ function createContentCard(listingName, location, price, bedCount,bathCount,size
     /*Property Description Elements*/
     const propertyDescDiv = document.createElement('div');
     propertyDescDiv.classList.add('property-desc');
-    propertyDescDiv.innerHTML = `<p>${desc}</p>`;
+    propertyDescDiv.innerHTML = `<p>${property.description}</p>`;
 
     /*Assemble*/
     propertyHeading.appendChild(propertyName);
@@ -104,17 +112,8 @@ function createContentCard(listingName, location, price, bedCount,bathCount,size
 }
 
 
-/*
-* const property = {
-        "name" : listingName,
-        "location" : location,
-        "price": price,
-        "number-of-beds":bedCount,
-        "number-of-bath":bathCount,
-        "size":size,
-        "description":desc,
-        "images":images
-    }*/
+
+//function takes in an agent object and creates an agent card based off of the agent
 function createAgentCard(agent)
 {
     const agentCardcontainer = document.createElement('div');
@@ -128,31 +127,23 @@ function createAgentCard(agent)
 
     const agentHeading = document.createElement('div');
     agentHeading.classList.add('agent-heading');
-    agentHeading.innerHTML = `<p>${agent["agencyName"]}</p>`;
+    agentHeading.innerHTML = `<p>${agent.name}</p>`;
 
     const agentDesc = document.createElement('div');
     agentDesc.classList.add('agent-desc');
-    agentDesc.innerHTML = `<p>${agent["description"]}</p>`;
+    agentDesc.innerHTML = `<p>${agent.description}</p>`;
 
-    /*email button*/
-    const agentEmail = document.createElement('div');
-    agentEmail.classList.add('agent-email');
-    const emailButton = document.createElement('button');
-    const emailLink = document.createElement('a');
-    emailLink.href = `mailto:${agent["email"]}`;
-    emailLink.textContent = "Email Agent";
-    emailButton.appendChild(emailLink);
-    agentEmail.appendChild(emailButton);
-
+    //Append children to parent element
     agentInfo.appendChild(agentHeading);
     agentInfo.appendChild(agentDesc);
-    agentInfo.appendChild(agentEmail);
 
     /*Logo*/
     const agentLogoContainer = document.createElement('div');
     agentLogoContainer.classList.add('agent-logo-container');
+
     const agentLogo = document.createElement('div');
     agentLogo.classList.add('agent-logo');
+    agentLogo.style.backgroundImage = `url('${agent.logo}')`;
     agentLogoContainer.appendChild(agentLogo);
 
     /*contact*/
@@ -161,20 +152,14 @@ function createAgentCard(agent)
 
     const agentWebsite = document.createElement('div');
     agentWebsite.classList.add('agent-website');
-    const websiteLink = document.createElement('a');
-    websiteLink.href = `mailto:${agent["email"]}`;
-    websiteLink.textContent = agent["email"];
-    agentWebsite.appendChild(websiteLink);
 
-    const agentNumber = document.createElement('div');
-    agentNumber.classList.add('agent-number');
-    const numberLink = document.createElement('a');
-    numberLink.textContent = agent["number"];
-    agentNumber.appendChild(numberLink);
+    const websiteLink = document.createElement('a');
+    websiteLink.href = `${agent.url}`;
+    websiteLink.textContent = agent.url;
+    agentWebsite.appendChild(websiteLink);
 
     /*assemble*/
     agentContact.appendChild(agentWebsite);
-    agentContact.appendChild(agentNumber);
 
     agentCard.appendChild(agentInfo);
     agentCard.appendChild(agentLogoContainer);
@@ -185,6 +170,22 @@ function createAgentCard(agent)
     return agentCardcontainer;
 }
 
+//takes the user to the view page with the correct property data
 function viewProperty(property){
-
+    console.log("Property name clicked!")
 }
+
+//Function below is used to delete current populated cards so that new cards can be loaded and populated based on a sort or filter
+function deleteCards()
+{
+    //delete current cards
+    const cards = document.getElementsByClassName("content-card-container");
+    const cardsArray = Array.from(cards);
+
+    cardsArray.forEach(function(card) {
+        card.remove();
+    });
+}
+
+
+
