@@ -105,21 +105,36 @@ button:hover{
 }
 
 #monthly-mortgage-container{
-    display: flex;
+    display: none;
     flex-direction: column;
     background-color: white;
     justify-content: center;
     padding:30px;
     width: 30%;
-    height:10vh;
+    height:fit-content;
     min-height: 100px;
     min-width: 500px;
     border-radius: 20px;
     gap:30px;
 }
 
-#property-tax-container{
+.results-table{
     display: flex;
+    flex-direction: column;
+    gap:20px;
+    color: #413D42;
+}
+
+.results-table > div > h3{
+    font-size: 18px;
+}
+
+.results-table > div > p{
+    font-size: 20px;
+}
+
+#property-tax-container{
+    display: none;
     flex-direction: column;
     background-color: white;
     justify-content: center;
