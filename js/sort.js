@@ -1,63 +1,55 @@
 //Array used to sore sorted property data
-let sortedRentals = [];
-let sortedSales = [];
+let sortedArray = [];
 
-function sortAscendingTitle(){
-    sortedRentals = rentals.sort((a,b) =>{
+
+function sortAscendingTitle(array){
+    sortedArray = array.sort((a,b) =>{
         const titleA = a.title.toLowerCase();
         const titleB = b.title.toLowerCase();
         if(titleA < titleB) return -1;
         if(titleA > titleB) return 1;
         return 0;
     });
-
-    sortedSales = sales.sort((a,b) =>{
-        const titleA = a.title.toLowerCase();
-        const titleB = b.title.toLowerCase();
-        if(titleA < titleB) return -1;
-        if(titleA > titleB) return 1;
-        return 0;
-    });
+    return sortedArray;
 }
 
-function sortDescendingTitle(){
-    sortedRentals = rentals.sort((a,b) =>{
+function sortDescendingTitle(array){
+    sortedArray = array.sort((a,b) =>{
         const titleA = a.title.toLowerCase();
         const titleB = b.title.toLowerCase();
         if(titleA > titleB) return -1;
         if(titleA < titleB) return 1;
         return 0;
     });
-
-    sortedSales = sales.sort((a,b) =>{
-        const titleA = a.title.toLowerCase();
-        const titleB = b.title.toLowerCase();
-        if(titleA > titleB) return -1;
-        if(titleA < titleB) return 1;
-        return 0;
-    });
+    return sortedArray;
 }
 
-function sortHieghestPrice(){
-    sortedRentals = rentals.sort((a,b)=>{
+function sortHieghestPrice(array){
+    sortedArray = array.sort((a,b)=>{
         return b.price - a.price
     });
-
-    sortedSales = rentals.sort((a,b)=>{
-        return b.price - a.price
-    });
+    return sortedArray;
 }
 
-function lowestHieghestPrice(){
-    sortedRentals = rentals.sort((a,b)=>{
+function sortLowestPrice(array){
+    sortedArray = array.sort((a,b)=>{
         return a.price - b.price
     });
+    return sortedArray;
+}
 
-    sortedSales = rentals.sort((a,b)=>{
-        return a.price - b.price
+//add event listeners
+let sortOptions = document.querySelectorAll('.dropdown-content a');
+
+sortOptions.forEach(option =>{
+    option.addEventListener('click',function(){
+        //remove class from all elements
+        sortOptions.forEach(opt=>{
+            opt.classList.remove('sortBy');
+        });
+
+        //add sort
+        this.classList.add('sortBy');
     });
-}
+});
 
-function handelSort(){
-
-}

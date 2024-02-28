@@ -289,3 +289,4 @@ function getAgencyNameFromUrl(url){
     const parts = url.split('/');
     return parts[2];
 }
+
