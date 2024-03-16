@@ -19,6 +19,10 @@
 
 <body>
 <header>
+  <!--I store all images in a dive element over a img element for the following reasons:
+   - Div element can be easily updated using javaScript allowing for dynamic content loading or interactive features without loading the entire page
+   - Div element allows me to contain other elements in the same container allowing for more complex layouts
+ -->
   <div id = "logo"></div>
   <div id = "nav">
     <div><a href = "./Listings.html">Listings</a></div>
@@ -44,27 +48,26 @@
       </div>
     </div>
     <div class = "agent-card">
-      <div id = "agent-logo"></div>
-      <div id = "agent-name"><p>Cake Realty</p></div>
-      <div id = "agent-contact"><a><button>Email Agent</button></a></div>
+      <div id = "view-agent-logo"></div>
+      <div id = "view-agent-name"><p>Cake Realty</p></div>
+      <div id = "view-agent-website"><a id = "view-website-button"><button>View Agent</button></a></div>
     </div>
   </div>
 
   <div class = "bottom-container">
     <div class = "property-view-card">
-    <div class = "Listing-name"><h3>Chell's Chalet</h3></div>
-    <div class = "listing-price"><p>R 900 000 000</p></div>
-    <div class = "location"><p>Paarl</p></div>
+    <div   class = "Listing-name"><h3 id = "view-name">Chell's Chalet</h3></div>
+    <div   class = "listing-price"><p id = "view-price">R 900 000 000</p></div>
+    <div   class = "location"><p id = "view-location">Paarl</p></div>
 
     <div class = "property-info-container">
-      <div class ="bed-container"> <div id = "bed-icon"></div> <div class = "property-info-value"><p id = "beds-value">12</p></div> </div>
-      <div class ="bath-container"> <div id = "bath-icon"></div> <div  class = "property-info-value"><p id = "bath-value">12</p></div> </div>
-      <div class ="car-container"> <div id = "car-icon"></div> <div  class = "property-info-value"><p id = "car-value">1</p></div> </div>
-      <div class ="size-container"> <div id = "size-icon"></div> <div  class = "property-info-value"><p id = "size-value">12 000 m²</p></div> </div>
-      <div class ="pet-container"> <div id = "pet-icon"></div> <div  class = "property-info-value"><p id = "pets-value">Allowed</p></div> </div>
+      <div class ="bed-container"> <div id = "bed-icon"></div> <div class = "property-info-value"><p id = "view-beds-value">12</p></div> </div>
+      <div class ="bath-container"> <div id = "bath-icon"></div> <div  class = "property-info-value"><p id = "view-bath-value">12</p></div> </div>
+      <div class ="car-container"> <div id = "car-icon"></div> <div  class = "property-info-value"><p id = "view-car-value">1</p></div> </div>
+
     </div>
 
-    <div class = "description">
+    <div id = "view-desc" class = "description">
       <p>
         Chell's Chalet offers the perfect mountain retreat. Our chalets are equipped with all the comforts of home,
         including cozy fireplaces, spacious living areas, and stunning views of the surrounding mountains.
@@ -74,7 +77,7 @@
 
     <div class = "property-feature-container">
       <div id = "features-heading"><h4>Property Features</h4></div>
-      <div class ="features-grid">
+      <div id = "view-features-grid"  class ="features-grid">
         <div> <div class = "location-icon"></div> <div class = "feature"><p>Mountain Views</p></div></div>
         <div> <div class = "location-icon"></div> <div class = "feature"><p>Companion Cubes</p></div></div>
         <div> <div class = "location-icon"></div> <div class = "feature"><p>Modern Design</p></div></div>

@@ -7,13 +7,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aperture Listings</title>
+  <!--External SCC Links-->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/content-card.css">
   <link rel="stylesheet" href="css/favourites.css">
   <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/spinner.css">
   <meta name="description" content="">
+  <!--Favicon-->
   <link rel="icon" href="./img/companion-cube.svg" sizes="any">
+
+  <!--google fonts font-->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -21,6 +26,10 @@
 
 <body>
 <header>
+  <!--I store all images in a dive element over a img element for the following reasons:
+   - Div element can be easily updated using javaScript allowing for dynamic content loading or interactive features without loading the entire page
+   - Div element allows me to contain other elements in the same container allowing for more complex layouts
+ -->
   <div id = "logo"></div>
   <div id = "nav">
     <div><a href = "./Listings.html">Listings</a></div>
@@ -38,9 +47,16 @@
   <h3>View saved properties</h3>
 </section>
 <section id = "listings-container">
+
+  <div id = "spinner-container">
+    <div class="loadingio-spinner-bean-eater-8d2rybet7d4"><div class="ldio-f74cwylkeb">
+      <div><div></div><div></div><div></div></div><div><div></div><div></div><div></div></div>
+    </div></div>
+  </div>
+
   <!--Mock data done-->
   <div class = "content-card-container">
-    <div class = "content-card">
+    <div class = "content-card sale">
 
       <div class = "property-img" style="background-image: url('./img/Mock/2.png');">
         <div class = "prev-arrow"></div>
@@ -54,12 +70,12 @@
           </div>
         </div>
         <div class="property-location">Cape Town</div>
-        <div class="property-price"><p>$300 000 000</p></div>
+        <div class="property-price"><p>R300 000 000</p></div>
 
         <div class = "property-details">
           <div><div class = "bed-icon"></div><div class = "detail-value">1</div></div>
           <div><div class = "bath-icon"></div><div class = "detail-value">2</div></div>
-          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value squareMeter">12 m²</div></div>
         </div>
         <div class = "property-desc">
           <p>
@@ -75,7 +91,7 @@
 
   <!--Mock data done-->
   <div class = "content-card-container">
-    <div class = "content-card">
+    <div class = "content-card sale">
 
       <div class = "property-img" style="background-image: url('./img/Mock/1.png')">
         <div class = "prev-arrow"></div>
@@ -89,12 +105,12 @@
           </div>
         </div>
         <div class="property-location">Durban</div>
-        <div class="property-price"><p>$100 000 000</p></div>
+        <div class="property-price"><p>R100 000 000</p></div>
 
         <div class = "property-details">
           <div><div class = "bed-icon"></div><div class = "detail-value">12</div></div>
           <div><div class = "bath-icon"></div><div class = "detail-value">12</div></div>
-          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value squareMeter">12 m²</div></div>
         </div>
         <div class = "property-desc">
           <p>
@@ -110,7 +126,7 @@
 
   <!--mOCK DATA done-->
   <div class = "content-card-container">
-    <div class = "content-card" style="background-color: darkorange">
+    <div class = "content-card rent">
 
       <div class = "property-img" style="background-image: url('./img/Mock/3.png')">
         <div class = "prev-arrow"></div>
@@ -124,12 +140,12 @@
           </div>
         </div>
         <div class="property-location">Benoni</div>
-        <div class="property-price"><p>$500 000 000</p></div>
+        <div class="property-price"><p>R500 000 000</p></div>
 
         <div class = "property-details">
           <div><div class = "bed-icon"></div><div class = "detail-value">3</div></div>
           <div><div class = "bath-icon"></div><div class = "detail-value">3</div></div>
-          <div><div class = "size-icon"></div><div class = "detail-value">1000 m²</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value squareMeter">1000 m²</div></div>
         </div>
         <div class = "property-desc">
           <p>
@@ -146,7 +162,7 @@
 
   <!--Mock data Complete-->
   <div class = "content-card-container">
-    <div class = "content-card">
+    <div class = "content-card rent">
 
       <div class = "property-img" style="background-image: url('./img/Mock/4.png')">
         <div class = "prev-arrow"></div>
@@ -160,12 +176,12 @@
           </div>
         </div>
         <div class="property-location">Randburg</div>
-        <div class="property-price"><p>$100 000 000</p></div>
+        <div class="property-price"><p>R100 000 000</p></div>
 
         <div class = "property-details">
           <div><div class = "bed-icon"></div><div class = "detail-value">5</div></div>
           <div><div class = "bath-icon"></div><div class = "detail-value">6</div></div>
-          <div><div class = "size-icon"></div><div class = "detail-value">70002 m²</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value squareMeter">70002 m²</div></div>
         </div>
         <div class = "property-desc">
           <p>
@@ -181,7 +197,7 @@
 
   <!--Done mock data-->
   <div class = "content-card-container">
-    <div class = "content-card">
+    <div class = "content-card rent">
 
       <div class = "property-img" style="background-image: url('./img/Mock/5.png')">
         <div class = "prev-arrow"></div>
@@ -195,12 +211,12 @@
           </div>
         </div>
         <div class="property-location">Gauteng</div>
-        <div class="property-price"><p>$100 000 000</p></div>
+        <div class="property-price"><p>R100 000 000</p></div>
 
         <div class = "property-details">
           <div><div class = "bed-icon"></div><div class = "detail-value">12</div></div>
           <div><div class = "bath-icon"></div><div class = "detail-value">12</div></div>
-          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value squareMeter">12 m²</div></div>
         </div>
         <div class = "property-desc">
           <p>
@@ -215,7 +231,7 @@
 
   <!--mock data done-->
   <div class = "content-card-container">
-    <div class = "content-card" style="background-color: darkorange">
+    <div class = "content-card rent">
 
       <div class = "property-img" style="background-image: url('./img/Mock/6.png')">
         <div class = "prev-arrow"></div>
@@ -229,12 +245,12 @@
           </div>
         </div>
         <div class="property-location">Paarl</div>
-        <div class="property-price"><p>$900 000 000</p></div>
+        <div class="property-price"><p>R900 000 000</p></div>
 
         <div class = "property-details">
           <div><div class = "bed-icon"></div><div class = "detail-value">12</div></div>
           <div><div class = "bath-icon"></div><div class = "detail-value">12</div></div>
-          <div><div class = "size-icon"></div><div class = "detail-value">12 000 m²</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value squareMeter">12 000 m²</div></div>
         </div>
         <div class = "property-desc"><p> Chell's Chalet offers the perfect mountain retreat. Our chalets are equipped
           with all the comforts of home, including cozy fireplaces, spacious living areas, and stunning
@@ -246,7 +262,7 @@
 
   <!--mock data done-->
   <div class = "content-card-container">
-    <div class = "content-card">
+    <div class = "content-card sale">
 
       <div class = "property-img" style="background-image: url('./img/Mock/7.png')">
         <div class = "prev-arrow"></div>
@@ -260,12 +276,12 @@
           </div>
         </div>
         <div class="property-location">Sandton</div>
-        <div class="property-price"><p>$100 000 000</p></div>
+        <div class="property-price"><p>R100 000 000</p></div>
 
         <div class = "property-details">
           <div><div class = "bed-icon"></div><div class = "detail-value">2</div></div>
           <div><div class = "bath-icon"></div><div class = "detail-value">2</div></div>
-          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value squareMeter">12 m²</div></div>
         </div>
         <div class = "property-desc">
           <p>
@@ -280,7 +296,7 @@
 
   <!--Mock data done-->
   <div class = "content-card-container">
-    <div class = "content-card" style="background-color: darkorange">
+    <div class = "content-card rent">
 
       <div class = "property-img" style="background-image: url('./img/Mock/8.png')">
         <div class = "prev-arrow"></div>
@@ -294,12 +310,12 @@
           </div>
         </div>
         <div class="property-location">Pretoria</div>
-        <div class="property-price"><p>$400 000 000</p></div>
+        <div class="property-price"><p>R400 000 000</p></div>
 
         <div class = "property-details">
           <div><div class = "bed-icon"></div><div class = "detail-value">12</div></div>
           <div><div class = "bath-icon"></div><div class = "detail-value">12</div></div>
-          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value squareMeter">12 m²</div></div>
         </div>
         <div class = "property-desc">
           <p>
@@ -315,7 +331,7 @@
 
   <!--Mock data done-->
   <div class = "content-card-container">
-    <div class = "content-card">
+    <div class = "content-card sale">
 
       <div class = "property-img" style="background-image: url('./img/Mock/9.png')">
         <div class = "prev-arrow"></div>
@@ -329,12 +345,12 @@
           </div>
         </div>
         <div class="property-location">London, United Kingdom</div>
-        <div class="property-price"><p>$100 000 000</p></div>
+        <div class="property-price"><p>R100 000 000</p></div>
 
         <div class = "property-details">
           <div><div class = "bed-icon"></div><div class = "detail-value">5</div></div>
           <div><div class = "bath-icon"></div><div class = "detail-value">6</div></div>
-          <div><div class = "size-icon"></div><div class = "detail-value">16752 m²</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value squareMeter">16752 m²</div></div>
         </div>
         <div class = "property-desc">
           <p>
@@ -348,7 +364,7 @@
   </div>
 
   <div class = "content-card-container">
-    <div class = "content-card">
+    <div class = "content-card rent">
 
       <div class = "property-img">
         <div class = "prev-arrow"></div>
@@ -362,12 +378,12 @@
           </div>
         </div>
         <div class="property-location">Bryanston</div>
-        <div class="property-price"><p>$600 000 000</p></div>
+        <div class="property-price"><p>R600 000 000</p></div>
 
         <div class = "property-details">
           <div><div class = "bed-icon"></div><div class = "detail-value">1</div></div>
           <div><div class = "bath-icon"></div><div class = "detail-value">1</div></div>
-          <div><div class = "size-icon"></div><div class = "detail-value">12 m²</div></div>
+          <div><div class = "size-icon"></div><div class = "detail-value squareMeter">12 m²</div></div>
         </div>
         <div class = "property-desc">
           <p>
@@ -407,6 +423,24 @@
   </div>
 
 </footer>
+
+<script src = "./js/loadingSpinner.js"></script>
+<script src = "./js/main.js"></script>
+<script src = "./js/search.js"></script>
+<script src = "./js/sort.js"></script>
+<script src = "./js/filter.js"></script>
+<script src = "./js/contentCard.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded',function(){
+    //fetch the data
+    fetchData();
+    //populate the content cards
+    displayContentCards(favourites);
+    //colour cards based on rent = orange sales = blue
+
+  })
+</script>
+
 </body>
 
 </html>
