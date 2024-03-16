@@ -5,6 +5,7 @@ function createContentCard(property)
     /*Create the container for the card*/
     const cardContainer = document.createElement('div');
     cardContainer.classList.add('content-card-container');
+    cardContainer.id = property.id;
 
     const card = document.createElement('div');
     card.classList.add('content-card');
@@ -17,16 +18,22 @@ function createContentCard(property)
     const prevArrow = document.createElement('div');
     prevArrow.classList.add('prev-arrow');
     const nextArrow = document.createElement('div');
-    prevArrow.classList.add('next-arrow');
+    nextArrow.classList.add('next-arrow');
 
     /*add event listners*/
     prevArrow.addEventListener('click', () =>{
         currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
+        if (currentImageIndex === property.images.length - 1) {
+            currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
+        }
         propertyImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
     });
 
     nextArrow.addEventListener('click', () =>{
         currentImageIndex = (currentImageIndex + 1) % property.images.length;
+        if (currentImageIndex === property.images.length - 1) {
+            currentImageIndex = (currentImageIndex + 1) % property.images.length;
+        }
         propertyImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
     });
     //append arrows to the image div
@@ -58,6 +65,7 @@ function createContentCard(property)
     if(isFavourite(property))
     {
         favButton.style.backgroundImage = `url('../img/Heart/red-heart.png')`;
+        card.classList.add(`${property.type}`);
     }
 
     favButtonContainer.appendChild(favButton);
@@ -70,7 +78,7 @@ function createContentCard(property)
     /*Property Price element*/
     const propertyPriceDiv = document.createElement('div');
     propertyPriceDiv.classList.add('property-price');
-    propertyPriceDiv.innerHTML = `<p>R ${formatAsZAR(property.price)}</p>`
+    propertyPriceDiv.innerHTML = `<p>${formatAsZAR(property.price)}</p>`
 
     /*Property detains Elements*/
     const propertyDetails = document.createElement('div');
@@ -190,12 +198,25 @@ function deleteCards()
     const cardsArray = Array.from(cards);
 
     cardsArray.forEach(function(card) {
+        //get the property
+    });
+}
+
+function deleteAgentCards()
+{
+    //delete current cards
+    const cards = document.getElementsByClassName("agent-card-container");
+    const cardsArray = Array.from(cards);
+
+    cardsArray.forEach(function(card) {
         card.remove();
     });
 }
 
+//Function to display all the content cards
 function displayContentCards(array)
 {
+    console.log(array.length)
     //Show loading symbol
     toggleSpinner();
     const container = document.getElementById('listings-container');
@@ -219,6 +240,42 @@ function displayContentCards(array)
         array.forEach(property=>{
             //create the new card
             const card = createContentCard(property);
+
+
+            //add the card to the container
+            container.appendChild(card);
+        });
+    }
+
+    //hide loading symbol
+    toggleSpinner();
+}
+
+function displayAgentCards()
+{
+    //Show loading symbol
+    toggleSpinner();
+    const container = document.getElementById('agents-container');
+    //Delete Existing cards
+    deleteAgentCards();
+
+    //show message if array is empty
+    if(agents.length === 0)
+    {
+        const message = document.createElement('h2');
+        message.id = 'no-content-message'
+        message.style.display = 'flex';
+        message.style.justifyContent = 'center';
+        message.style.alignItems = 'center';
+        message.style.height = '30vh';
+        message.style.color = 'white';
+        message.textContent = "Sorry no results found :("
+        container.appendChild(message);
+    }
+    else{
+        agents.forEach(agent=>{
+            //create the new card
+            const card = createAgentCard(agent);
 
             //add the card to the container
             container.appendChild(card);
@@ -245,12 +302,12 @@ function viewCard(property){
     /*add event listners*/
     prevArrow.addEventListener('click', () =>{
         currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
-        propertyImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
+        houseImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
     });
 
     nextArrow.addEventListener('click', () =>{
         currentImageIndex = (currentImageIndex + 1) % property.images.length;
-        propertyImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
+        houseImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
     });
 
     if(isFavourite(property))
@@ -303,6 +360,8 @@ function viewCard(property){
         featureDiv.classList.add('feature');
         featureDiv.innerHTML = `<p>${feature}</p>`;
         outerDiv.appendChild(featureDiv);
+        const grid = document.getElementById('view-features-grid');
+        grid.appendChild(outerDiv);
     }
 }
 
@@ -316,5 +375,15 @@ function findAgent(agentName){
 
 function formatAsZAR(number) {
     return 'R' + number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+}
+
+function colourCards(){
+    //get all the cards
+    let allCards = document.getElementsByClassName('content-card-container');
+    let cardsArray = Array.from(allCards);
+
+    cardsArray.forEach(function(card) {
+
+    });
 }
 

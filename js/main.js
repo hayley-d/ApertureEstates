@@ -1,5 +1,5 @@
 //Constants
-const apiKey = "";
+const apiKey = "a729e2f414c947b786032eba8d8b68d5";
 const studentNum = "u21528790";
 
 //Array for Storing rentals for the API
@@ -64,6 +64,10 @@ function handelPropertyData(id,title,location,price,bedrooms,bathrooms,parking,a
         rentals.push(property);
     }
     else{
+        const card = createContentCard(property);
+        const container = document.getElementById('listings-container');
+        //add the card to the container
+        container.appendChild(card);
         sales.push(property);
     }
 }
@@ -71,7 +75,11 @@ function handelPropertyData(id,title,location,price,bedrooms,bathrooms,parking,a
 function handelAgentData(agent,logoUrl)
 {
     let newAgent = createAgentObject(agent.id,agent.name,agent.description,logoUrl,agent.url);
+    const container = document.getElementById('agents-container');
+    const card = createAgentCard(agent);
 
+    //add the card to the container
+    container.appendChild(card);
     agents.push(newAgent);
 }
 //API Call function
@@ -154,7 +162,7 @@ function apiCallProperties(returnFields = "*",limit = 0,sort = '',order = '',sea
     };
 }
 
-function apiCallAgents(limit,callback)
+function apiCallAgents(limit = 0,callback)
 {
     //Declare XML Request variable and request url
     let xhr = new XMLHttpRequest();
@@ -247,46 +255,67 @@ function apiCallImages(listingId,agencyName,property,agent,callback){
     };
 }
 
-function callApiAndStoreData() {
-    apiCallProperties(function (propertyData) {
-        // Store the data in an array
-        for(let property of propertyData)
-        {
-            //get the agency
-            const propertyAgencyName = getAgencyNameFromUrl(property.url);
-
-            //Find the matching agency
-            const matchingAgency = agents.find(agent => {
-                const agentUrl = agent.url.toLowerCase();
-                return agenturl.includes(propertyAgencyName.toLowerCase());
-            });
-
-            if(matchingAgency)
-            {
-                property.agency = matchingAgency.name;
-            }
-
-            //Now call images api
-            apiCallImages(property.id,"",property,"",handelPropertyData)
-        }
-    });
-    console.log("Properties have been Loaded")
-}
-
-function apiCallAndStoreAgents()
-{
-    apiCallAgents(function (agentData) {
-        for(let agent of agentData){
-            //get the agent logo
-            apiCallImages(-1,agent.name,"",agent,handelAgentData);
-        }
-    });
-}
-
 
 //function to get the agency name from the url
 function getAgencyNameFromUrl(url){
-    const parts = url.split('/');
-    return parts[2];
+    const urlObject = new URL(url);
+    return urlObject.hostname;
+}
+
+
+function fetchAgents(){
+    return new Promise((resolve, reject) => {
+        apiCallAgents(0,(agentData) =>{
+            for(let agent of agentData){
+                apiCallImages(-1,agent.name,"",agent,handelAgentData);
+            }
+            resolve(); // Resolve the promise once the agents are fetched
+        });
+    });
+}
+
+//fetch properties and return promise
+function fetchProperties(){
+    return new Promise((resolve,reject) =>{
+        apiCallProperties("*",0,'','',[], (propertyData) =>{
+            for(let property of propertyData)
+            {
+                //get agency
+                const propertyAgencyName = getAgencyNameFromUrl(property.url);
+                //Find the matching agency
+                const matchingAgency = agents.find(agent=>{
+                    const agentUrl =  new URL(agent.url).hostname;
+                    return agentUrl===propertyAgencyName;
+                });
+
+                if(matchingAgency)
+                {
+                    property.agency = "Private Property";
+                }
+                property.agency = "Private Property";
+                //call images api
+                apiCallImages(property.id,"",property,"",handelPropertyData);
+            }
+            resolve();
+        });
+    });
+}
+
+//function to fetch agents first the fetch properties
+function fetchData(){
+    toggleSpinner();
+    fetchAgents()
+        .then(fetchProperties)
+        .then(() => {
+            console.log("All data loaded");
+
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        })
+        .finally(() => {
+            console.log(sales)
+            toggleSpinner();
+        });
 }
 
