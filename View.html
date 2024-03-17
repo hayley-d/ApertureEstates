@@ -7,9 +7,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aperture Listings</title>
-  <link rel="stylesheet" href="css/header.css">
-  <link rel="stylesheet" href="css/view.css">
-  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="./css/header.css" type="text/css">
+  <link rel="stylesheet" href="./css/view.css" type="text/css">
+  <link rel="stylesheet" href="./css/footer.css" type="text/css">
   <meta name="description" content="">
   <link rel="icon" href="./img/companion-cube.svg" sizes="any">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,11 +78,7 @@
     <div class = "property-feature-container">
       <div id = "features-heading"><h4>Property Features</h4></div>
       <div id = "view-features-grid"  class ="features-grid">
-        <div> <div class = "location-icon"></div> <div class = "feature"><p>Mountain Views</p></div></div>
-        <div> <div class = "location-icon"></div> <div class = "feature"><p>Companion Cubes</p></div></div>
-        <div> <div class = "location-icon"></div> <div class = "feature"><p>Modern Design</p></div></div>
-        <div> <div class = "location-icon"></div> <div class = "feature"><p>Pool</p></div></div>
-        <div> <div class = "location-icon"></div> <div class = "feature"><p>Elevator</p></div></div>
+
       </div>
     </div>
     </div>
@@ -115,6 +111,16 @@
   </div>
 
 </footer>
+<script src = "./js/contentCard.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const selectedProperty = JSON.parse(localStorage.getItem('selectedProperty'));
+    if (selectedProperty)
+    {
+      viewCard(selectedProperty);
+    }
+  });
+</script>
 </body>
 
 </html>

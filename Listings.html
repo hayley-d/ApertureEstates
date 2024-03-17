@@ -42,7 +42,7 @@
 <section id = "content">
   <div id = "greeting-container">
     <div id = "house"></div>
-    <div><h1>Properties For Sale</h1></div>
+    <div onclick="getLen()"><h1>Properties For Sale</h1></div>
     <div><h4>GLaDOS-Approved Homes: Where Every Room is a Test</h4></div>
   </div>
   <div id = "search-container">
@@ -92,10 +92,10 @@
     <div class = "price-dropdown">
       <button class="dropbtn"><span><div id = "price"></div></span>Price</button>
       <div class="dropdown-content input-fields">
-        <label for="minBedrooms">Min Price:</label>
+        <label for="minPrice">Min Price:</label>
         <input type="number" id="minPrice" name="minPrice" min="0">
         <br>
-        <label for="maxBedrooms">Max Price:</label>
+        <label for="maxPrice">Max Price:</label>
         <input type="number" id="maxPrice" name="maxPrice" min="0">
       </div>
     </div>
@@ -151,9 +151,11 @@
   document.addEventListener('DOMContentLoaded',function(){
     //fetch the data
     fetchData();
-
-
   })
+
+  function getLen(){
+    console.log(propertiesSale.length)
+  }
 </script>
 </body>
 
