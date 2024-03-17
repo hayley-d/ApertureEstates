@@ -1,10 +1,18 @@
+var propertiesSale = [];
+var propertiesRental = [];
+var propertyAgents = [];
+var favProperties = [];
 
+var populatedProps = false;
+var populatedRentals = false;
+var populatedAgents = false;
 //function takes in a property object and creates a property card for the object
 function createContentCard(property)
 {
     /*Create the container for the card*/
     const cardContainer = document.createElement('div');
     cardContainer.classList.add('content-card-container');
+    cardContainer.id = property.id;
 
     const card = document.createElement('div');
     card.classList.add('content-card');
@@ -17,16 +25,22 @@ function createContentCard(property)
     const prevArrow = document.createElement('div');
     prevArrow.classList.add('prev-arrow');
     const nextArrow = document.createElement('div');
-    prevArrow.classList.add('next-arrow');
+    nextArrow.classList.add('next-arrow');
 
     /*add event listners*/
     prevArrow.addEventListener('click', () =>{
         currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
+        if (currentImageIndex === property.images.length - 1) {
+            currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
+        }
         propertyImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
     });
 
     nextArrow.addEventListener('click', () =>{
         currentImageIndex = (currentImageIndex + 1) % property.images.length;
+        if (currentImageIndex === property.images.length - 1) {
+            currentImageIndex = (currentImageIndex + 1) % property.images.length;
+        }
         propertyImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
     });
     //append arrows to the image div
@@ -42,7 +56,9 @@ function createContentCard(property)
     const propertyName = document.createElement('a');
     propertyName.textContent = property.title;
     propertyName.onclick = function(){
-        viewProperty(property);
+        const sepectedProperty = property;
+        localStorage.setItem('selectedProperty',JSON.stringify(sepectedProperty));
+        window.location.href = './View.html';
     };
     const propertyNameDiv = document.createElement('div');
     propertyNameDiv.classList.add('property-name');
@@ -58,9 +74,38 @@ function createContentCard(property)
     if(isFavourite(property))
     {
         favButton.style.backgroundImage = `url('../img/Heart/red-heart.png')`;
+        card.classList.add(`${property.type}`);
     }
 
     favButtonContainer.appendChild(favButton);
+
+    favButton.addEventListener('click', function() {
+        if(property.favorite===false)
+        {
+            // Update the property's favorite status
+            property.favorite = true;
+
+            // Change the heart to red
+            favButton.style.backgroundImage = `url('../img/Heart/red-heart.png')`;
+
+            favProperties.push(property);
+            console.log(favProperties)
+        }
+        else{
+            property.favorite = false;
+
+            // Change the heart to red
+            favButton.style.backgroundImage = `url('../img/Heart/black-filled-heart.png')`;
+
+            // Find the index of the property in favProperties
+            const index = favProperties.findIndex(p => p.id === property.id);
+            if (index !== -1) {
+                // Remove the property from the favProperties array
+                favProperties.splice(index, 1);
+            }
+            console.log(favProperties)
+        }
+    });
 
     /*Property Location element*/
     const propertyLocationDiv = document.createElement('div');
@@ -70,7 +115,7 @@ function createContentCard(property)
     /*Property Price element*/
     const propertyPriceDiv = document.createElement('div');
     propertyPriceDiv.classList.add('property-price');
-    propertyPriceDiv.innerHTML = `<p>R ${formatAsZAR(property.price)}</p>`
+    propertyPriceDiv.innerHTML = `<p>${formatAsZAR(property.price)}</p>`
 
     /*Property detains Elements*/
     const propertyDetails = document.createElement('div');
@@ -175,27 +220,45 @@ function createAgentCard(agent)
     return agentCardcontainer;
 }
 
-//takes the user to the view page with the correct property data
-function viewProperty(property){
-    console.log("Property name clicked!")
-    window.location.href = '../View.html';
-    viewCard(property);
-}
 
 //Function below is used to delete current populated cards so that new cards can be loaded and populated based on a sort or filter
 function deleteCards()
 {
+    console.log("Deleting cards....")
     //delete current cards
-    const cards = document.getElementsByClassName("content-card-container");
+    const cards = document.querySelectorAll('.content-card-container');
+    const cardsArray = Array.from(cards);
+
+    cardsArray.forEach(function(card) {
+        //get the property
+        card.remove();
+    });
+}
+
+function deleteAgentCards()
+{
+    //delete current cards
+    const cards = document.getElementsByClassName("agent-card-container");
     const cardsArray = Array.from(cards);
 
     cardsArray.forEach(function(card) {
         card.remove();
     });
+
 }
 
+//Function to display all the content cards
 function displayContentCards(array)
 {
+    if(!populatedProps)
+    {
+        console.log(array.length)
+        for(var i = 0; i < array.length; i++){
+            propertiesSale.push(array[i]);
+        }
+        populatedProps = true;
+    }
+
     //Show loading symbol
     toggleSpinner();
     const container = document.getElementById('listings-container');
@@ -220,6 +283,7 @@ function displayContentCards(array)
             //create the new card
             const card = createContentCard(property);
 
+
             //add the card to the container
             container.appendChild(card);
         });
@@ -229,9 +293,78 @@ function displayContentCards(array)
     toggleSpinner();
 }
 
+function displayRentals(array){
+    if(!populatedRentals)
+    {
+        console.log(array.length)
+        for(var i = 0; i < array.length; i++){
+            propertiesRental.push(array[i]);
+        }
+        populatedRentals = true;
+    }
+}
+function displayAgentCards(array)
+{
+    if(!populatedAgents)
+    {
+        console.log(array.length)
+        for(var i = 0; i < array.length; i++){
+            propertyAgents.push(array[i]);
+        }
+        populatedAgents = true;
+    }
+
+    console.log(array)
+    //Show loading symbol
+    toggleSpinner();
+    const container = document.getElementById('agents-container');
+    //Delete Existing cards
+    deleteAgentCards();
+
+    //show message if array is empty
+    if(agents.length === 0)
+    {
+        const message = document.createElement('h2');
+        message.id = 'no-content-message'
+        message.style.display = 'flex';
+        message.style.justifyContent = 'center';
+        message.style.alignItems = 'center';
+        message.style.height = '30vh';
+        message.style.color = 'white';
+        message.textContent = "Sorry no results found :("
+        container.appendChild(message);
+    }
+    else{
+        propertyAgents.forEach(agent=>{
+            //create the new card
+            const card = createAgentCard(agent);
+
+            //add the card to the container
+            container.appendChild(card);
+        });
+    }
+
+    //hide loading symbol
+    toggleSpinner();
+}
+
+function displayAgent(array)
+{
+    if(!populatedAgents)
+    {
+        console.log(array.length)
+        for(var i = 0; i < array.length; i++){
+            propertyAgents.push(array[i]);
+        }
+        populatedAgents = true;
+    }
+
+}
+
 
 //changes the view page for the correct data
 function viewCard(property){
+    console.log(property)
     //top container
     let currentImageIndex = 0;
     const houseImage = document.getElementById('house-image');
@@ -245,31 +378,64 @@ function viewCard(property){
     /*add event listners*/
     prevArrow.addEventListener('click', () =>{
         currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
-        propertyImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
+        if (currentImageIndex === property.images.length - 1) {
+            currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
+        }
+        houseImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
     });
 
     nextArrow.addEventListener('click', () =>{
         currentImageIndex = (currentImageIndex + 1) % property.images.length;
-        propertyImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
+        if (currentImageIndex === property.images.length - 1) {
+            currentImageIndex = (currentImageIndex + 1) % property.images.length;
+        }
+        houseImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
     });
-
-    if(isFavourite(property))
+    const heartButton = document.getElementById('heart');
+    if(property.favorite === true)
     {
         //if it is a fav property make the heart red
-        const heartButton = document.getElementById('heart');
+
         heartButton.style.backgroundImage = `url('../img/Heart/red-heart.png')`;
     }
 
+    heartButton.addEventListener('click', function() {
+        if(property.favorite===false)
+        {
+            // Update the property's favorite status
+            property.favorite = true;
+
+            // Change the heart to red
+            heartButton.style.backgroundImage = `url('../img/Heart/red-heart.png')`;
+
+            favProperties.push(property);
+            console.log(favProperties)
+        }
+        else{
+            property.favorite = false;
+
+            // Change the heart to red
+            heartButton.style.backgroundImage = `url('../img/Heart/black-filled-heart.png')`;
+
+            // Find the index of the property in favProperties
+            const index = favProperties.findIndex(p => p.id === property.id);
+            if (index !== -1) {
+                // Remove the property from the favProperties array
+                favProperties.splice(index, 1);
+            }
+            console.log(favProperties)
+        }
+    });
+
     //populate agent data
     const agentName = document.getElementById('view-agent-name');
-    const agent = findAgent(property.agency);
-    agentName.innerHTML = `<p>${agent.name}</p>`;
+    agentName.innerHTML = `<p>View Property</p>`;
 
     const agentLogo = document.getElementById('view-agent-logo');
-    agentLogo.style.backgroundImage = `url('${agent.logo}')`;
+    agentLogo.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
 
     const agentWebsite = document.getElementById('view-website-button');
-    agentWebsite.href = agent.url;
+    agentWebsite.href = property.url;
 
 
     //bottom container
@@ -294,7 +460,10 @@ function viewCard(property){
     const description = document.getElementById('view-desc');
     description.innerHTML = `<p>${property.description}</p>`;
 
-    for(let feature of property.amenities){
+    const amenityString = property.amenities;
+    const amenityArray = amenityString.replace(/^, */, '').split(', ').map(amenity => amenity.trim());
+
+    for(let feature of amenityArray){
         const outerDiv = document.createElement('div');
         const IconDiv = document.createElement('div');
         IconDiv.classList.add('location-icon');
@@ -303,6 +472,8 @@ function viewCard(property){
         featureDiv.classList.add('feature');
         featureDiv.innerHTML = `<p>${feature}</p>`;
         outerDiv.appendChild(featureDiv);
+        const grid = document.getElementById('view-features-grid');
+        grid.appendChild(outerDiv);
     }
 }
 
@@ -311,10 +482,20 @@ function isFavourite(property){
 }
 
 function findAgent(agentName){
-    return agents.find(agent => agent.name === agentName);
+    return propertyAgents.find(agent => agent.name === agentName);
 }
 
 function formatAsZAR(number) {
     return 'R' + number.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+}
+
+function colourCards(){
+    //get all the cards
+    let allCards = document.getElementsByClassName('content-card-container');
+    let cardsArray = Array.from(allCards);
+
+    cardsArray.forEach(function(card) {
+
+    });
 }
 
