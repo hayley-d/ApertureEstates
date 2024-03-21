@@ -7,11 +7,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Aperture Estates</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/header.css">
-  <link rel="stylesheet" href="css/search-section.css">
-  <link rel="stylesheet" href="css/content-card.css">
-  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="./COS216/PA1/css/style.css">
+  <link rel="stylesheet" href="./COS216/PA1/css/header.css">
+  <link rel="stylesheet" href="./COS216/PA1/css/search-section.css">
+  <link rel="stylesheet" href="./COS216/PA1/css/content-card.css">
+  <link rel="stylesheet" href="./COS216/PA1/css/footer.css">
   <meta name="description" content="">
   <link rel="icon" href="./img/favicon2.png" sizes="any">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +20,7 @@
 
   <style>
     #launch-container{
-      background-image: url("./img/indexBack.png");
+      background-image: url("./COS216/PA1/img/indexBack.png");
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -32,8 +32,18 @@
 
 <body>
 <header>
+  <!--I store all images in a dive element over a img element for the following reasons:
+   - Div element can be easily updated using javaScript allowing for dynamic content loading or interactive features without loading the entire page
+   - Div element allows me to contain other elements in the same container allowing for more complex layouts
+ -->
   <div id = "logo"></div>
-  <div id = "nav"><div><a href = "./Listings.html">PA1</a></div> <div><a href = "./UnderConstruction.html">PA2</a></div> <div><a href = "./UnderConstruction.html">PA3</a></div> <div><a href = "./UnderConstruction.html">PA4</a></div> <div><a href = "./UnderConstruction.html">PA5</a></div> </div>
+  <div id = "nav">
+    <div><a href = "./COS216/PA1/Listings.html">PA1</a></div>
+    <div><a href = "./COS216/PA2/Listings.html">PA2</a></div>
+    <div><a href = "./COS216/PA3/UnderConstruction.html">PA3</a></div>
+    <div><a href = "./COS216/PA4/UnderConstruction.html">PA4</a></div>
+    <div><a href = "./COS216/PA5/UnderConstruction.html">PA5</a></div>
+  </div>
 </header>
 
 <section id = "launch-container">
