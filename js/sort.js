@@ -1,8 +1,10 @@
+/*Hayley Dodkins u21528790*/
 //Array used to sore sorted property data
 let sortedArray = [];
 
 
 function sortAscendingTitle(array){
+
     sortedArray = array.sort((a,b) =>{
         const titleA = a.title.toLowerCase();
         const titleB = b.title.toLowerCase();
@@ -10,6 +12,7 @@ function sortAscendingTitle(array){
         if(titleA > titleB) return 1;
         return 0;
     });
+
     return sortedArray;
 }
 

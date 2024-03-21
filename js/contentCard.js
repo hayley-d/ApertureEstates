@@ -1,4 +1,12 @@
+/*Hayley Dodkins u21528790*/
+var propertiesSale = [];
+var propertiesRental = [];
+var propertyAgents = [];
+var favProperties = [];
 
+var populatedProps = false;
+var populatedRentals = false;
+var populatedAgents = false;
 //function takes in a property object and creates a property card for the object
 function createContentCard(property)
 {
@@ -49,7 +57,9 @@ function createContentCard(property)
     const propertyName = document.createElement('a');
     propertyName.textContent = property.title;
     propertyName.onclick = function(){
-        viewProperty(property);
+        const sepectedProperty = property;
+        localStorage.setItem('selectedProperty',JSON.stringify(sepectedProperty));
+        window.location.href = 'view.php';
     };
     const propertyNameDiv = document.createElement('div');
     propertyNameDiv.classList.add('property-name');
@@ -69,6 +79,34 @@ function createContentCard(property)
     }
 
     favButtonContainer.appendChild(favButton);
+
+    favButton.addEventListener('click', function() {
+        if(property.favorite===false)
+        {
+            // Update the property's favorite status
+            property.favorite = true;
+
+            // Change the heart to red
+            favButton.style.backgroundImage = `url('../img/Heart/red-heart.png')`;
+
+            favProperties.push(property);
+            console.log(favProperties)
+        }
+        else{
+            property.favorite = false;
+
+            // Change the heart to red
+            favButton.style.backgroundImage = `url('../img/Heart/black-filled-heart.png')`;
+
+            // Find the index of the property in favProperties
+            const index = favProperties.findIndex(p => p.id === property.id);
+            if (index !== -1) {
+                // Remove the property from the favProperties array
+                favProperties.splice(index, 1);
+            }
+            console.log(favProperties)
+        }
+    });
 
     /*Property Location element*/
     const propertyLocationDiv = document.createElement('div');
@@ -183,22 +221,18 @@ function createAgentCard(agent)
     return agentCardcontainer;
 }
 
-//takes the user to the view page with the correct property data
-function viewProperty(property){
-    console.log("Property name clicked!")
-    window.location.href = '../View.html';
-    viewCard(property);
-}
 
 //Function below is used to delete current populated cards so that new cards can be loaded and populated based on a sort or filter
 function deleteCards()
 {
+    console.log("Deleting cards....")
     //delete current cards
-    const cards = document.getElementsByClassName("content-card-container");
+    const cards = document.querySelectorAll('.content-card-container');
     const cardsArray = Array.from(cards);
 
     cardsArray.forEach(function(card) {
         //get the property
+        card.remove();
     });
 }
 
@@ -211,12 +245,21 @@ function deleteAgentCards()
     cardsArray.forEach(function(card) {
         card.remove();
     });
+
 }
 
 //Function to display all the content cards
 function displayContentCards(array)
 {
-    console.log(array.length)
+    if(!populatedProps)
+    {
+        console.log(array.length)
+        for(var i = 0; i < array.length; i++){
+            propertiesSale.push(array[i]);
+        }
+        populatedProps = true;
+    }
+
     //Show loading symbol
     toggleSpinner();
     const container = document.getElementById('listings-container');
@@ -251,8 +294,28 @@ function displayContentCards(array)
     toggleSpinner();
 }
 
-function displayAgentCards()
+function displayRentals(array){
+    if(!populatedRentals)
+    {
+        console.log(array.length)
+        for(var i = 0; i < array.length; i++){
+            propertiesRental.push(array[i]);
+        }
+        populatedRentals = true;
+    }
+}
+function displayAgentCards(array)
 {
+    if(!populatedAgents)
+    {
+        console.log(array.length)
+        for(var i = 0; i < array.length; i++){
+            propertyAgents.push(array[i]);
+        }
+        populatedAgents = true;
+    }
+
+    console.log(array)
     //Show loading symbol
     toggleSpinner();
     const container = document.getElementById('agents-container');
@@ -273,7 +336,7 @@ function displayAgentCards()
         container.appendChild(message);
     }
     else{
-        agents.forEach(agent=>{
+        propertyAgents.forEach(agent=>{
             //create the new card
             const card = createAgentCard(agent);
 
@@ -286,9 +349,23 @@ function displayAgentCards()
     toggleSpinner();
 }
 
+function displayAgent(array)
+{
+    if(!populatedAgents)
+    {
+        console.log(array.length)
+        for(var i = 0; i < array.length; i++){
+            propertyAgents.push(array[i]);
+        }
+        populatedAgents = true;
+    }
+
+}
+
 
 //changes the view page for the correct data
 function viewCard(property){
+    console.log(property)
     //top container
     let currentImageIndex = 0;
     const houseImage = document.getElementById('house-image');
@@ -302,32 +379,62 @@ function viewCard(property){
     /*add event listners*/
     prevArrow.addEventListener('click', () =>{
         currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
+        if (currentImageIndex === property.images.length - 1) {
+            currentImageIndex = (currentImageIndex - 1 + property.images.length) % property.images.length;
+        }
         houseImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
     });
 
     nextArrow.addEventListener('click', () =>{
         currentImageIndex = (currentImageIndex + 1) % property.images.length;
+        if (currentImageIndex === property.images.length - 1) {
+            currentImageIndex = (currentImageIndex + 1) % property.images.length;
+        }
         houseImage.style.backgroundImage = `url('${property.images[currentImageIndex]}')`;
     });
-
-    if(isFavourite(property))
+    const heartButton = document.getElementById('heart');
+    if(property.favorite === true)
     {
         //if it is a fav property make the heart red
-        const heartButton = document.getElementById('heart');
+
         heartButton.style.backgroundImage = `url('../img/Heart/red-heart.png')`;
     }
 
-    //populate agent data
-    const agentName = document.getElementById('view-agent-name');
-    const agent = findAgent(property.agency);
-    agentName.innerHTML = `<p>${agent.name}</p>`;
+    heartButton.addEventListener('click', function() {
+        if(property.favorite===false)
+        {
+            // Update the property's favorite status
+            property.favorite = true;
 
-    const agentLogo = document.getElementById('view-agent-logo');
-    agentLogo.style.backgroundImage = `url('${agent.logo}')`;
+            // Change the heart to red
+            heartButton.style.backgroundImage = `url('../img/Heart/red-heart.png')`;
 
-    const agentWebsite = document.getElementById('view-website-button');
-    agentWebsite.href = agent.url;
+            favProperties.push(property);
+            console.log(favProperties)
+        }
+        else{
+            property.favorite = false;
 
+            // Change the heart to red
+            heartButton.style.backgroundImage = `url('../img/Heart/black-filled-heart.png')`;
+
+            // Find the index of the property in favProperties
+            const index = favProperties.findIndex(p => p.id === property.id);
+            if (index !== -1) {
+                // Remove the property from the favProperties array
+                favProperties.splice(index, 1);
+            }
+            console.log(favProperties)
+        }
+    });
+
+    if(property.type==='rent')
+    {
+        propertyScore(property,true);
+    }
+    else{
+        propertyScore(property,false);
+    }
 
     //bottom container
     const listingName = document.getElementById('view-name');
@@ -351,6 +458,8 @@ function viewCard(property){
     const description = document.getElementById('view-desc');
     description.innerHTML = `<p>${property.description}</p>`;
 
+
+
     for(let feature of property.amenities){
         const outerDiv = document.createElement('div');
         const IconDiv = document.createElement('div');
@@ -370,7 +479,7 @@ function isFavourite(property){
 }
 
 function findAgent(agentName){
-    return agents.find(agent => agent.name === agentName);
+    return propertyAgents.find(agent => agent.name === agentName);
 }
 
 function formatAsZAR(number) {
@@ -385,5 +494,70 @@ function colourCards(){
     cardsArray.forEach(function(card) {
 
     });
+}
+
+function propertyScore(property,isRental)
+{
+    const GREAT = 90;//min precentage
+    const GOOD = 70;
+    const MEH = 50;
+    const BAD = 30;
+    const VERYBAD = 0;
+
+    const weights = {
+        price: isRental ? 0.1 : 0.3, // Adjusted price weight for rentals
+        bedrooms: 0.2,
+        bathrooms: 0.2,
+        parking: 0.1,
+        amenities: 0.1,
+        description: 0.1
+    };
+
+    var totalScore = 0;
+    totalScore += weights.price * (isRental ? (property.price / 1000) : (property.price / 1000000)); // Brings all the properties to the same scale so I can assess equally
+    totalScore += weights.bedrooms * property.bedrooms;
+    totalScore += weights.bathrooms * property.bathrooms;
+    totalScore += weights.parking * property.parking_spaces;
+    totalScore += weights.amenities * (property.amenities.length > 8 ? 20 : 10);
+    const keywords = ['ensuite', 'modern', 'beautiful','security'];
+    totalScore += weights.description * (keywords.some(keyword => property.description.toLowerCase().includes(keyword)) ? 20 : 10);
+
+    //get the wieghts array and reduce it to a single value adding it up to 1.0
+    //multiply by 10 to give you each score out of 10
+    const maxPossibleScore = Object.values(weights).reduce((acc, curr) => acc + curr, 0) * 10;
+    const percentage = Math.round((totalScore / maxPossibleScore) * 100);
+
+    let ratingCategory;
+    const RatingLogo = document.getElementById('property-rating-face');
+    const score = document.getElementById('property-score');
+
+    if (percentage >= 90)
+    {
+        ratingCategory = 'Great';
+        RatingLogo.style.backgroundImage = `url('./img/greatFace.png')`;
+        score.innerHTML = `<p style="color: green">${percentage}%</p>`;
+
+    } else if (percentage >= 70)
+    {
+        ratingCategory = 'Good';
+        RatingLogo.style.backgroundImage = `url('./img/goodFace.png')`;
+        score.innerHTML = `<p style="color: yellowgreen">${percentage}%</p>`;
+    } else if (percentage >= 50)
+    {
+        ratingCategory = 'Meh';
+        RatingLogo.style.backgroundImage = `url('./img/mehFace.png')`;
+        score.innerHTML = `<p style="color: gold">${percentage}%</p>`;
+    } else if (percentage >= 30)
+    {
+        ratingCategory = 'Bad';
+        RatingLogo.style.backgroundImage = `url('./img/BadFace.png')`;
+        score.innerHTML = `<p style="color: orange">${percentage}%</p>`;
+    } else
+    {
+        ratingCategory = 'Very Bad';
+        RatingLogo.style.backgroundImage = `url('./img/VeryBadFace.png')`;
+        score.innerHTML = `<p style="color: red">${percentage}%</p>`;
+    }
+
 }
 
