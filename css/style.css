@@ -1,4 +1,4 @@
-
+/*Hayley Dodkins u21528790*/
 section{
   width: 100vw;
   height:100vh;
@@ -35,7 +35,7 @@ footer{
 }
 
 #house{
-  background-image: url("../img/icons/home.png");
+  background-image: url("../img/house.png");
   background-size: cover;
   background-repeat: no-repeat;
   width:100px;

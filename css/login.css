@@ -1,0 +1,102 @@
+*{
+    margin: 0;
+    padding:0;
+    font-family: "Montserrat", sans-serif;
+}
+
+body{
+    margin:10px;
+    overflow-x: hidden;
+    background: linear-gradient(to bottom left, hotpink, #0CC0DF);
+
+}
+
+#login-container{
+    width:100vw;
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#back-btn{
+    background-color: #0CC0DF;
+    color: white;
+    border-radius: 10px;
+    padding:20px;
+    cursor: pointer;
+}
+
+#back-btn:hover{
+    background-color: hotpink;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+form{
+    width:20%;
+    height:fit-content;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding:20px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+form > div{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+}
+
+.heading{
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    color: #0CC0DF;
+    margin-bottom: 30px;
+}
+
+input{
+    border-radius: 10px;
+    font-size: 16px;
+    padding:10px;
+    border:none;
+    outline: none;
+}
+
+label{
+    font-size: 16px;
+
+}
+
+.label-container{
+    display: flex;
+    margin-top: 30px;
+    color: #413D42;
+}
+
+.btn{
+    padding:10px;
+    font-size: 18px;
+    border-radius: 10px;
+    border:none;
+    background-color: #0CC0DF;
+    color: white;
+
+}
+.btn:hover{
+    background-color: #413D42;
+    cursor: pointer;
+}
+
+.submit{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
