@@ -1,4 +1,4 @@
-
+/*Hayley Dodkins u21528790*/
 #search-container{
     width:100vw;
     height:20vh;
@@ -43,7 +43,7 @@
 }
 
 #search-container > .button-container > #rent-search-btn{
-   background-color: darkorange;
+   background-color: hotpink;
 }
 
 #search-container > .button-container > #buy-search-btn{

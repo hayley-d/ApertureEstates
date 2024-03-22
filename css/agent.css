@@ -1,17 +1,22 @@
+/*Hayley Dodkins u21528790*/
 #agent-heading{
     background-image: url("../img/search-background.png");
-    width: 100%;
-    height:20vh;
+    width: 100vw;
+    height:25vh;
     display: flex;
     justify-content: center;
     align-items: center;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-
+    font-size: 100px;
 }
 
 a{
     text-decoration: inherit;
     color: white;
+}
+
+#hide-me{
+    display: none;
 }

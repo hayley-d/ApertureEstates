@@ -1,3 +1,4 @@
+/*Hayley Dodkins u21528790*/
 *{
     margin: 0;
     padding:0;
@@ -6,6 +7,10 @@
 
 body{
     overflow-x: hidden;
+}
+
+#hide-me{
+    display: none;
 }
 
 /*Header CSS*/
@@ -56,8 +61,8 @@ header{
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: darkorange;
-    box-shadow: 0 0 10px darkorange; /* white glowing effect */
+    background-color: hotpink;
+    box-shadow: 0 0 10px hotpink; /* white glowing effect */
     opacity: 0; /* start with no glow */
     transition: opacity 0.3s; /* smooth transition glow */
 }
@@ -77,14 +82,26 @@ header{
     align-items: center;
 }
 
-.user-profile-img{
+.user-btn{
     width:60px;
     height:60px;
-    background-image: url("../img/Mock/profileimage.jpg");
-    border-radius: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-btn > button{
+    border-radius: 8px;
+    border:none;
+    cursor: pointer;
+    background-color: #0CC0DF;
+    padding:10px;
+    color: #413D42;
+}
+
+.user-btn > button:hover{
+    background-color: #413D42;
+    color: white;
 }
 
 @media (max-width: 1300px)

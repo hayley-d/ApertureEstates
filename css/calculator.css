@@ -1,3 +1,4 @@
+/*Hayley Dodkins u21528790*/
 body{
     overflow-x: hidden;
 }
@@ -168,11 +169,12 @@ hr{
     justify-content: center;
     background-repeat: no-repeat;
     background-size: cover;
+    font-size: 100px;
 }
 
 h1{
     color: #0CC0DF;
-    font-size: 90px;
+    font-size: 100px;
 }
 
 @media only screen and (min-width: 1024px) and (max-width: 1440px) {

@@ -1,13 +1,12 @@
-
+/*Hayley Dodkins u21528790*/
 #listings-container{
     background-color: #413D42;
     display: grid;
-    grid-template-rows: repeat(10,1fr);
     width:100vw;
     gap:5vh;
     height:fit-content;
-    overflow: hidden;
-    max-width: 100%;
+    overflow-x: hidden;
+
 }
 
 .content-card-container{
@@ -132,7 +131,7 @@
     height:30px;
 }
 
-.bed-icon, .bath-icon, .car-icon, .size-icon{
+.bed-icon, .bath-icon, .car-icon{
     width:30px;
     height:30px;
     background-repeat: no-repeat;
@@ -145,16 +144,12 @@
     background-image: url("../img/icons/black-bed.png");
 }
 
-.size-icon{
-    background-image: url("../img/icons/black-area.png");
-}
-
 .bath-icon{
     background-image: url("../img/icons/black-bath.png");
 }
 
 .car-icon{
-    background-image: url("../img/CarIcon.png");
+    background-image: url("../img/icons/black-car.png");
 }
 
 .fav-btn{
@@ -195,7 +190,7 @@
 }
 
 .property-desc{
-    display: flex;
+    display: none;
     color: black;
     width:100%;
     height:fit-content;

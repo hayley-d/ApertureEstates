@@ -1,4 +1,4 @@
-
+/*Hayley Dodkins u21528790*/
 section{
   width: 100vw;
   height:100vh;
@@ -35,7 +35,7 @@ footer{
 }
 
 #house{
-  background-image: url("../img/icons/home.png");
+  background-image: url("../img/house.png");
   background-size: cover;
   background-repeat: no-repeat;
   width:100px;
@@ -50,6 +50,24 @@ h1{
 h4{
   font-size: 20px;
   color: #0CC0DF;
+}
+#page-btn-container{
+  background-color: #413D42;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.page-btn{
+  border-radius: 10px;
+  padding:10px;
+  border: none;
+  cursor: pointer;
+}
+
+.page-btn:hover{
+  background-color: hotpink;
+  color: white;
 }
 
 @media only screen and (min-width: 1024px) and (max-width: 1440px) {

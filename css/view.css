@@ -1,3 +1,4 @@
+/*Hayley Dodkins u21528790*/
 section{
     background-color: #413D42;
     display: flex;
@@ -17,7 +18,7 @@ section{
     overflow: hidden;
 }
 
-.agent-card{
+.agent-card, .property-score-container{
     background-color: white;
     border-radius: 20px;
     display: flex;
@@ -74,8 +75,8 @@ section{
     padding:20px;
 }
 
-#agent-logo{
-    background-image: url("../img/Mock/agent4.jpg");
+#view-agent-logo, #property-rating-face{
+    background-image: url("../img/greatFace.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -84,13 +85,13 @@ section{
     border-radius: 100%;
 }
 
-#agent-name{
+#view-agent-name, #property-score-title, #property-score{
     font-size: 30px;
     color: #413D42;
     font-weight: normal;
 }
 
-#agent-contact > a > button{
+#view-agent-website > button{
     border-radius: 20px;
     border:none;
     background-color: darkorange;
@@ -99,7 +100,7 @@ section{
     padding:10px;
     cursor: pointer;
 }
-#agent-contact > a > button:hover{
+#view-agent-website > button:hover{
     background-color: #413D42;
 }
 

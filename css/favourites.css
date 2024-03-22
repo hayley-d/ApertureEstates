@@ -1,7 +1,9 @@
+/*Hayley Dodkins u21528790*/
+
 #header{
     background-image: url("../img/search-background.png");
     width:100vw;
-    height:20vh;
+    height:25vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,7 +23,7 @@ section{
 
 
 .content-card{
-    background-color: #0CC0DF;
+    background-color: white;
     width:70vw;
     height:30vh;
     border-radius: 20px;
@@ -44,5 +46,10 @@ a{
     background-image: url("../img/Heart/black-filled-heart.png");
 }
 
+.rent{
+    background-color: darkorange;
+}
 
-
+.sale{
+    background-color: #0CC0DF;
+}
