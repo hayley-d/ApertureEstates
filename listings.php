@@ -106,7 +106,15 @@ include './includes/header.php'
             </div></div>
     </div>
 
+
 </section>
+
+<div id="page-btn-container">
+    <div>
+        <button class ="page-btn" id="incPage"  onclick="decreasePage()">Previous Page</button>
+        <button class ="page-btn" id="decPage"  onclick="increasePage()">Next Page</button>
+    </div>
+</div>
 
 
 
@@ -128,6 +136,89 @@ include './includes/footer.php'
 
     function getLen(){
         console.log(propertiesSale.length)
+    }
+
+    async function increasePage(){
+        if(pageNum<14)
+        {
+            pageNum+=1;
+        }
+        const button = document.getElementById('incPage');
+        if(pageNum>=14)
+        {
+            button.disabled = true;
+        }
+        const button2 = document.getElementById('decPage');
+        button2.disabled = false;
+
+        //call api
+        try {
+            toggleSpinner();
+            if(currSearch==='sale')
+            {
+                await fetchProperties();
+            }
+            else{
+                await fetchRentals();
+            }
+            console.log("All data loaded");
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            if(currSearch==='sale')
+            {
+                search(false,-1);
+            }
+            else{
+                search(true,-1);
+            }
+            toggleSpinner();
+        }
+    }
+
+    async function decreasePage(){
+        if(pageNum > 1)
+        {
+            pageNum -=1;
+        }
+        const button = document.getElementById('incPage');
+        const button2 = document.getElementById('decPage');
+        if(pageNum===1)
+        {
+            button.disabled = true;
+        }
+
+        button2.disabled = false;
+
+        //call api
+        try {
+            toggleSpinner();
+            if(currSearch==='sale')
+            {
+
+                await fetchProperties();
+
+            }
+            else{
+
+                await fetchRentals();
+
+            }
+            console.log("All data loaded");
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            if(currSearch==='sale')
+            {
+                search(false,-1);
+            }
+            else{
+                search(true,-1);
+            }
+            toggleSpinner();
+        }
     }
 
 </script>
