@@ -251,13 +251,8 @@ function deleteAgentCards()
 //Function to display all the content cards
 function displayContentCards(array)
 {
-    if(!populatedProps)
-    {
-        console.log(array.length)
-        for(var i = 0; i < array.length; i++){
-            propertiesSale.push(array[i]);
-        }
-        populatedProps = true;
+    for(var i = 0; i < array.length; i++){
+        propertiesSale.push(array[i]);
     }
 
     //Show loading symbol
@@ -295,14 +290,40 @@ function displayContentCards(array)
 }
 
 function displayRentals(array){
-    if(!populatedRentals)
-    {
-        console.log(array.length)
-        for(var i = 0; i < array.length; i++){
-            propertiesRental.push(array[i]);
-        }
-        populatedRentals = true;
+    console.log(array)
+    for(var i = 0; i < array.length; i++){
+        propertiesRental.push(array[i]);
     }
+
+    toggleSpinner();
+    const container = document.getElementById('listings-container');
+    //Delete Existing cards
+    deleteCards();
+
+    //show message if array is empty
+    if(array.length === 0)
+    {
+        const message = document.createElement('h2');
+        message.id = 'no-content-message'
+        message.style.display = 'flex';
+        message.style.justifyContent = 'center';
+        message.style.alignItems = 'center';
+        message.style.height = '30vh';
+        message.style.color = 'white';
+        message.textContent = "Sorry no results found :("
+        container.appendChild(message);
+    }
+    else{
+        array.forEach(property=>{
+            //create the new card
+            const card = createContentCard(property);
+            //add the card to the container
+            container.appendChild(card);
+        });
+    }
+
+    //hide loading symbol
+    toggleSpinner();
 }
 function displayAgentCards(array)
 {

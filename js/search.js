@@ -60,12 +60,14 @@ function search(rental,location){
     }
 
     //Step 5: Display the searched results
-    displayContentCards(searchArray);
-
+    var func = rental ? displayContentCards:displayRentals;
+    func(searchArray);
 }
 
 //Add event listeners to the buttons
 buyButton.addEventListener('click', function() {
+    currSearch = 'sale';
+    //fetchSales();
     let location = searchInput.value.trim(); // Trim removes any leading or trailing whitespace
     const message = document.getElementById('no-content-message');
     if(message)
@@ -75,15 +77,28 @@ buyButton.addEventListener('click', function() {
     if (location === '') {
         location = -1; // Set location to -1 if search location is empty
     }
+    const button = document.getElementById('incPage');
+    const button2 = document.getElementById('decPage');
+    button.disabled = false;
+    button2.disabled = false;
     search(false, location);
 });
 
 rentButton.addEventListener('click', function() {
-    const location = searchInput.value.trim(); // Trim removes any leading or trailing whitespace
-    const message = document.getElementById('no-content-message');
+    currSearch = 'rent';
+    //fetchRentalsData();
+    let location = searchInput.value.trim(); // Trim removes any leading or trailing whitespace
+    let message = document.getElementById('no-content-message');
     if(message)
     {
         message.remove();
     }
-    search(true,location);
+    if (location === '') {
+        location = -1; // Set location to -1 if search location is empty
+    }
+    const button = document.getElementById('incPage');
+    const button2 = document.getElementById('decPage');
+    button.disabled = false;
+    button2.disabled = false;
+   search(true,location);
 });

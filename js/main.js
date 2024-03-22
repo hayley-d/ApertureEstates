@@ -16,6 +16,10 @@ var favourites = [];
 //Array for storing agents
 var agents = [];
 
+var pageNum = 1;
+
+var currSearch = 'sale';
+
 
 
 
@@ -25,6 +29,7 @@ function createPropertyObject(id,title,location,price,bedrooms,bathrooms,parking
 
     const amenityArray = amenities.replace(/^, */, '').split(', ').map(amenity => amenity.trim());
     //features and images is an array
+
     return {
         id:id, //int
         title: title,//String
@@ -63,22 +68,16 @@ function handelPropertyData(id,title,location,price,bedrooms,bathrooms,parking,a
     let property = createPropertyObject(id,title,location,price,bedrooms,bathrooms,parking,amenities,description,url,type,agency,images);
 
     //Add property to the array
-    if(type === 'rent')
+    sales.push(property);
+    if(sales.length === 20)
     {
-        rentals.push(property);
-        console.log(property)
-    }
-    else{
-        sales.push(property);
-        if(sales.length === 30)
+
+        var propertyArr = new Array();
+        for(var i = 0; i < 20;i++)
         {
-            var propertyArr = new Array();
-            for(var i = 0; i < 30;i++)
-            {
-                propertyArr.push(sales[i]);
-            }
-            displayContentCards(propertyArr)
+            propertyArr.push(sales[i]);
         }
+        displayContentCards(propertyArr)
     }
 }
 
@@ -88,19 +87,17 @@ function handelRentalData(id,title,location,price,bedrooms,bathrooms,parking,ame
     let property = createPropertyObject(id,title,location,price,bedrooms,bathrooms,parking,amenities,description,url,type,agency,images);
 
     //Add property to the array
-    if(type === 'rent')
-    {
         rentals.push(property);
-        if(rentals.length === 30)
+        if(rentals.length === 20)
         {
             var propertyArr = new Array();
-            for(var i = 0; i < 30;i++)
+            for(var i = 0; i < 20;i++)
             {
                 propertyArr.push(rentals[i]);
             }
             displayRentals(propertyArr)
         }
-    }
+
 }
 
 function handelAgentDataAgents(agent,logoUrl)
@@ -139,12 +136,13 @@ function apiCallProperties(returnFields = "*",limit = 0,sort = '',order = '',sea
     return new Promise((resolve, reject) => {
         //Declare XML Request variable and request url
         let xhr = new XMLHttpRequest();
-        let url = "https://wheatley.cs.up.ac.za/api/";
+        let url = "../includes/api.php";
         //Declare parameters
         let params = {
-            studentnum: `${studentNum}`,
             type: `GetAllListings`,
-            apikey: `${apiKey}`
+            apikey: `Vb2O3W9DfTZLFwlu`,
+            page:pageNum,
+            limit:20
         };
 
         //If the limit param is valid
@@ -181,7 +179,6 @@ function apiCallProperties(returnFields = "*",limit = 0,sort = '',order = '',sea
         }
 
         let requestBody = JSON.stringify(params);
-        console.log(params);
 
         xhr.open("POST", url, true);
 
@@ -193,6 +190,7 @@ function apiCallProperties(returnFields = "*",limit = 0,sort = '',order = '',sea
                 if (xhr.status === 200) {
                     /*returns an array of property objects*/
                     let responseData = JSON.parse(xhr.responseText).data;
+                    console.log(responseData);
                     resolve(responseData);
                    // callback(responseData); // Call the callback function with the response data
                 } else {
@@ -218,10 +216,9 @@ function apiCallAgents(limit = 0,callback)
     return new Promise((resolve, reject) => {
         //Declare XML Request variable and request url
         let xhr = new XMLHttpRequest();
-        let url = "https://wheatley.cs.up.ac.za/api/";
+        let url = "../includes/GetAllAgents.php";
         //Declare parameters
         let params = {
-            studentnum: `${studentNum}`,
             type: `GetAllAgents`,
             apikey: `${apiKey}`
         };
@@ -345,7 +342,7 @@ async function fetchAgentsAgent(){
 //fetch properties and return promise
 async function fetchProperties(){
     try {
-        let propertyData = await apiCallProperties("*", 0, '', '', false);
+        let propertyData = await apiCallProperties("*", 0, '', '', {type:"sale"});
         for (let property of propertyData) {
             const propertyAgencyName = getAgencyNameFromUrl(property.url);
             const matchingAgency = agents.find(agent => new URL(agent.url).hostname === propertyAgencyName);
@@ -353,6 +350,7 @@ async function fetchProperties(){
                 property.agency = "Private Property";
             }
             property.agency = "Private Property";
+            sales = new Array();
             await apiCallImages(property.id, "", property, "", handelPropertyData);
         }
     } catch (error) {
@@ -361,16 +359,6 @@ async function fetchProperties(){
 }
 
 async function fetchRentals(){
-    //{
-    //     "apikey": "a729e2f414c947b786032eba8d8b68d5",
-    //     "return": "*",
-    //     "studentnum": "u21528790",
-    //     "type": "GetAllListings",
-    //     "search":{
-    //       "type":"rent"
-    //   }
-    // }
-
     try {
         let propertyData = await apiCallProperties("*", 0, '', '', {type:"rent"});
         for (let property of propertyData) {
@@ -380,6 +368,7 @@ async function fetchRentals(){
                 property.agency = "Private Property";
             }
             property.agency = "Private Property";
+            rentals = new Array();
             await apiCallImages(property.id, "", property, "", handelRentalData);
         }
     } catch (error) {
@@ -415,5 +404,34 @@ async function fetchAgentData(){
         toggleSpinner();
     }
 }
+
+async function fetchSales(){
+    try {
+        toggleSpinner();
+        await fetchProperties();
+        console.log("All data loaded");
+
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    } finally {
+        toggleSpinner();
+    }
+}
+
+async function fetchRentalsData(){
+    try {
+        toggleSpinner();
+        rentals = new Array();
+        await fetchRentals();
+        console.log("All data loaded");
+
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    } finally {
+        toggleSpinner();
+    }
+}
+
+
 
 
