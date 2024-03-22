@@ -1,6 +1,7 @@
+/*Hayley Dodkins u21528790*/
 const spinnerContainer = document.getElementById('spinner-container');
 
-let isSpinnerShowing = false;
+var isSpinnerShowing = false;
 
 function showSpinner()
 {

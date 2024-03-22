@@ -1,3 +1,4 @@
+/*Hayley Dodkins u21528790*/
 //Filtered array
 let filteredArray = [];
 
@@ -19,12 +20,12 @@ function filter(array,minBedrooms, minBathrooms, minPrice, maxBedrooms, maxBathr
 
 function filterBedrooms(min,max){
 
-        if(min !== ""){
+        if(min !== -1){
             filteredArray = filteredArray.filter(property =>{
                 return property.bedrooms >= min;
             });
         }
-        if(max !== "")
+        if(max !== -1)
         {
             filteredArray = filteredArray.filter(property =>{
                 return property.bedrooms <= max;
@@ -33,12 +34,12 @@ function filterBedrooms(min,max){
 }
 
 function filterBathrooms(min,max){
-        if(min !== ""){
+        if(min !== -1){
             filteredArray = filteredArray.filter(property =>{
                 return property.bathrooms >= min;
             });
         }
-        if(max !== "")
+        if(max !== -1)
         {
             filteredArray = filteredArray.filter(property =>{
                 return property.bathrooms <= max;
@@ -47,12 +48,12 @@ function filterBathrooms(min,max){
 }
 
 function filterPrice(min,max){
-        if(min !== ""){
+        if(min !== -1){
             filteredArray = filteredArray.filter(property =>{
                 return property.price >= min;
             });
         }
-        if(max !== "")
+        if(max !== -1)
         {
             filteredArray = filteredArray.filter(property =>{
                 return property.price <= max;
