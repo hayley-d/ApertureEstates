@@ -45,7 +45,7 @@ class api
     {
 
         $time = time();
-        // Check if there is a message and set the message key
+
         $responseData = ["status" => 'success', "timestamp" => $time, "data" => $data];
 
         // Encode the response data

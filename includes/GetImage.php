@@ -6,7 +6,7 @@ ini_set('display_errors', 'On');
 class GetImage {
     private const APIURL = 'https://wheatley.cs.up.ac.za/api/getimage';
 
-    protected function getImageUrl($queryParams): string|null {
+    protected function getImageUrl($queryParams) {
         // Construct the full URL with query parameters
         $urlWithParams = GetImage::APIURL . '?' . http_build_query($queryParams);
 
