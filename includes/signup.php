@@ -1,5 +1,6 @@
 <?php
-
+session_start();
+$_SESSION['errors_login'] = null;
 ?>
 
     <!DOCTYPE html>
@@ -11,10 +12,50 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="../css/login.css">
+        <style>
+            #errors{
+                width:30vw;
+                height:fit-content;
+                color: red;
+                font-size: 20px;
+                background-color: white;
+                border-radius: 20px;
+                padding:20px;
+            }
+
+            #error-container{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
 
     </head>
     <body>
     <div><a id="back-btn" href="../listings.php">Back</a></div>
+    <?php
+    if(isset($_SESSION['error_signup']))
+    {
+        ?>
+        <div id="error-container">
+            <div id="errors">
+                <p>
+                    <?php
+                    //Errors Occured
+                    $errors = $_SESSION['error_signup'];
+                    foreach ($errors as $error)
+                    {
+                        echo $error;
+                    }
+
+                    ?>
+
+                </p>
+            </div>
+        </div>
+        <?php
+    }
+    ?>
     <div id="login-container">
         <form id="signup-form" method="POST" action="signup_validate.php">
 
@@ -50,23 +91,23 @@
 
         </form>
     </div>
-    <div class="errors">
+    <!--<div class="errors">
         <?php
-            if(isset($_SESSION['error_signup']))
+/*            if(isset($_SESSION['error_signup']))
             {
                 $errors = $_SESSION['error_signup'];
                 $length = count($errors);
                 for($i=0;$i<$length;$i++)
                 {
-                     ?>
+                     */?>
                         <p>
-                            <?php echo $errors[$i]  ?>
+                            <?php /*echo $errors[$i]  */?>
                         </p>
                     <?php
-                }
+/*                }
             }
-        ?>
-    </div>
+        */?>
+    </div>-->
 
     <script>
         function validateInformation()

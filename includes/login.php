@@ -1,5 +1,6 @@
 <?php
-
+session_start();
+$_SESSION['error_signup'] = null;
 ?>
 
 <!DOCTYPE html>
@@ -12,10 +13,52 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/login.css">
 
+    <style>
+        #errors{
+            width:30vw;
+            height:fit-content;
+            color: red;
+            font-size: 20px;
+            background-color: white;
+            border-radius: 20px;
+            padding:20px;
+        }
+
+        #error-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+
 </head>
 <body>
 <div><a id="back-btn" href="../listings.php">Back</a></div>
+<?php
+if(isset($_SESSION['errors_login']))
+{
+?>
+<div id="error-container">
+    <div id="errors">
+        <p>
+            <?php
+                //Errors Occured
+                $errors = $_SESSION['errors_login'];
+                foreach ($errors as $error)
+                {
+                    echo $error;
+                }
+
+            ?>
+
+        </p>
+    </div>
+</div>
+<?php
+}
+?>
 <div id="login-container">
+
     <form id="login-form" method="POST" action="login_validate.php">
 
         <div class="heading"><h1>Login</h1></div>

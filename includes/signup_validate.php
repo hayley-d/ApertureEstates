@@ -39,7 +39,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
         require_once '../config_session.php';
 
-        if(empty($errors))
+        if(count($errors)>0)
         {
             $_SESSION['error_signup'] = $errors;
 
@@ -56,11 +56,57 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             die();
         }
 
-        set_user($name,$surname,$email,$password);
+        $user_data = [
+            'type' => 'Register',
+            'name' => $name,
+            'password' => $password,
+            'email' => $email,
+            'surname' => $surname,
+        ];
 
-        header('Location: ./login.php?signup=success');
-        $stmt = null;
+        //set_user($name,$surname,$email,$password);
+        $url = 'https://wheatley.cs.up.ac.za/u21528790/COS216/PA3/includes/api.php';
+        // Encode the username and password for basic authentication
+        $username = 'u21528790';
+        $password = '345803Moo';
+        $auth = base64_encode("$username:$password");
 
+        $jsonData = json_encode($user_data);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json', // Set the request content type
+            'Authorization: Basic ' . $auth // Set basic authentication header
+        ));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($ch);
+        // Check for errors
+        if (curl_errno($ch)) {
+            $error = curl_error($ch);
+            $errors = [];
+            $errors['Failed Signup'] = $error;
+            $_SESSION['error_signup'] = $errors;
+            header('Location: ./signup.php');
+        } else {
+            // Check the HTTP response code
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            if ($httpCode == 201 || $httpCode == 200)
+            {
+                echo "Signup successful!";
+                header('Location: ./login.php?signup=success');
+            } else {
+                // Failed signup
+                $errors = [];
+                $errors['Failed Signup'] = "Signup Failed";
+                $_SESSION['error_signup'] = $errors;
+                header('Location: ./signup.php');
+            }
+        }
+
+        curl_close($ch);
         die();
 
     } catch(mysqli_sql_exception $e)

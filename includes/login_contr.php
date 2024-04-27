@@ -1,26 +1,20 @@
 <?php
 declare(strict_types=1);
-function is_password_valid(string $password, string $hashed_password_with_salt)
+function is_password_valid( $password, $hashed_password, $salt)
 {
-    if(verify_argon2i($password,$hashed_password_with_salt))
+    if(verify_argon2i($password,$hashed_password,$salt))
     {
         return true;
     }
     else{
-        ?>
-        <script>console.log("passwords do not match.")</script>
-        <?php
         return false;
     }
 }
 
-function verify_argon2i($password, $hashed_password_with_salt): bool
+function verify_argon2i($password, $hashed_password , $salt)
 {
-    // Extract the hash and salt from the stored value
-    list($stored_hash, $stored_salt) = explode('|', $hashed_password_with_salt);
-
     // Verify the password
-    return password_verify($password . $stored_salt, $stored_hash);
+    return password_verify($password . $salt, $hashed_password);
 }
 
 function is_input_empty($username,$password)
@@ -36,6 +30,17 @@ function is_input_empty($username,$password)
 
 function is_email_valid(string $email):bool
 {
+    // Check if the email contains an "@" symbol
+    if (strpos($email, '@') === false) {
+        return false;
+    }
+
+    // Check if the email has at least one character before the "@" symbol
+    $username = explode('@', $email)[0];
+    if (empty($username)) {
+        return false;
+    }
+
     if(filter_var($email,FILTER_VALIDATE_EMAIL)){
         return true;
     }

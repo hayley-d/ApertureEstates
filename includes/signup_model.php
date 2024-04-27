@@ -15,7 +15,7 @@ function get_user(string $email_given)
         $stmt->execute();
 
         // Bind the result variable
-        $stmt->bind_result($id,$name,$surname,$email,$password,$apikey);
+        $stmt->bind_result($id,$name,$surname,$email,$password,$apikey,$salt);
 
         // Fetch the user data
         $stmt->fetch();
@@ -27,7 +27,8 @@ function get_user(string $email_given)
             'surname' => $surname,
             'email' => $email,
             'password' => $password,
-            'apikey' => $apikey
+            'apikey' => $apikey,
+            'salt' => $salt
         ];
     } catch (Exception $e) {
         // Handle the exception (log, display an error, etc.)
@@ -40,13 +41,15 @@ function create_user($name,$surname,$email,$password):void
 {
     global $db;
     $apikey = generateApiKey();
-    $hashed_password = argon2i($password);
+    $hash = argon2i($password);
+    $hashed_password = $hash['password'];
+    $salt = $hash['salt'];
 
-    $query = "INSERT INTO u21528790_users (name,surname,email,password,apikey) VALUES (?,?,?,?,?);";
+    $query = "INSERT INTO u21528790_users (name,surname,email,password,apikey,salt) VALUES (?,?,?,?,?,?);";
 
     try {
         $stmt = $db->prepare($query);
-        $stmt->bind_param("sssss", $name,$surname,$email,$hashed_password,$apikey);
+        $stmt->bind_param("ssssss", $name,$surname,$email,$hashed_password,$apikey,$salt);
         $stmt->execute();
 
     } catch (Exception $e) {
@@ -56,7 +59,7 @@ function create_user($name,$surname,$email,$password):void
     }
 }
 
-function get_email(string $email_given)
+function get_email($email_given)
 {
     global $db;
     $query = "SELECT * FROM u21528790_users WHERE email = ?";
@@ -72,7 +75,7 @@ function get_email(string $email_given)
         }
 
         // Bind the result variable
-        $stmt->bind_result($id,$name,$surname,$email,$password,$apikey);
+        $stmt->bind_result($id,$name,$surname,$email,$password,$apikey,$salt);
 
         // Fetch the user data
         $stmt->fetch();
@@ -84,7 +87,8 @@ function get_email(string $email_given)
             'surname' => $surname,
             'email' => $email,
             'password' => $password,
-            'apikey' => $apikey
+            'apikey' => $apikey,
+            'salt' => $salt
         ];
     } catch (Exception $e) {
         // Handle the exception (log, display an error, etc.)

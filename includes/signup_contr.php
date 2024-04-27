@@ -16,6 +16,17 @@ function is_input_empty( string $name,string $surname,string $email,string $pass
 
 function is_email_valid(string $email):bool
 {
+    // Check if the email contains an "@" symbol
+    if (strpos($email, '@') === false) {
+        return false;
+    }
+
+    // Check if the email has at least one character before the "@" symbol
+    $username = explode('@', $email)[0];
+    if (empty($username)) {
+        return false;
+    }
+
     if(filter_var($email,FILTER_VALIDATE_EMAIL)){
         return true;
     }
@@ -37,7 +48,7 @@ function passwords_match(string $password,string $confirm_password): bool
 
 function is_email_registered($email)
 {
-    if(get_email($email) !== null)
+    if(get_email($email)['email'] !== null)
     {
         return true;
     }
@@ -62,7 +73,7 @@ function generateApiKey() {
     return $apiKey;
 }
 
-function argon2i($password): string
+function argon2i($password)
 {
     $salt = bin2hex(random_bytes(16)); // generate a random 16-byte salt
     $hash_options = [
@@ -75,7 +86,10 @@ function argon2i($password): string
     $hashed_password = password_hash($password . $salt, PASSWORD_ARGON2I, $hash_options);
 
     // Return the hashed password and the salt
-    return $hashed_password . '|' . $salt;
+    return [
+        "password" => $hashed_password,
+        "salt" => $salt
+    ];
 }
 
 function validatePassword($password)

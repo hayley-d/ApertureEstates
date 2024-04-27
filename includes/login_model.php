@@ -13,7 +13,7 @@ function get_user(string $email_given)
         $stmt->execute();
 
         // Bind the result variable
-        $stmt->bind_result($id,$name,$surname,$email,$password,$apikey);
+        $stmt->bind_result($id,$name,$surname,$email,$password,$apikey,$salt);
 
         // Fetch the user data
         $stmt->fetch();
@@ -25,7 +25,8 @@ function get_user(string $email_given)
             'surname' => $surname,
             'email' => $email,
             'password' => $password,
-            'apikey' => $apikey
+            'apikey' => $apikey,
+            'salt' => $salt
         ];
     } catch (Exception $e) {
         // Handle the exception (log, display an error, etc.)
