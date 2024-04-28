@@ -8,7 +8,7 @@ const studentNum = "u21528790";
 var rentals = [];
 
 //Array for storing sale properties
-var sales = new Array();
+var sales = [];
 
 //Array for storing favourite properties
 var favourites = [];
@@ -69,14 +69,18 @@ function handelPropertyData(id,title,location,price,bedrooms,bathrooms,parking,a
 
     //Add property to the array
     sales.push(property);
-    if(sales.length === 20)
+    if(sales.length === 300)
     {
 
         var propertyArr = new Array();
-        for(var i = 0; i < 20;i++)
+        for(var i = 0; i < 300;i++)
         {
             propertyArr.push(sales[i]);
         }
+
+        const arrayAsString = JSON.stringify(propertyArr);
+        sessionStorage.setItem('salesArray', arrayAsString);
+        sessionStorage.setItem('page', "1");
         displayContentCards(propertyArr)
     }
 }
@@ -88,14 +92,18 @@ function handelRentalData(id,title,location,price,bedrooms,bathrooms,parking,ame
 
     //Add property to the array
         rentals.push(property);
-        if(rentals.length === 20)
+        if(rentals.length === 300)
         {
             var propertyArr = new Array();
-            for(var i = 0; i < 20;i++)
+            for(var i = 0; i < 300;i++)
             {
                 propertyArr.push(rentals[i]);
             }
-            displayRentals(propertyArr)
+
+            // Serialize the array into a string using JSON.stringify
+            const arrayAsString = JSON.stringify(propertyArr);
+            sessionStorage.setItem('rentalArray', arrayAsString);
+            //displayRentals(propertyArr)
         }
 
 }
@@ -136,13 +144,12 @@ function apiCallProperties(returnFields = "*",limit = 0,sort = '',order = '',sea
     return new Promise((resolve, reject) => {
         //Declare XML Request variable and request url
         let xhr = new XMLHttpRequest();
-        let url = "../includes/api.php";
+        let url = "https://wheatley.cs.up.ac.za/u21528790/COS216/PA3/includes/api.php";
         //Declare parameters
         let params = {
             type: `GetAllListings`,
             apikey: `Vb2O3W9DfTZLFwlu`,
-            page:pageNum,
-            limit:20
+            limit:500
         };
 
         //If the limit param is valid
@@ -185,6 +192,12 @@ function apiCallProperties(returnFields = "*",limit = 0,sort = '',order = '',sea
         // Set the Content-Type header BEFORE sending the request
         xhr.setRequestHeader("Content-Type", "application/json");
 
+        let username = "u21528790";
+        let password = "345803Moo";
+        let credentials = `${username}:${password}`;
+        let encodedCredentials = btoa(credentials);
+        xhr.setRequestHeader("Authorization", `Basic ${encodedCredentials}`);
+
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
@@ -216,11 +229,11 @@ function apiCallAgents(limit = 0,callback)
     return new Promise((resolve, reject) => {
         //Declare XML Request variable and request url
         let xhr = new XMLHttpRequest();
-        let url = "../includes/GetAllAgents.php";
+        let url = "https://wheatley.cs.up.ac.za/u21528790/COS216/PA3/includes/api.php";
         //Declare parameters
         let params = {
             type: `GetAllAgents`,
-            apikey: `${apiKey}`
+            apikey: `O3MDpgwGlONHZCfg`
         };
 
         //If the limit param is valid
@@ -235,6 +248,14 @@ function apiCallAgents(limit = 0,callback)
 
         // Set the Content-Type header BEFORE sending the request
         xhr.setRequestHeader("Content-Type", "application/json");
+
+        let username = "u21528790";
+        let password = "345803Moo";
+        let credentials = `${username}:${password}`;
+        let encodedCredentials = btoa(credentials);
+        xhr.setRequestHeader("Authorization", `Basic ${encodedCredentials}`);
+
+        console.log(requestBody);
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
@@ -252,6 +273,7 @@ function apiCallAgents(limit = 0,callback)
             }
         };
 
+        console.log(requestBody);
         // Send the request to the API
         xhr.send(requestBody);
 

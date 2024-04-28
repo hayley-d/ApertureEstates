@@ -251,9 +251,14 @@ function deleteAgentCards()
 //Function to display all the content cards
 function displayContentCards(array)
 {
-    for(var i = 0; i < array.length; i++){
+   /* console.log(array)*/
+    /*for(var i = 0; i < array.length; i++){
         propertiesSale.push(array[i]);
-    }
+    }*/
+    const retrievedArrayAsString = sessionStorage.getItem('salesArray');
+    console.log(JSON.parse(retrievedArrayAsString))
+
+    array = getPageItems();
 
     //Show loading symbol
     toggleSpinner();
@@ -290,10 +295,12 @@ function displayContentCards(array)
 }
 
 function displayRentals(array){
-    console.log(array)
+    /*console.log(array)
     for(var i = 0; i < array.length; i++){
         propertiesRental.push(array[i]);
-    }
+    }*/
+
+    array = getPageItemsRentals();
 
     toggleSpinner();
     const container = document.getElementById('listings-container');
@@ -383,6 +390,27 @@ function displayAgent(array)
 
 }
 
+function getPageItems()
+{
+    const retrievedArrayAsString = sessionStorage.getItem('salesArray');
+    const data = JSON.parse(retrievedArrayAsString);
+
+    const itemsPerPage = 20;
+    const startIndex = (sessionStorage.getItem('page') - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return data.slice(startIndex, endIndex);
+}
+
+function getPageItemsRentals()
+{
+    const retrievedArrayAsString = sessionStorage.getItem('rentalArray');
+    const data = JSON.parse(retrievedArrayAsString);
+
+    const itemsPerPage = 20;
+    const startIndex = (sessionStorage.getItem('page') - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return data.slice(startIndex, endIndex);
+}
 
 //changes the view page for the correct data
 function viewCard(property){
@@ -580,5 +608,88 @@ function propertyScore(property,isRental)
         score.innerHTML = `<p style="color: red">${percentage}%</p>`;
     }
 
+}
+
+function displayContentCards2(array)
+{
+    /* console.log(array)*/
+    /*for(var i = 0; i < array.length; i++){
+        propertiesSale.push(array[i]);
+    }*/
+
+
+    array = getPageItems();
+
+    //Show loading symbol
+    toggleSpinner();
+    const container = document.getElementById('listings-container');
+    //Delete Existing cards
+    deleteCards();
+
+    //show message if array is empty
+    if(array.length === 0)
+    {
+        const message = document.createElement('h2');
+        message.id = 'no-content-message'
+        message.style.display = 'flex';
+        message.style.justifyContent = 'center';
+        message.style.alignItems = 'center';
+        message.style.height = '30vh';
+        message.style.color = 'white';
+        message.textContent = "Sorry no results found :("
+        container.appendChild(message);
+    }
+    else{
+        array.forEach(property=>{
+            //create the new card
+            const card = createContentCard(property);
+
+
+            //add the card to the container
+            container.appendChild(card);
+        });
+    }
+
+    //hide loading symbol
+    toggleSpinner();
+}
+
+function displayRentals2(array){
+    /*console.log(array)
+    for(var i = 0; i < array.length; i++){
+        propertiesRental.push(array[i]);
+    }*/
+
+
+
+    toggleSpinner();
+    const container = document.getElementById('listings-container');
+    //Delete Existing cards
+    deleteCards();
+
+    //show message if array is empty
+    if(array.length === 0)
+    {
+        const message = document.createElement('h2');
+        message.id = 'no-content-message'
+        message.style.display = 'flex';
+        message.style.justifyContent = 'center';
+        message.style.alignItems = 'center';
+        message.style.height = '30vh';
+        message.style.color = 'white';
+        message.textContent = "Sorry no results found :("
+        container.appendChild(message);
+    }
+    else{
+        array.forEach(property=>{
+            //create the new card
+            const card = createContentCard(property);
+            //add the card to the container
+            container.appendChild(card);
+        });
+    }
+
+    //hide loading symbol
+    toggleSpinner();
 }
 
