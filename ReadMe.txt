@@ -1,7 +1,7 @@
 Default Login Details
 ----------------------------------------------------------
-Email:
-Password:
+Email: email@proton.me
+Password: 123456Woo*
 
 Password Requirements:
 ----------------------------------------------------------

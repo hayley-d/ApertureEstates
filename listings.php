@@ -36,8 +36,8 @@ include './includes/header.php'
 <section id = "content">
     <div id = "greeting-container">
         <div id = "house"></div>
-        <div onclick="getLen()"><h1>Properties For Sale</h1></div>
-        <div><h4>GLaDOS-Approved Homes: Where Every Room is a Test</h4></div>
+        <div onclick="getLen()"><h1 id="heading1">Properties For Sale</h1></div>
+        <div><h4 id="heading4">GLaDOS-Approved Homes: Where Every Room is a Test</h4></div>
     </div>
     <div id = "search-container">
         <input type="search" placeholder="Location">
@@ -111,8 +111,8 @@ include './includes/header.php'
 
 <div id="page-btn-container">
     <div>
-        <button class ="page-btn" id="incPage"  onclick="decreasePage()">Previous Page</button>
-        <button class ="page-btn" id="decPage"  onclick="increasePage()">Next Page</button>
+        <button class ="page-btn" id="decPage"  onclick="decreasePage()">Previous Page</button>
+        <button class ="page-btn" id="incPage"  onclick="increasePage()">Next Page</button>
     </div>
 </div>
 
@@ -128,23 +128,29 @@ include './includes/footer.php'
 <script src = "./js/sort.js"></script>
 <script src = "./js/filter.js"></script>
 <script src = "./js/contentCard.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded',function(){
         //fetch the data
         fetchData();
+        const button2 = document.getElementById('decPage');
+        button2.disabled = true;
     })
 
     function getLen(){
         console.log(propertiesSale.length)
     }
 
-    async function increasePage(){
-        if(pageNum<14)
+     function increasePage(){
+        var page = sessionStorage.getItem('page');
+         console.log("Page Number: "+ page);
+        if(page < 14)
         {
-            pageNum+=1;
+            page++;
+            sessionStorage.setItem('page', page);
         }
         const button = document.getElementById('incPage');
-        if(pageNum>=14)
+        if(page >= 14)
         {
             button.disabled = true;
         }
@@ -156,10 +162,10 @@ include './includes/footer.php'
             toggleSpinner();
             if(currSearch==='sale')
             {
-                await fetchProperties();
+               displayContentCards([]);
             }
             else{
-                await fetchRentals();
+                displayRentals([]);
             }
             console.log("All data loaded");
 
@@ -168,41 +174,46 @@ include './includes/footer.php'
         } finally {
             if(currSearch==='sale')
             {
-                search(false,-1);
+                searchPage(false,-1);
             }
             else{
-                search(true,-1);
+                searchPage(true,-1);
             }
             toggleSpinner();
         }
     }
 
-    async function decreasePage(){
-        if(pageNum > 1)
+    function decreasePage(){
+        var page = sessionStorage.getItem('page');
+        console.log("Page Number: "+ page);
+        if(page > 1)
         {
-            pageNum -=1;
-        }
-        const button = document.getElementById('incPage');
-        const button2 = document.getElementById('decPage');
-        if(pageNum===1)
-        {
-            button.disabled = true;
+            page--;
+            sessionStorage.setItem('page', page);
         }
 
-        button2.disabled = false;
+        const button = document.getElementById('incPage');
+        const button2 = document.getElementById('decPage');
+
+        if(page === 1)
+        {
+            button2.disabled = true;
+        }
+
+        button.disabled = false;
 
         //call api
         try {
             toggleSpinner();
-            if(currSearch==='sale')
+            if(currSearch === 'sale')
             {
 
-                await fetchProperties();
+                displayContentCards([])
 
             }
             else{
 
-                await fetchRentals();
+                displayRentals([]);
 
             }
             console.log("All data loaded");
@@ -212,10 +223,10 @@ include './includes/footer.php'
         } finally {
             if(currSearch==='sale')
             {
-                search(false,-1);
+                searchPage(false,-1);
             }
             else{
-                search(true,-1);
+                searchPage(true,-1);
             }
             toggleSpinner();
         }
