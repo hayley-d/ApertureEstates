@@ -27,6 +27,7 @@ body{
     width:70vw;
     height:25vh;
     display: grid;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     grid-template-columns: 3fr 1fr;
     grid-template-rows: 3fr 1fr;
     height:fit-content;

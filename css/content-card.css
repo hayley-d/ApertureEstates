@@ -27,7 +27,7 @@
     grid-template-columns: 1fr 3fr;
     padding:2vw;
     gap:2vh;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     min-height: 200px;
     overflow: hidden;
 }

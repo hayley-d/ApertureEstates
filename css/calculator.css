@@ -15,6 +15,7 @@ section{
 }
 
 #mortgage-payment-form{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(6,1fr);
@@ -30,6 +31,7 @@ section{
 }
 
 #property-tax-form{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(4,1fr);
@@ -106,6 +108,7 @@ button:hover{
 }
 
 #monthly-mortgage-container{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     display: none;
     flex-direction: column;
     background-color: white;
