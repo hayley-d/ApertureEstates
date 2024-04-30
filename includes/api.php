@@ -53,42 +53,211 @@ class api
         echo json_encode($responseData, JSON_PRETTY_PRINT);
     }
 
-    public function GetAllListings($db,$limit,$sort_field,$sort_order, $search,$page,$fuzzy)
+    public function GetAllListings($db,$return,$limit,$sort_field,$sort_order, $search,$page,$fuzzy)
     {
-        // Sanitize and validate parameters
-        $limit = filter_var($limit, FILTER_VALIDATE_INT);
-        $sort_field = filter_var($sort_field, FILTER_SANITIZE_STRING);
-        $sort_order = strtoupper(filter_var($sort_order, FILTER_SANITIZE_STRING));
-        $page = filter_var($page, FILTER_VALIDATE_INT);
+        if($return == null)
+        {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Missing Return Fields"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
 
-        // Calculate the offset based on the page number and limit
-        $offset = ($page - 1) * $limit;
+        //parse the return
+        $allowedFields = ["id", "title", "location", "price", "bedrooms", "bathrooms", "URL", "parking_spaces", "amenities", "description", "type", "images"];
 
-        $query = "SELECT * FROM u21528790_properties ";
-
-        if ($search !== null) {
-            // Convert the object to an array of key-value pairs
-            $searchArray = [];
-            foreach ($search as $key => $value) {
-                if ($fuzzy) {
-                    $searchArray[] = "$key LIKE ?";
-                    $value = "%$value%";
-                } else {
-                    $searchArray[] = "$key = ?";
+        // Parse the return parameter
+        $returnFields = [];
+        if (isset($return))
+        {
+            if ($return === "*")
+            {
+                $selectFields = '*';
+            } else
+            {
+                // Validate requested fields against allowed fields
+                $invalidFields = array_diff($return, $allowedFields);
+                if (count($invalidFields)>0)
+                {
+                    header('Content-Type: application/json');
+                    http_response_code(400);
+                    $timestamp = round(microtime(true) * 1000);
+                    $response = array(
+                        "status" => "Fail",
+                        "timestamp" => $timestamp,
+                        "data" => "Invalid Return Fields"
+                    );
+                    echo json_encode($response, JSON_PRETTY_PRINT);
+                    die();
                 }
+                $returnFields = $return;
+                $selectFields = implode(", ", array_map(function($field) {return "`$field`";}, $returnFields));
             }
-
-            // Build WHERE clause for search parameters
-            $whereClause = implode(' AND ', $searchArray);
-            $query .= " WHERE $whereClause";
         }
 
-        // Add ORDER BY and LIMIT clauses
-        if ($sort_field !== null && in_array(strtoupper($sort_order), ['ASC', 'DESC'])) {
-            $query .= " ORDER BY $sort_field $sort_order";
+        // Construct the SELECT clause based on returnFields
+
+
+        $query = "SELECT $selectFields FROM u21528790_properties ";
+
+        // Initialize the WHERE clause
+        $whereClause = '';
+        $allowedSearchKeys = ["id", "title", "location", "price_min", "price_max", "bedrooms", "bathrooms", "parking_spaces", "amenities", "type"];
+
+        // Check if $search is not null and is an array
+        if($search !== null)
+        {
+            if (is_array($search))
+            {
+                // Array to store prepared statement placeholders
+                $placeholders = [];
+
+                // Iterate through each search parameter
+                foreach ($search as $key => $value)
+                {
+                    if (!in_array($key, $allowedSearchKeys)) {
+                        // Throw an error if an invalid key is found
+                        header('Content-Type: application/json');
+                        http_response_code(400);
+                        $timestamp = round(microtime(true) * 1000);
+                        $response = [
+                            "status" => "Fail",
+                            "timestamp" => $timestamp,
+                            "data" => "Invalid search field"
+                        ];
+                        echo json_encode($response, JSON_PRETTY_PRINT);
+                        die();
+                    }
+                    else{
+                        // Apply fuzzy search if enabled
+                        if ($fuzzy && $key !== 'price_min' && $key !== 'price_max')
+                        {
+                            $whereClause .= "$key LIKE '%" . $value . "%' AND ";
+                        }
+                        else {
+                            // Otherwise, perform exact match
+                            if ($key === 'price_min') {
+                                $whereClause .= 'price > ' . intval($value) . ' AND ';
+                            } elseif ($key === 'price_max') {
+                                $whereClause .= 'price < ' . intval($value) . ' AND ';
+                            } else {
+                                $whereClause .= "$key = '" . $value . "' AND ";
+                            }
+                        }
+                    }
+                }
+
+                // Remove the trailing 'AND' from the WHERE clause
+                $whereClause = rtrim($whereClause, 'AND ');
+
+
+                // Add the WHERE clause to the main query if it's not empty
+                if (!empty($whereClause)) {
+                    $query .= " WHERE $whereClause";
+                }
+
+            }
+            else{
+                header('Content-Type: application/json');
+                http_response_code(400);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "Invalid Search Field"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            }
         }
-        if ($limit !== null && is_numeric($limit)) {
-            $query .= " LIMIT $limit OFFSET $offset";
+
+        if($sort_order !== null && $sort_field !== null)
+        {
+            if(in_array(strtoupper($sort_order), ['ASC', 'DESC']) /*&& in_array(strtoupper($sort_field), ['id', 'title','location','price','bedrooms','bathrooms','parking_spaces'])*/)
+            {
+                $query .= " ORDER BY ". $sort_field." ". $sort_order;
+            }
+            else{
+                header('Content-Type: application/json');
+                http_response_code(400);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "Invalid Order/Sort Field"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            }
+        }
+        else if($sort_order !== null && $sort_field === null)
+        {
+            if(in_array(strtoupper($sort_order), ['ASC', 'DESC']))
+            {
+                $query .= " ORDER BY title $sort_order";
+            }
+            else{
+                header('Content-Type: application/json');
+                http_response_code(400);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "Invalid Order Field"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            }
+        }
+        else if($sort_order === null && $sort_field !== null)
+        {
+            if(in_array(strtoupper($sort_field), ['id', 'title','location','price','bedrooms','bathrooms','parking_spaces']))
+            {
+                $query .= " ORDER BY $sort_field ASC";
+            }
+            else{
+                header('Content-Type: application/json');
+                http_response_code(400);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "Invalid Order Field"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            }
+        }
+        else if($sort_order === null && $sort_field === null)
+        {
+            $query .= " ORDER BY title ASC";
+        }
+
+
+        // Check if the limit parameter is provided and valid
+        if ($limit !== null)
+        {
+            // Validate if the limit is a valid number and within the range 0 to 500
+            if (!is_numeric($limit) || $limit < 0 || $limit > 500) {
+                header('Content-Type: application/json');
+                http_response_code(400);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "Invalid Limit Parameter. Limit must be a number between 0 and 500."
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            }
+            // Add the LIMIT clause to the query
+            $query .= " LIMIT $limit";
         }
 
         try{
@@ -96,7 +265,16 @@ class api
             $stmt = $db->prepare($query);
 
             if (!$stmt) {
-                throw new Exception("Error preparing the SQL query.");
+                header('Content-Type: application/json');
+                http_response_code(400);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "SQL Error: ". $query
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
             }
 
             if($search !== null)
@@ -110,32 +288,53 @@ class api
             $executionResult = $stmt->execute();
 
             if (!$executionResult) {
-                throw new Exception("Error executing the SQL query: " . $stmt->error);
+                header('Content-Type: application/json');
+                http_response_code(400);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "SQL Error: ". $query
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
             }
 
             // Get the result set
             $result = $stmt->get_result();
 
             if (!$result) {
-                throw new Exception("Error getting the result set: " . $stmt->error);
+                header('Content-Type: application/json');
+                http_response_code(400);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "Error Fetching Result"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
             }
 
             // Fetch all results
             $results = $result->fetch_all(MYSQLI_ASSOC);
             // Return the user data
 
-           $this->handleReturn('*',$results);
-
-            return $results;
+           $this->handleReturn($return,$results);
         }
 
         catch (Exception $e) {
 
-            $error_message = "Error fetching data. Please try again later.";
-
-            http_response_code(500);
-            echo json_encode(['error' => $error_message]);
-            return null;
+            header('Content-Type: application/json');
+            http_response_code(400);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => $e->getMessage()
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
         }
     }
 
@@ -354,39 +553,42 @@ class api
     
     public  function handleReturn( $return, $database_results)
     {
-        $results = [];
+
+        // Convert $return to an array if it's a string
+        if (!is_array($return)) {
+            // If $return is '*', convert it to an array containing all column names
+            if ($return === '*') {
+                // Fetch column names from the first database result
+                $return = array_keys($database_results[0]);
+            } else {
+                // Split the comma-separated string into an array
+                $return = explode(',', $return);
+            }
+        }
+
         // function filters out any unwanted data
-
-        if (gettype($return) === 'string')
+        if(in_array("images", $return))
         {
-            foreach ($database_results as $result) {
-
+            foreach ($database_results as $result)
+            {
                 $images = $this->getImageUrl(['listing_id' => $result['id']]);
                 $result['images'] = $images;
             }
-            $this->response(true,"success",$database_results);
-            return $database_results;
-        } else {
-            foreach ($database_results as $result) {
-                $singleResult = [];
-
-                foreach ($return as $key) {
-                    // Check if the key exists in the current result
-                    if (array_key_exists($key, $result)) {
-                        $singleResult[$key] = $result[$key];
-                    } else {
-                        // Handle non-existent key (you can log a warning or take other actions)
-                        echo "Error invalid key: " . $key;
-                    }
-                }
-                $images = $this->getImageUrl(['listing_id' => $result['id']]);
-                $singleResult['images'] = $images;
-                $results[] = $singleResult;
-            }
-            $this->response(true,"success",$results);
-            return $results;
         }
+        header('Content-Type: application/json');
+        http_response_code(200);
+        $timestamp = round(microtime(true) * 1000);
+        $response = array(
+            "status" => "Success",
+            "timestamp" => $timestamp,
+            "data" => $database_results
+        );
+        echo json_encode($response, JSON_PRETTY_PRINT);
+        die();
+
     }
+
+
 
     function is_email_valid($email):bool
     {
@@ -672,17 +874,426 @@ class api
         // Verify the password
         return password_verify($password . $salt, $hashed_password);
     }
+
+    function update_theme($theme,$apikey)
+    {
+        global $db;
+        if($theme == null || $apikey == null)
+        {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Invalid Information"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+
+
+        $statment= $db->prepare("UPDATE user_information SET theme = ? WHERE apikey = ?");
+
+        $statment->bind_param('ss',$theme,$apikey);
+
+        if ($statment->execute()) {
+            // Check if any rows were affected
+            if ($statment->affected_rows > 0) {
+                //Successful
+                header('Content-Type: application/json');
+                http_response_code(201);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Success",
+                    "timestamp" => $timestamp,
+                    "data" => "Update Successful"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            } else {
+                header('Content-Type: application/json');
+                http_response_code(500);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "Update Error"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            }
+        } else {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Update Error"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+    }
+
+    function update_price($apikey,$min_price,$max_price)
+    {
+        global $db;
+        if($apikey == null || $min_price == null || $max_price == null)
+        {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Invalid apikey/price"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+
+        $statment= $db->prepare("UPDATE user_information SET min_price = ?, max_price = ? WHERE apikey = ?");
+
+        $statment->bind_param('iis', $min_price, $max_price, $apikey);
+
+        if ($statment->execute()) {
+            // Check if any rows were affected
+            if ($statment->affected_rows > 0) {
+                //Successful
+                header('Content-Type: application/json');
+                http_response_code(201);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Success",
+                    "timestamp" => $timestamp,
+                    "data" => "Update Successful"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            } else {
+                header('Content-Type: application/json');
+                http_response_code(500);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "Update Error"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            }
+        } else {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Update Error"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+    }
+
+    function update_bedrooms($apikey,$min_bedrooms,$max_bedrooms)
+    {
+        global $db;
+        if($apikey == null || $min_bedrooms == null || $max_bedrooms == null)
+        {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Invalid apikey/bedrooms"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+
+        $statment= $db->prepare("UPDATE user_information SET min_bedrooms = ?, max_bedrooms = ? WHERE apikey = ?");
+
+        $statment->bind_param('iis', $min_bedrooms, $max_bedrooms, $apikey);
+
+        if ($statment->execute()) {
+            // Check if any rows were affected
+            if ($statment->affected_rows > 0) {
+                //Successful
+                header('Content-Type: application/json');
+                http_response_code(201);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Success",
+                    "timestamp" => $timestamp,
+                    "data" => "Update Successful"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            } else {
+                header('Content-Type: application/json');
+                http_response_code(500);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "Update Error"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            }
+        } else {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Update Error"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+    }
+
+    function update_bathrooms($apikey,$min_bathrooms,$max_bathrooms)
+    {
+        global $db;
+        if($apikey == null || $min_bathrooms == null || $max_bathrooms == null)
+        {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Invalid apikey/bathrooms"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+
+        $statment= $db->prepare("UPDATE user_information SET min_bathrooms = ?, max_bathrooms = ? WHERE apikey = ?");
+
+        $statment->bind_param('iis', $min_bathrooms, $max_bathrooms, $apikey);
+
+        if ($statment->execute()) {
+            // Check if any rows were affected
+            if ($statment->affected_rows > 0) {
+                //Successful
+                header('Content-Type: application/json');
+                http_response_code(201);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Success",
+                    "timestamp" => $timestamp,
+                    "data" => "Update Successful"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            } else {
+                header('Content-Type: application/json');
+                http_response_code(500);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "Update Error"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            }
+        } else {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Update Error"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+    }
+
+    function update_favourites($apikey,$favourites)
+    {
+        global $db;
+        if($apikey == null || $favourites == null)
+        {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Invalid apikey/favourites"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+
+        $statment= $db->prepare("UPDATE user_information SET favourites = ? WHERE apikey = ?");
+
+        $statment->bind_param('ss', $favourites, $apikey);
+
+        if ($statment->execute()) {
+            // Check if any rows were affected
+            if ($statment->affected_rows > 0) {
+                //Successful
+                header('Content-Type: application/json');
+                http_response_code(201);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Success",
+                    "timestamp" => $timestamp,
+                    "data" => "Update Successful"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            } else {
+                header('Content-Type: application/json');
+                http_response_code(500);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Fail",
+                    "timestamp" => $timestamp,
+                    "data" => "Update Error"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
+                die();
+            }
+        } else {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Update Error"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+    }
+
+    function get_favourites($properties)
+    {
+        global $db;
+        // Split the comma-separated string into an array of IDs
+        $propertyIds = explode(',', $properties);
+        // Construct the parameter placeholders based on the number of IDs in the array
+        $placeholders = implode(',', array_fill(0, count($propertyIds), '?'));
+        $query = "SELECT * FROM u21528790_properties WHERE id IN ($placeholders)";
+
+        try {
+            $stmt = $db->prepare($query);
+            // Construct the types string dynamically based on the number of IDs
+            $types = str_repeat('i', count($propertyIds));
+
+            // Create an array of references to bind parameters
+            $params = array_merge([$types], $propertyIds);
+            $refs = [];
+            foreach ($params as $key => &$value) {
+                $refs[$key] = &$value;
+            }
+
+            // Bind parameters dynamically
+            call_user_func_array([$stmt, 'bind_param'], $refs);
+
+            $stmt->execute();
+
+            // Bind the result variable
+            $stmt->bind_result($id,$title,$price,$bedrooms,$bathrooms,$parking_spaces,$location,$description,$images,$type,$amenities,$url,$agent,$createdAt,$updated);
+
+            // Fetch the results
+            $results = [];
+            while ($stmt->fetch()) {
+                $results[] = [
+                    'id' => $id,
+                    'title' => $title,
+                    'price' => $price,
+                    'bedrooms' => $bedrooms,
+                    'bathrooms' => $bathrooms,
+                    'parking_spaces' => $parking_spaces,
+                    'location' => $location,
+                    'description' => $description,
+                    'images' => $images,
+                    'type' => $type,
+                    'amenities' => $amenities,
+                    'url' => $url,
+                    'agent' => $agent,
+                    'created' => $createdAt,
+                    'updated' => $updated
+                ];
+            }
+            $this->handleReturn("*",$results);
+        } catch (Exception $e) {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => $e->getMessage()
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+    }
+
+    //returns an array of ids for the properties
+    function get_favourites_helper($apikey)
+    {
+        global $db;
+        $query = "SELECT favourites FROM user_information WHERE apikey = ?";
+        try {
+            $stmt = $db->prepare($query);
+            $stmt->bind_param("s", $apikey); // 's' indicates a string parameter
+            $stmt->execute();
+
+            $stmt->bind_result($favourites);
+
+            $stmt->fetch();
+
+            // Close the statement
+            $stmt->close();
+
+            // Convert the string of IDs to an array of integers
+            //$favouritesArray = array_map('intval', explode(',', $favourites));
+
+            $this->get_favourites($favourites);
+
+
+        } catch (Exception $e) {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => $e->getMessage()
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+    }
 }
 
 $api = new api();
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
     $type = $requestData['type'] ?? null;
-    /*$type = "Register";
-    $requestData['name'] = "Tom";
-    $requestData['surname'] = "Nook";
-    $requestData['email'] = "tom@proton.me";
-    $requestData['password'] = "123456Woo*";*/
+
+    /*$type = "updateBathroom";
+    $requestData['apikey'] = "oUsBARLyO4bJfM7Y";
+    $requestData['min_bathrooms'] = "0";
+    $requestData['max_bathrooms'] = "4";*/
+
     if($type == 'Register')
     {
         $name = $requestData['name'] ?? null;
@@ -706,8 +1317,56 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
         $api->loginImplement($email,$password);
         die();
     }
+    else if($type == "updateTheme")
+    {
+        $apikey = $requestData['apikey'] ?? null;
+        $theme = $requestData['theme'] ?? null;
+        $api->update_theme($theme,$apikey);
+        die();
+    }
+    else if($type == "updateBathroom")
+    {
+        $apikey = $requestData['apikey'] ?? null;
+        $min_bathrooms = $requestData['min_bathrooms'] ?? null;
+        $max_bathrooms = $requestData['max_bathrooms'] ?? null;
+
+        $api->update_bathrooms($apikey,$min_bathrooms,$max_bathrooms);
+        die();
+    }
+    else if($type == "updateBedroom")
+    {
+        $apikey = $requestData['apikey'] ?? null;
+
+        $min_bedrooms = $requestData['min_bedrooms'] ?? null;
+        $max_bedrooms = $requestData['max_bedrooms'] ?? null;
+
+        $api->update_bedrooms($apikey,$min_bedrooms,$max_bedrooms);
+        die();
+    }
+    else if($type == "updatePrice")
+    {
+        $apikey = $requestData['apikey'] ?? null;
+        $min_price = $requestData['min_price'] ?? null;
+        $max_price = $requestData['max_price'] ?? null;
+        $api->update_price($apikey,$min_price,$max_price);
+        die();
+    }
+    else if($type == "updateFavourites")
+    {
+        $apikey = $requestData['apikey'] ?? null;
+        $favourites = $requestData['favourites'] ?? null;
+        $api->update_favourites($apikey,$favourites);
+        die();
+    }
+    else if($type == "getFavourites")
+    {
+        $apikey = $requestData['apikey'] ?? null;
+        $api->get_favourites_helper($apikey);
+        die();
+    }
 
     $apiKey = $requestData['apikey'] ?? null;
+    $return = $requestData['return'] ?? null;
     $limit = $requestData['limit'] ?? null;
     $sort = $requestData['sort'] ?? null;
     $order = $requestData['order'] ?? null;
@@ -727,7 +1386,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
 
         if($type == 'GetAllListings')
         {
-            $api->GetAllListings($db,$limit,$sort,$order,$search,$page,$fuzzy);
+            $api->GetAllListings($db,$return,$limit,$sort,$order,$search,$page,$fuzzy);
         }
         else if($type == 'GetAllAgents')
         {

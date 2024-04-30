@@ -95,6 +95,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             if ($httpCode == 201 || $httpCode == 200)
             {
+                create_user_info(get_user_key($email));
                 echo "Signup successful!";
                 header('Location: ./login.php?signup=success');
             } else {

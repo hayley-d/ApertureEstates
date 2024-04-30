@@ -96,4 +96,50 @@ function get_email($email_given)
         return null;
     }
 }
+
+function create_user_info($apikey):void
+{
+    global $db;
+    $favourites = "";
+    $theme = "dark";
+
+
+    $query = "INSERT INTO user_information (apikey,favourites,theme) VALUES (?,?,?);";
+
+    try {
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("sss", $apikey,$favourites,$theme);
+        $stmt->execute();
+
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        header('Location: ../listings.php');
+        die();
+    }
+}
+
+function get_user_key(string $email_given)
+{
+    global $db;
+    $query = "SELECT apikey FROM u21528790_users WHERE email = ?";
+
+    try {
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("s", $email_given); // 's' indicates a string parameter
+        $stmt->execute();
+
+        // Bind the result variable
+        $stmt->bind_result($apikey);
+
+        // Fetch the user data
+        $stmt->fetch();
+
+        // Return the user data
+        return $apikey;
+    } catch (Exception $e) {
+        // Handle the exception (log, display an error, etc.)
+        echo "Error: " . $e->getMessage();
+        return null;
+    }
+}
 ?>

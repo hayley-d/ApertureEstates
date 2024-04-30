@@ -1,19 +1,8 @@
 <?php
 declare(strict_types=1);
-function is_password_valid( $password, $hashed_password, $salt)
+function is_password_valid($password, $hashed_password, $salt)
 {
-    if(verify_argon2i($password,$hashed_password,$salt))
-    {
-        return true;
-    }
-    else{
-        return false;
-    }
-}
-
-function verify_argon2i($password, $hashed_password , $salt)
-{
-    // Verify the password
+    // Compare the hashed password with the stored hashed password
     return password_verify($password . $salt, $hashed_password);
 }
 

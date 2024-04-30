@@ -35,3 +35,39 @@ function get_user(string $email_given)
     }
 }
 
+function get_user_info(string $apikey_given)
+{
+    global $db;
+
+    $query = "SELECT * FROM user_information WHERE apikey = ?";
+
+    try {
+        $stmt = $db->prepare($query);
+        $stmt->bind_param("s", $apikey_given);
+        $stmt->execute();
+
+        // Bind the result variable
+        $stmt->bind_result($apikey,$favourites,$theme,$min_bathrooms,$max_bathrooms,$min_bedrooms,$max_bedrooms,$min_price,$max_price);
+
+        // Fetch the user data
+        $stmt->fetch();
+
+        // Return the user data
+        return [
+            'apikey' => $apikey,
+            'favourites' => $favourites,
+            'theme' => $theme,
+            'min_bathrooms' => $min_bathrooms,
+            'max_bathrooms' => $max_bathrooms,
+            'min_bedrooms' => $min_bedrooms,
+            'max_bedrooms' => $max_bedrooms,
+            'min_price' => $min_price,
+            'max_price' => $max_price
+        ];
+    } catch (Exception $e) {
+        // Handle the exception (log, display an error, etc.)
+        echo "Error: " . $e->getMessage();
+        return null;
+    }
+}
+

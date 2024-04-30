@@ -20,7 +20,7 @@ global $currentPage;
                 </a>
             </div>
             <div>
-                <a <?php if($currentPage == 'favourites'){ ?>style="color: #0CC0DF"<?php }?>
+                <a <?php if($currentPage == 'favourite'){ ?>style="color: #0CC0DF"<?php }?>
                     href = "favourites.php">Favourites
                 </a>
             </div>
