@@ -588,8 +588,6 @@ class api
 
     }
 
-
-
     function is_email_valid($email):bool
     {
         // Check if the email contains an "@" symbol
@@ -1282,6 +1280,62 @@ class api
             die();
         }
     }
+
+    function getTheme($apikey)
+    {
+        if($apikey == null)
+        {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Invalid apikey/bedrooms"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+
+        global $db;
+        $query = "SELECT theme FROM user_information WHERE apikey = ?";
+        try {
+            $stmt = $db->prepare($query);
+            $stmt->bind_param("s", $apikey); // 's' indicates a string parameter
+            $stmt->execute();
+
+            $stmt->bind_result($theme);
+
+            $stmt->fetch();
+
+            // Close the statement
+            $stmt->close();
+
+            header('Content-Type: application/json');
+            http_response_code(200);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Success",
+                "timestamp" => $timestamp,
+                "data" => $theme
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+
+
+        } catch (Exception $e) {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => $e->getMessage()
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+    }
 }
 
 $api = new api();
@@ -1293,6 +1347,8 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
     $requestData['apikey'] = "oUsBARLyO4bJfM7Y";
     $requestData['min_bathrooms'] = "0";
     $requestData['max_bathrooms'] = "4";*/
+//    $requestData['apikey'] = "oUsBARLyO4bJfM7Y";
+//    $type = "GetTheme";
 
     if($type == 'Register')
     {
@@ -1363,6 +1419,19 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
         $apikey = $requestData['apikey'] ?? null;
         $api->get_favourites_helper($apikey);
         die();
+    }
+    else if($type == "GetTheme")
+    {
+        $apikey = $requestData['apikey'] ?? null;
+        $api->getTheme($apikey);
+        die();
+    }
+    else if($type == "save")
+    {
+        $apikey = $requestData['apikey'] ?? null;
+
+        //Check Bathrooms
+
     }
 
     $apiKey = $requestData['apikey'] ?? null;

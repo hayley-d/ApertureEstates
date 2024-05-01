@@ -27,11 +27,13 @@ global $currentPage;
             <div class = "user-profile-container">
 
                     <?php
-                        if(isset($_SESSION['apikey'])) {
+                        if(isset($_SESSION['apikey']) && $_SESSION['apikey'] != null) {
                             ?>
                                 <div class = "user-btn">
                                     <button onclick="logout()">Logout</button>
-                                    <div class = "username"><p><?php echo $_SESSION['name']; ?></p></div>
+                                    <div class = "username"><p><?php if(isset($_SESSION['name']) && $_SESSION['name'] != null){
+                                        echo $_SESSION['name'];
+                                    } ?></p></div>
                                     <script>
                                         function logout(){
                                             window.location.href = './includes/logout.php';
