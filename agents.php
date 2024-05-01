@@ -66,7 +66,7 @@ include './includes/footer.php'
 <script>
     document.addEventListener('DOMContentLoaded',function(){
         //fetch the data
-        fetchAgentData();
+        fetchAllAgents();
 
     })
 </script>

@@ -22,9 +22,15 @@ $currentPage = "listings";
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        body{
+            margin:0;
+            padding:0;
+        }
+    </style>
 </head>
 
-<body>
+<body style="margin: 0; padding:0;">
 <!--I store all images in a dive element over a img element for the following reasons:
    - Div element can be easily updated using javaScript allowing for dynamic content loading or interactive features without loading the entire page
    - Div element allows me to contain other elements in the same container allowing for more complex layouts
@@ -97,7 +103,12 @@ include './includes/header.php'
 
 </section>
 
+
 <section id = "listings-container">
+    <div id="save-btn-container">
+        <button id="save-btn">Save Filters</button>
+    </div>
+
     <h2 id="hide-me">listings</h2>
 
     <div id = "spinner-container">
@@ -132,9 +143,11 @@ include './includes/footer.php'
 <script>
     document.addEventListener('DOMContentLoaded',function(){
         //fetch the data
-        fetchData();
+        //fetchData();
         const button2 = document.getElementById('decPage');
         button2.disabled = true;
+       // fetchAllAgents();
+        fetchAllProperties();
     })
 
     function getLen(){
