@@ -29,13 +29,14 @@ function search(rental,location){
     const retrievedArrayAsString = sessionStorage.getItem('salesArray');
     const data = JSON.parse(retrievedArrayAsString);
 
+
     /*console.log(sessionStorage.getItem('salesArray'))*/
     //rental is a boolean value
     let searchArray = rental ? JSON.parse(sessionStorage.getItem('rentalArray')) : JSON.parse(sessionStorage.getItem('salesArray'));
-    console.log(searchArray)
+    //console.log("Searching ",searchArray)
 
     //Step 1: Declare array
-    console.log("Size of array "+searchArray.length)
+    //console.log("Size of array "+searchArray.length)
 
     //Step 2: Search Array for property search if location was used
     if (location !== -1) {
@@ -66,6 +67,7 @@ function search(rental,location){
 
     //Step 5: Display the searched results
     var func = !rental ? displayContentCards : displayRentals;
+    //console.log(searchArray)
     func(searchArray);
 }
 
@@ -131,10 +133,11 @@ function searchPage(rental,location){
     /*console.log(sessionStorage.getItem('salesArray'))*/
     //rental is a boolean value
     let searchArray = rental ? getPageItemsRentals() : getPageItems();
-    console.log(searchArray)
+    sessionStorage.setItem('page',1);
+    //console.log(searchArray)
 
     //Step 1: Declare array
-    console.log("Size of array "+searchArray.length)
+    //console.log("Size of array "+searchArray.length)
 
     //Step 2: Search Array for property search if location was used
     if (location !== -1) {
@@ -167,3 +170,4 @@ function searchPage(rental,location){
     var func = !rental ? displayContentCards2 : displayRentals2;
     func(searchArray);
 }
+

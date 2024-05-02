@@ -114,7 +114,6 @@ function handelAgentDataAgents(agent,logoUrl)
     agents.push(newAgent);
     if(agents.length === 15)
     {
-
         var propertyArr = new Array();
         for(var i = 0; i < 15;i++)
         {
@@ -127,24 +126,22 @@ function handelAgentDataAgents(agent,logoUrl)
 function handelAgentData(agent,logoUrl)
 {
     let newAgent = createAgentObject(agent.id,agent.name,agent.description,logoUrl,agent.url);
+
     agents.push(newAgent);
     if(agents.length === 15)
     {
-
-        var propertyArr = new Array();
-        for(var i = 0; i < 15;i++)
-        {
-            propertyArr.push(agents[i]);
-        }
-        displayAgent(propertyArr)
+        displayAgent(agents);
+        displayAgentCards(agents);
     }
 }
 //API Call function
-function apiCallProperties(returnFields = "*",limit = 0,sort = '',order = '',search,callback){
-    return new Promise((resolve, reject) => {
+function apiCallProperties(returnFields = "*",limit = 0,sort = '',order = '',search){
+    return new Promise((resolve, reject) =>
+    {
         //Declare XML Request variable and request url
         let xhr = new XMLHttpRequest();
         let url = "https://wheatley.cs.up.ac.za/u21528790/COS216/PA3/includes/api.php";
+
         //Declare parameters
         let params = {
             type: `GetAllListings`,
@@ -189,7 +186,7 @@ function apiCallProperties(returnFields = "*",limit = 0,sort = '',order = '',sea
 
         xhr.open("POST", url, true);
 
-        // Set the Content-Type header BEFORE sending the request
+        // Set the Content-Type header
         xhr.setRequestHeader("Content-Type", "application/json");
 
         let username = "u21528790";
@@ -203,9 +200,8 @@ function apiCallProperties(returnFields = "*",limit = 0,sort = '',order = '',sea
                 if (xhr.status === 200) {
                     /*returns an array of property objects*/
                     let responseData = JSON.parse(xhr.responseText).data;
-                    console.log(responseData);
                     resolve(responseData);
-                   // callback(responseData); // Call the callback function with the response data
+
                 } else {
                     // Handle an error
                     console.error("Request failed with status:", xhr.status);
@@ -284,175 +280,186 @@ function apiCallAgents(limit = 0,callback)
     });
 }
 
-function apiCallImages(listingId,agencyName,property,agent,callback){
-    //Declare XML Request variable and request url
-    let xhr = new XMLHttpRequest();
-    let url =  `https://wheatley.cs.up.ac.za/api/getimage?`;
-    if(listingId !== -1)
-    {
+function apiCallImages(listingId,property,callback){
+
+    return new Promise((resolve, reject) => {
+        //Declare XML Request variable and request url
+        let xhr = new XMLHttpRequest();
+        let url =  `https://wheatley.cs.up.ac.za/api/getimage?`;
         url += `listing_id=${listingId}`
-    }
-    if(agencyName !== "")
-    {
-        url += `agency=${agencyName}`
-    }
+        //console.log(url);
+        xhr.open("GET", url, true);
 
-    xhr.open("GET", url, true);
+        // Set the Content-Type header
+        xhr.setRequestHeader("Content-Type", "application/json");
 
-
-    // Set the Content-Type header BEFORE sending the request
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                let responseData = JSON.parse(xhr.responseText).data;
-                // Call the callback function with the response data
-                if(listingId !== -1)
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200)
                 {
-                    callback(property.id,property.title,property.location,property.price,property.bedrooms,property.bathrooms,property.parking_spaces,property.amenities,property.description,property.url,property.type,property.agency,responseData);
+                    let responseData = JSON.parse(xhr.responseText).data;
+                    //console.log(responseData)
+                    resolve(responseData );
+                } else {
+                    // Reject the promise with an error
+                    reject(new Error("Request failed with status: " + xhr.status));
                 }
-                else{
+            }
+        };
 
-                    callback(agent,responseData);
+        // Send the request to the API
+        xhr.send();
+
+        xhr.onerror = function () {
+            reject(new Error("Request failed due to a network error or server issue."));
+        };
+    });
+}
+
+function apiCallImagesAgent(agencyName,agent,callback)
+{
+    return new Promise((resolve, reject) => {
+        //Declare XML Request variable and request url
+        let xhr = new XMLHttpRequest();
+        let url =  `https://wheatley.cs.up.ac.za/api/getimage?`;
+        url += `agency=${agencyName}`
+        xhr.open("GET", url, true);
+
+        // Set the Content-Type header
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function ()
+        {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200)
+                {
+                    let responseData = JSON.parse(xhr.responseText).data;
+                    resolve(responseData);
+
+                } else {
+                    // Reject the promise with an error
+                    reject(new Error("Request failed with status: " + xhr.status));
                 }
-            } else {
-                // Handle an error (e.g., display an error message)
-                console.error("Request failed with status:", xhr.status);
+            }
+        };
+
+        // Send the request to the API
+        xhr.send();
+
+        xhr.onerror = function () {
+            reject(new Error("Request failed due to a network error or server issue."));
+        };
+    });
+}
+
+async function fetchAllProperties() {
+    try {
+        toggleSpinner();
+        const promises = [];
+
+        // Push all the API calls into the promises array
+        promises.push(apiCallProperties("*", 0, '', '', {type:"sale"}),apiCallProperties("*", 0, '', '', {type:"rent"}));
+        // If you have more API calls, push them here as well
+
+        // Wait for all the promises to resolve
+        const results = await Promise.all(promises);
+
+        const salesArray = results[0];
+        const rentalArray = results[1];
+
+        await fetchPropertyImages(salesArray);
+        await fetchPropertyImages(rentalArray);
+
+        // Now results will contain an array of fetched data from all API calls
+       //console.log("All data fetched:", results);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+    finally {
+        toggleSpinner();
+    }
+}
+
+async function fetchAllAgents() {
+    try {
+        toggleSpinner();
+        const promises = [];
+
+        // Push all the API calls into the promises array
+        promises.push(apiCallAgents(0));
+
+        // Wait for all the promises to resolve
+        const results = await Promise.all(promises);
+
+        await fetchAgentImages(results[0]);
+
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+    finally {
+        toggleSpinner();
+    }
+}
+//apiCallImages
+async function fetchAgentImages(agents) {
+
+    try {
+        const promises = [];
+
+        // Loop through each agent and create a promise for fetching images
+        agents.forEach(agent => {
+            promises.push(apiCallImagesAgent(agent.name, agent,handelAgentDataAgents));
+        });
+
+        // Wait for all promises to resolve
+        const results = await Promise.all(promises);
+
+
+        for(var i = 0; i < agents.length; i++)
+        {
+            handelAgentData(agents[i],results[i]);
+        }
+
+
+    } catch (error) {
+        console.error("Error fetching agent images:", error);
+    }
+}
+
+async function fetchPropertyImages(properties) {
+
+    try {
+        const promises = [];
+
+        // Loop through each agent and create a promise for fetching images
+        properties.forEach(property => {
+            promises.push(apiCallImages(property.id, property,handelAgentDataAgents));
+        });
+
+        // Wait for all promises to resolve
+        const results = await Promise.all(promises);
+        //console.log("Results: ",results)
+
+        for(var i = 0; i < properties.length; i++)
+        {
+            if(properties[i].type === 'rent')
+            {
+                handelRentalData(properties[i].id,properties[i].title,properties[i].location,properties[i].price,properties[i].bedrooms,properties[i].bathrooms,properties[i].parking_spaces,properties[i].amenities,properties[i].description,properties[i].url,properties[i].type,properties[i].agency,results[i]);
+            }
+            else{
+                handelPropertyData(properties[i].id,properties[i].title,properties[i].location,properties[i].price,properties[i].bedrooms,properties[i].bathrooms,properties[i].parking_spaces,properties[i].amenities,properties[i].description,properties[i].url,properties[i].type,properties[i].agency,results[i]);
             }
         }
-    };
 
-    // Send the request to the API
-    xhr.send();
-
-    xhr.onerror = function () {
-        console.error("Request failed due to a network error or server issue.");
-    };
-}
-
-
-//function to get the agency name from the url
-function getAgencyNameFromUrl(url){
-    const urlObject = new URL(url);
-    return urlObject.hostname;
-}
-
-
-async function fetchAgents(){
-    try {
-        let agentData = await apiCallAgents(0);
-        for (let agent of agentData) {
-            await apiCallImages(-1, agent.name, "", agent, handelAgentData);
-        }
     } catch (error) {
-        console.error("Error fetching agents:", error);
+        console.error("Error fetching agent images:", error);
     }
 }
 
-async function fetchAgentsAgent(){
-    try {
-        let agentData = await apiCallAgents(0);
-        for (let agent of agentData) {
-            await apiCallImages(-1, agent.name, "", agent, handelAgentDataAgents);
-        }
-    } catch (error) {
-        console.error("Error fetching agents:", error);
-    }
-}
 
-//fetch properties and return promise
-async function fetchProperties(){
-    try {
-        let propertyData = await apiCallProperties("*", 0, '', '', {type:"sale"});
-        for (let property of propertyData) {
-            const propertyAgencyName = getAgencyNameFromUrl(property.url);
-            const matchingAgency = agents.find(agent => new URL(agent.url).hostname === propertyAgencyName);
-            if (matchingAgency) {
-                property.agency = "Private Property";
-            }
-            property.agency = "Private Property";
-            sales = new Array();
-            await apiCallImages(property.id, "", property, "", handelPropertyData);
-        }
-    } catch (error) {
-        console.error("Error fetching properties:", error);
-    }
-}
 
-async function fetchRentals(){
-    try {
-        let propertyData = await apiCallProperties("*", 0, '', '', {type:"rent"});
-        for (let property of propertyData) {
-            const propertyAgencyName = getAgencyNameFromUrl(property.url);
-            const matchingAgency = agents.find(agent => new URL(agent.url).hostname === propertyAgencyName);
-            if (matchingAgency) {
-                property.agency = "Private Property";
-            }
-            property.agency = "Private Property";
-            rentals = new Array();
-            await apiCallImages(property.id, "", property, "", handelRentalData);
-        }
-    } catch (error) {
-        console.error("Error fetching properties:", error);
-    }
-}
 
-//function to fetch agents first the fetch properties
-async function fetchData(){
-    try {
-        toggleSpinner();
-        await fetchAgents();
-        await fetchProperties();
-        await fetchRentals();
-        console.log("All data loaded");
 
-    } catch (error) {
-        console.error("Error fetching data:", error);
-    } finally {
-        toggleSpinner();
-    }
-}
-
-async function fetchAgentData(){
-    try {
-        toggleSpinner();
-        await fetchAgentsAgent();
-        console.log("All data loaded");
-
-    } catch (error) {
-        console.error("Error fetching data:", error);
-    } finally {
-        toggleSpinner();
-    }
-}
-
-async function fetchSales(){
-    try {
-        toggleSpinner();
-        await fetchProperties();
-        console.log("All data loaded");
-
-    } catch (error) {
-        console.error("Error fetching data:", error);
-    } finally {
-        toggleSpinner();
-    }
-}
-
-async function fetchRentalsData(){
-    try {
-        toggleSpinner();
-        rentals = new Array();
-        await fetchRentals();
-        console.log("All data loaded");
-
-    } catch (error) {
-        console.error("Error fetching data:", error);
-    } finally {
-        toggleSpinner();
-    }
-}
 
 
 

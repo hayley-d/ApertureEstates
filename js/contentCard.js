@@ -226,14 +226,7 @@ function createAgentCard(agent)
 function deleteCards()
 {
     console.log("Deleting cards....")
-    //delete current cards
-    const cards = document.querySelectorAll('.content-card-container');
-    const cardsArray = Array.from(cards);
-
-    cardsArray.forEach(function(card) {
-        //get the property
-        card.remove();
-    });
+    $('.content-card-container').remove();
 }
 
 function deleteAgentCards()
@@ -252,19 +245,27 @@ function deleteAgentCards()
 function displayContentCards(array)
 {
    /* console.log(array)*/
-    /*for(var i = 0; i < array.length; i++){
+    propertiesSale = [];
+    for(var i = 0; i < array.length; i++){
         propertiesSale.push(array[i]);
-    }*/
-    const retrievedArrayAsString = sessionStorage.getItem('salesArray');
-    console.log(JSON.parse(retrievedArrayAsString))
+    }
+    //const retrievedArrayAsString = sessionStorage.getItem('salesArray');
+    sessionStorage.setItem('salesArray',JSON.stringify(array));
+    //console.log(JSON.parse(retrievedArrayAsString))
 
     array = getPageItems();
+    //console.log("For page " + sessionStorage.getItem('page')+ " ",array);
 
-    //Show loading symbol
     toggleSpinner();
     const container = document.getElementById('listings-container');
     //Delete Existing cards
     deleteCards();
+    console.log("All Cards have been Deleted.")
+
+    /*if(parseInt(sessionStorage.getItem('page')) > 1)
+    {
+        return;
+    }*/
 
     //show message if array is empty
     if(array.length === 0)
@@ -280,14 +281,14 @@ function displayContentCards(array)
         container.appendChild(message);
     }
     else{
+        console.log("Looping through ",array);
         array.forEach(property=>{
             //create the new card
             const card = createContentCard(property);
-
-
             //add the card to the container
             container.appendChild(card);
         });
+        console.log("Finished looping through");
     }
 
     //hide loading symbol
@@ -394,6 +395,7 @@ function getPageItems()
 {
     const retrievedArrayAsString = sessionStorage.getItem('salesArray');
     const data = JSON.parse(retrievedArrayAsString);
+    //console.log(data);
 
     const itemsPerPage = 20;
     const startIndex = (sessionStorage.getItem('page') - 1) * itemsPerPage;
