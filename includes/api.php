@@ -938,7 +938,7 @@ class api
     function update_price($apikey,$min_price,$max_price)
     {
         global $db;
-        if($apikey == null || $min_price == null || $max_price == null)
+        if($apikey == null)
         {
             header('Content-Type: application/json');
             http_response_code(400);
@@ -952,6 +952,16 @@ class api
             die();
         }
 
+        if($min_price == null || $min_price == 'null')
+        {
+            $min_price = 0;
+        }
+
+        if($max_price == null || $max_price == 'null')
+        {
+            $max_price = 0;
+        }
+
         $statment= $db->prepare("UPDATE user_information SET min_price = ?, max_price = ? WHERE apikey = ?");
 
         $statment->bind_param('iis', $min_price, $max_price, $apikey);
@@ -960,7 +970,7 @@ class api
             // Check if any rows were affected
             if ($statment->affected_rows > 0) {
                 //Successful
-                header('Content-Type: application/json');
+                /*header('Content-Type: application/json');
                 http_response_code(201);
                 $timestamp = round(microtime(true) * 1000);
                 $response = array(
@@ -968,8 +978,9 @@ class api
                     "timestamp" => $timestamp,
                     "data" => "Update Successful"
                 );
-                echo json_encode($response, JSON_PRETTY_PRINT);
-                die();
+                echo json_encode($response, JSON_PRETTY_PRINT);*/
+                return;
+
             } else {
                 header('Content-Type: application/json');
                 http_response_code(500);
@@ -999,7 +1010,7 @@ class api
     function update_bedrooms($apikey,$min_bedrooms,$max_bedrooms)
     {
         global $db;
-        if($apikey == null || $min_bedrooms == null || $max_bedrooms == null)
+        if($apikey == null)
         {
             header('Content-Type: application/json');
             http_response_code(400);
@@ -1013,6 +1024,17 @@ class api
             die();
         }
 
+        if($min_bedrooms == null || $min_bedrooms == 'null')
+        {
+            $min_bedrooms = 0;
+        }
+
+        if($max_bedrooms == null || $max_bedrooms == 'null')
+        {
+            $max_bedrooms = 0;
+        }
+
+
         $statment= $db->prepare("UPDATE user_information SET min_bedrooms = ?, max_bedrooms = ? WHERE apikey = ?");
 
         $statment->bind_param('iis', $min_bedrooms, $max_bedrooms, $apikey);
@@ -1021,7 +1043,7 @@ class api
             // Check if any rows were affected
             if ($statment->affected_rows > 0) {
                 //Successful
-                header('Content-Type: application/json');
+                /*header('Content-Type: application/json');
                 http_response_code(201);
                 $timestamp = round(microtime(true) * 1000);
                 $response = array(
@@ -1029,8 +1051,8 @@ class api
                     "timestamp" => $timestamp,
                     "data" => "Update Successful"
                 );
-                echo json_encode($response, JSON_PRETTY_PRINT);
-                die();
+                echo json_encode($response, JSON_PRETTY_PRINT);*/
+                return;
             } else {
                 header('Content-Type: application/json');
                 http_response_code(500);
@@ -1060,7 +1082,7 @@ class api
     function update_bathrooms($apikey,$min_bathrooms,$max_bathrooms)
     {
         global $db;
-        if($apikey == null || $min_bathrooms == null || $max_bathrooms == null)
+        if($apikey == null)
         {
             header('Content-Type: application/json');
             http_response_code(400);
@@ -1072,6 +1094,16 @@ class api
             );
             echo json_encode($response, JSON_PRETTY_PRINT);
             die();
+        }
+
+        if($min_bathrooms == null || $min_bathrooms == 'null')
+        {
+            $min_bathrooms = 0;
+        }
+
+        if($max_bathrooms == null || $max_bathrooms == 'null')
+        {
+            $max_bathrooms = 0;
         }
 
         $statment= $db->prepare("UPDATE user_information SET min_bathrooms = ?, max_bathrooms = ? WHERE apikey = ?");
@@ -1091,7 +1123,7 @@ class api
                     "data" => "Update Successful"
                 );
                 echo json_encode($response, JSON_PRETTY_PRINT);
-                die();
+
             } else {
                 header('Content-Type: application/json');
                 http_response_code(500);
@@ -1336,6 +1368,68 @@ class api
             die();
         }
     }
+
+    function get_preferences($apikey){
+        if($apikey == null)
+        {
+            header('Content-Type: application/json');
+            http_response_code(400);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => "Invalid apikey"
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+
+        global $db;
+        $query = "SELECT min_bathrooms, max_bathrooms, min_bedrooms, max_bedrooms, min_price, max_price FROM user_information WHERE apikey = ?";
+        try {
+            $stmt = $db->prepare($query);
+            $stmt->bind_param("s", $apikey); // 's' indicates a string parameter
+            $stmt->execute();
+
+            $stmt->bind_result($min_bathrooms,$max_bathrooms,$min_bedrooms,$max_bedrooms,$min_price,$max_price);
+
+            $stmt->fetch();
+
+            // Close the statement
+            $stmt->close();
+
+            header('Content-Type: application/json');
+            http_response_code(200);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Success",
+                "timestamp" => $timestamp,
+                "data" => [
+                    "min_bathrooms" => $min_bathrooms,
+                    "max_bathrooms" => $max_bathrooms,
+                    "min_bedrooms" => $min_bedrooms,
+                    "max_bedrooms" => $max_bedrooms,
+                    "min_price" => $min_price,
+                    "max_price" => $max_price
+            ]
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+
+
+        } catch (Exception $e) {
+            header('Content-Type: application/json');
+            http_response_code(500);
+            $timestamp = round(microtime(true) * 1000);
+            $response = array(
+                "status" => "Fail",
+                "timestamp" => $timestamp,
+                "data" => $e->getMessage()
+            );
+            echo json_encode($response, JSON_PRETTY_PRINT);
+            die();
+        }
+    }
 }
 
 $api = new api();
@@ -1430,8 +1524,24 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
     {
         $apikey = $requestData['apikey'] ?? null;
 
-        //Check Bathrooms
+        $min_price = $requestData['min_price'] ?? null;
+        $max_price = $requestData['max_price'] ?? null;
 
+        $min_bedrooms = $requestData['min_bedrooms'] ?? null;
+        $max_bedrooms = $requestData['max_bedrooms'] ?? null;
+
+        $min_bathrooms = $requestData['min_bathrooms'] ?? null;
+        $max_bathrooms = $requestData['max_bathrooms'] ?? null;
+
+        $api->update_price($apikey,$min_price,$max_price);
+        $api->update_bedrooms($apikey,$min_bedrooms,$max_bedrooms);
+        $api->update_bathrooms($apikey,$min_bathrooms,$max_bathrooms);
+        die();
+    }
+    else if($type == "GetPreferences")
+    {
+        $apikey = $requestData['apikey'] ?? null;
+        $api->get_preferences($apikey);
     }
 
     $apiKey = $requestData['apikey'] ?? null;

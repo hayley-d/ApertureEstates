@@ -8,7 +8,7 @@ if(isset($_SESSION['apikey']) && $_SESSION['apikey'] != null){
     echo $_SESSION['apikey'];
 }else {
     $_SESSION['apikey'] = false;
-    echo 'false';
+    echo 'none';
 } ?>">
 <script>
 
