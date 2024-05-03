@@ -250,7 +250,7 @@ function displayContentCards(array)
         propertiesSale.push(array[i]);
     }
     //const retrievedArrayAsString = sessionStorage.getItem('salesArray');
-    sessionStorage.setItem('salesArray',JSON.stringify(array));
+    sessionStorage.setItem('salesArray2',JSON.stringify(array));
     //console.log(JSON.parse(retrievedArrayAsString))
 
     array = getPageItems();
@@ -262,10 +262,6 @@ function displayContentCards(array)
     deleteCards();
     console.log("All Cards have been Deleted.")
 
-    /*if(parseInt(sessionStorage.getItem('page')) > 1)
-    {
-        return;
-    }*/
 
     //show message if array is empty
     if(array.length === 0)
@@ -289,6 +285,7 @@ function displayContentCards(array)
             container.appendChild(card);
         });
         console.log("Finished looping through");
+
     }
 
     //hide loading symbol
@@ -300,6 +297,8 @@ function displayRentals(array){
     for(var i = 0; i < array.length; i++){
         propertiesRental.push(array[i]);
     }*/
+
+    sessionStorage.setItem('rentalArray2',JSON.stringify(array));
 
     array = getPageItemsRentals();
 
@@ -393,7 +392,7 @@ function displayAgent(array)
 
 function getPageItems()
 {
-    const retrievedArrayAsString = sessionStorage.getItem('salesArray');
+    const retrievedArrayAsString = sessionStorage.getItem('salesArray2');
     const data = JSON.parse(retrievedArrayAsString);
     //console.log(data);
 
@@ -405,7 +404,7 @@ function getPageItems()
 
 function getPageItemsRentals()
 {
-    const retrievedArrayAsString = sessionStorage.getItem('rentalArray');
+    const retrievedArrayAsString = sessionStorage.getItem('rentalArray2');
     const data = JSON.parse(retrievedArrayAsString);
 
     const itemsPerPage = 20;
@@ -657,12 +656,6 @@ function displayContentCards2(array)
 }
 
 function displayRentals2(array){
-    /*console.log(array)
-    for(var i = 0; i < array.length; i++){
-        propertiesRental.push(array[i]);
-    }*/
-
-
 
     toggleSpinner();
     const container = document.getElementById('listings-container');
@@ -695,3 +688,103 @@ function displayRentals2(array){
     toggleSpinner();
 }
 
+function saveFilters()
+{
+    //Get the value of the min bathrooms number input
+    var min_bathrooms = checkState($('#minBathrooms').val());
+    var max_bathrooms = checkState($('#maxBathrooms').val());
+
+    var min_bedrooms = checkState($('#minBedrooms').val());
+    var max_bedrooms = checkState($('#maxBedrooms').val());
+
+    var min_price = checkState($('#minPrice').val());
+    var max_price = checkState($('#maxPrice').val());
+
+
+    //send to the api to update the values
+    //make api call to the api to change mode preference
+    updatePrefrences(min_bathrooms,max_bathrooms,min_bedrooms,max_bedrooms,min_price,max_price)
+        .then(response => {
+            console.log('Preferences updated successfully:', response);
+        })
+        .catch(error => {
+            //console.error('Error updating Preferences:', error);
+        });
+
+}
+
+async function updatePrefrences(min_bathrooms,max_bathrooms,min_bedrooms,max_bedrooms,min_price,max_price){
+    var apikey = $('#apikey').val();
+    return new Promise((resolve, reject) => {
+        //Declare XML Request variable and request url
+        let xhr = new XMLHttpRequest();
+        let url = "https://wheatley.cs.up.ac.za/u21528790/COS216/PA3/includes/api.php";
+        //Declare parameters
+        const params = {
+            type: 'save',
+            apikey: apikey,
+            min_bathrooms: min_bathrooms,
+            max_bathrooms:max_bathrooms,
+            min_bedrooms:min_bedrooms,
+            max_bedrooms:max_bedrooms,
+            min_price:min_price,
+            max_price:max_price
+        };
+
+        console.log(params);
+
+        let requestBody = JSON.stringify(params);
+
+        xhr.open("POST", url, true);
+
+        // Set the Content-Type header BEFORE sending the request
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        let username = "u21528790";
+        let password = "345803Moo";
+        let credentials = `${username}:${password}`;
+        let encodedCredentials = btoa(credentials);
+        xhr.setRequestHeader("Authorization", `Basic ${encodedCredentials}`);
+
+        console.log(requestBody);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    /*returns an array of property objects*/
+                    let responseData = JSON.parse(xhr.responseText).data;
+                    resolve(responseData);
+                    //callback(responseData); // Call the callback function with the response data
+                } else {
+                    // Handle an error
+                    reject(new Error("Failed to update preferences"));
+                    /* console.error("Request failed with status:", xhr.status);*/
+
+                }
+            }
+        };
+
+        // Send the request to the API
+        xhr.send(requestBody);
+
+        xhr.onerror = function () {
+            console.error("Request failed due to a network error or server issue.");
+            reject(new Error("Network error or server issue"));
+        };
+    });
+}
+
+function checkState(x)
+{
+    if (x.trim() === '')
+    {
+        // If it's empty, set the value to null
+        x = null;
+    }
+    else
+    {
+        //Convert into an integer
+        x = parseInt(x);
+    }
+    return x;
+}

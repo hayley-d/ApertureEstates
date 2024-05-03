@@ -366,7 +366,8 @@ async function fetchAllProperties() {
 
         const salesArray = results[0];
         const rentalArray = results[1];
-
+        sessionStorage.setItem('salesArray',JSON.stringify(salesArray));
+        sessionStorage.setItem('rentalArray',JSON.stringify(rentalArray));
         await fetchPropertyImages(salesArray);
         await fetchPropertyImages(rentalArray);
 
@@ -453,6 +454,108 @@ async function fetchPropertyImages(properties) {
 
     } catch (error) {
         console.error("Error fetching agent images:", error);
+    }
+    finally {
+        fetchPrefrences();
+    }
+
+}
+
+async function apiCallPrefrences(apikey)
+{
+    return new Promise((resolve, reject) =>
+    {
+        //Declare XML Request variable and request url
+        let xhr = new XMLHttpRequest();
+        let url = "https://wheatley.cs.up.ac.za/u21528790/COS216/PA3/includes/api.php";
+
+        //Declare parameters
+        let params = {
+            type: `GetPreferences`,
+            apikey: apikey,
+        };
+
+        let requestBody = JSON.stringify(params);
+
+        xhr.open("POST", url, true);
+
+        // Set the Content-Type header
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        let username = "u21528790";
+        let password = "345803Moo";
+        let credentials = `${username}:${password}`;
+        let encodedCredentials = btoa(credentials);
+        xhr.setRequestHeader("Authorization", `Basic ${encodedCredentials}`);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    /*returns an array of property objects*/
+                    let responseData = JSON.parse(xhr.responseText).data;
+                    resolve(responseData);
+
+                } else {
+                    // Handle an error
+                    console.error("Request failed with status:", xhr.status);
+                    reject(new Error("Failed to fetch properties"));
+                }
+            }
+        };
+
+        // Send the request to the API
+        xhr.send(requestBody);
+
+        xhr.onerror = function () {
+            console.error("Request failed due to a network error or server issue.");
+            reject(new Error("Network error or server issue"));
+        };
+    });
+}
+
+async function fetchPrefrences() {
+    //Check if the user is logged in
+    var apikey = $('#apikey').val();
+    if(apikey == 'none')
+    {
+        //do nothing
+    }
+    else
+    {
+        try {
+
+            const promises = [];
+
+            // Push all the API calls into the promises array
+            promises.push(apiCallPrefrences(apikey));
+
+            // Wait for all the promises to resolve
+            const results = await Promise.all(promises);
+
+            const preferences = results[0];
+
+            //set the filters
+            $('#minBathrooms').val(preferences['min_bathrooms']);
+            $('#maxBathrooms').val(preferences['max_bathrooms']);
+            $('#minBedrooms').val(preferences['min_bedrooms']);
+            $('#maxBedrooms').val(preferences['max_bedrooms']);
+            $('#minPrice').val(preferences['min_price']);
+            $('#maxPrice').val(preferences['max_price']);
+
+            const searchInput = document.querySelector('input[type="search"]');
+            let location = searchInput.value.trim(); // Trim removes any leading or trailing whitespace
+            if (location === '') {
+                location = -1; // Set location to -1 if search location is empty
+            }
+            search(false, location);
+            console.log("Search Complete using preferences")
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+        finally {
+
+        }
     }
 }
 

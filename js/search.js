@@ -33,7 +33,7 @@ function search(rental,location){
     /*console.log(sessionStorage.getItem('salesArray'))*/
     //rental is a boolean value
     let searchArray = rental ? JSON.parse(sessionStorage.getItem('rentalArray')) : JSON.parse(sessionStorage.getItem('salesArray'));
-    //console.log("Searching ",searchArray)
+    console.log("Searching ",searchArray)
 
     //Step 1: Declare array
     //console.log("Size of array "+searchArray.length)
