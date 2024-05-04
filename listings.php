@@ -22,10 +22,22 @@ $currentPage = "listings";
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <style>
         body{
             margin:0;
             padding:0;
+        }
+        #content{
+            background-color: white;
+            width: 110vw;
+            overflow: hidden;
+            background-image: url("img/search-background.png");
+            /*background-image: url("https://wheatley.cs.up.ac.za/u21528790/COS216/PA4/img/search-background.png");*/
+            background-size: cover;
+            background-repeat: no-repeat;
+            height:fit-content;
+            padding:20px;
         }
     </style>
 </head>
@@ -36,10 +48,11 @@ $currentPage = "listings";
    - Div element allows me to contain other elements in the same container allowing for more complex layouts
  -->
 <?php
-include './includes/header.php'
+include './includes/header.php';
+
 ?>
 
-<section id = "content">
+<section id = "content" style="background-image: url('img/search-background.png')">
     <div id = "greeting-container">
         <div id = "house"></div>
         <div onclick="getLen()"><h1 id="heading1">Properties For Sale</h1></div>
@@ -105,9 +118,11 @@ include './includes/header.php'
 
 
 <section id = "listings-container">
+
     <div id="save-btn-container">
-        <button id="save-btn">Save Filters</button>
+        <button id="save-btn" onclick="saveFilters()">Save Filters</button>
     </div>
+
 
     <h2 id="hide-me">listings</h2>
 
@@ -133,6 +148,7 @@ include './includes/header.php'
 include './includes/footer.php'
 ?>
 
+
 <script src = "./js/loadingSpinner.js"></script>
 <script src = "./js/main.js"></script>
 <script src = "./js/search.js"></script>
@@ -141,13 +157,17 @@ include './includes/footer.php'
 <script src = "./js/contentCard.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded',function(){
-        //fetch the data
-        //fetchData();
+    document.addEventListener('DOMContentLoaded',function()
+    {
         const button2 = document.getElementById('decPage');
         button2.disabled = true;
-       // fetchAllAgents();
         fetchAllProperties();
+
+        if(sessionStorage.getItem('apikey') === null)
+        {
+            $('#save-btn-container').hide();
+        }
+
     })
 
     function getLen(){
@@ -155,14 +175,18 @@ include './includes/footer.php'
     }
 
      function increasePage(){
-        var page = sessionStorage.getItem('page');
-         console.log("Page Number: "+ page);
+        //Get the current page and increase by 1
+        var page = parseInt(sessionStorage.getItem('page'));
+
+        //makes sure that the page is less than 14
         if(page < 14)
         {
-            page++;
+            page+=1;
             sessionStorage.setItem('page', page);
         }
         const button = document.getElementById('incPage');
+
+        //if the page is greater than 14 disable the next page button
         if(page >= 14)
         {
             button.disabled = true;
@@ -170,44 +194,47 @@ include './includes/footer.php'
         const button2 = document.getElementById('decPage');
         button2.disabled = false;
 
-        //call api
+
         try {
-            toggleSpinner();
-            if(currSearch==='sale')
+            //If the current search is for the sales properties then display the next page of sales properties else display rentals
+            if(currSearch ==='sale')
             {
-               displayContentCards([]);
+               displayContentCards(JSON.parse(sessionStorage.getItem('salesArray')));
             }
             else{
-                displayRentals([]);
+                displayRentals(JSON.parse(sessionStorage.getItem('rentalArray')));
             }
-            console.log("All data loaded");
 
         } catch (error) {
-            console.error("Error fetching data:", error);
-        } finally {
-            if(currSearch==='sale')
-            {
-                searchPage(false,-1);
-            }
-            else{
-                searchPage(true,-1);
-            }
-            toggleSpinner();
+            console.error("Error displaying data:", error);
         }
+
+        //after loading the next page scroll the user to the top of the page
+        scrollToTop();
+
+    }
+
+    function scrollToTop() {
+        // Scroll to the top of the page
+        document.documentElement.scrollTop = 0; // For modern browsers
+        document.body.scrollTop = 0; // For older browsers
     }
 
     function decreasePage(){
-        var page = sessionStorage.getItem('page');
-        console.log("Page Number: "+ page);
+        //Get the current page and increase by 1
+        var page = parseInt(sessionStorage.getItem('page'));
+
+        //makes sure that the page is greater than 1
         if(page > 1)
         {
-            page--;
-            sessionStorage.setItem('page', page);
+            page-=1;
+            sessionStorage.setItem('page', page+"");
         }
 
         const button = document.getElementById('incPage');
         const button2 = document.getElementById('decPage');
 
+        //If the page is 1 then disable the prev page button
         if(page === 1)
         {
             button2.disabled = true;
@@ -215,34 +242,27 @@ include './includes/footer.php'
 
         button.disabled = false;
 
-        //call api
+        //Display the property cards
         try {
-            toggleSpinner();
+
             if(currSearch === 'sale')
             {
 
-                displayContentCards([])
+                displayContentCards(JSON.parse(sessionStorage.getItem('salesArray')))
 
             }
             else{
 
-                displayRentals([]);
+                displayRentals(JSON.parse(sessionStorage.getItem('rentalArray')));
 
             }
-            console.log("All data loaded");
 
         } catch (error) {
-            console.error("Error fetching data:", error);
-        } finally {
-            if(currSearch==='sale')
-            {
-                searchPage(false,-1);
-            }
-            else{
-                searchPage(true,-1);
-            }
-            toggleSpinner();
+            console.error("Error displaying data:", error);
         }
+
+        //after loading the next page scroll the user to the top of the page
+        scrollToTop();
     }
 
 </script>

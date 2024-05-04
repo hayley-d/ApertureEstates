@@ -24,6 +24,7 @@ $currentPage = "favourite";
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -59,12 +60,19 @@ include './includes/footer.php'
 <script src = "./js/filter.js"></script>
 <script src = "./js/contentCard.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded',function(){
-        //fetch the data
-        displayContentCards(favProperties);
-        //populate the content cards
+    document.addEventListener('DOMContentLoaded',function()
+    {
+        //Step 1: Check if the user is logged in
+        if(sessionStorage.getItem('favourites') == 'none')
+        {
+            //do nothing
+        }
+        else{
+            //User is logged in
+            displayFavouriteCards();
+        }
 
-        //colour cards based on rent = orange sales = blue
+        //Step 2: Fetch the data from the database
 
     })
 
