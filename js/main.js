@@ -456,7 +456,19 @@ async function fetchPropertyImages(properties) {
         console.error("Error fetching agent images:", error);
     }
     finally {
-        fetchPrefrences();
+        var apikey = $('#apikey').val();
+        //console.log("Apikey: " ,apikey)
+        if(apikey == 'none')
+        {
+            sessionStorage.setItem('favourites','none');
+
+            $('.fav-btn').hide();
+        }
+        else{
+            fetchFavourites();
+
+            fetchPrefrences();
+        }
     }
 
 }
@@ -535,11 +547,24 @@ async function fetchPrefrences() {
             const preferences = results[0];
 
             //set the filters
+
             $('#minBathrooms').val(preferences['min_bathrooms']);
+            if(preferences['max_bathrooms'] == 0)
+            {
+                preferences['max_bathrooms'] = "";
+            }
             $('#maxBathrooms').val(preferences['max_bathrooms']);
             $('#minBedrooms').val(preferences['min_bedrooms']);
+            if(preferences['max_bedrooms'] == 0)
+            {
+                preferences['max_bedrooms'] = "";
+            }
             $('#maxBedrooms').val(preferences['max_bedrooms']);
             $('#minPrice').val(preferences['min_price']);
+            if(preferences['max_price'] == 0)
+            {
+                preferences['max_price'] = "";
+            }
             $('#maxPrice').val(preferences['max_price']);
 
             const searchInput = document.querySelector('input[type="search"]');
@@ -558,6 +583,182 @@ async function fetchPrefrences() {
         }
     }
 }
+
+async function apiCallFavourites(apikey)
+{
+    return new Promise((resolve, reject) =>
+    {
+        //Declare XML Request variable and request url
+        let xhr = new XMLHttpRequest();
+        let url = "https://wheatley.cs.up.ac.za/u21528790/COS216/PA3/includes/api.php";
+
+        //Declare parameters
+        let params = {
+            type: `getFavourites`,
+            apikey: apikey,
+        };
+
+        let requestBody = JSON.stringify(params);
+
+        xhr.open("POST", url, true);
+
+        // Set the Content-Type header
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        let username = "u21528790";
+        let password = "345803Moo";
+        let credentials = `${username}:${password}`;
+        let encodedCredentials = btoa(credentials);
+        xhr.setRequestHeader("Authorization", `Basic ${encodedCredentials}`);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    /*returns an array of property objects*/
+                    let responseData = JSON.parse(xhr.responseText).data;
+                    resolve(responseData);
+
+                } else {
+                    // Handle an error
+                    console.error("Request failed with status:", xhr.status);
+                    reject(new Error("Failed to fetch properties"));
+                }
+            }
+        };
+
+        // Send the request to the API
+        xhr.send(requestBody);
+
+        xhr.onerror = function () {
+            console.error("Request failed due to a network error or server issue.");
+            reject(new Error("Network error or server issue"));
+        };
+    });
+}
+
+async function fetchFavourites() {
+    //Check if the user is logged in
+    var apikey = $('#apikey').val();
+    if(apikey == 'none')
+    {
+        sessionStorage.setItem('favourites','none');
+    }
+    else
+    {
+        try {
+            const promises = [];
+
+            // Push all the API calls into the promises array
+            promises.push(apiCallFavourites(apikey));
+
+            // Wait for all the promises to resolve
+            const results = await Promise.all(promises);
+
+            const favourites = results[0];
+            sessionStorage.setItem('favourites',JSON.stringify(favourites));
+            console.log("Stored Favourites");
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+        finally {
+            const array = JSON.parse(sessionStorage.getItem('favourites'));
+            const array2 = JSON.parse(sessionStorage.getItem('salesArray'));
+            //console.log("Favourites Array: ",array)
+            var favIds = [];
+
+            for(var i = 0; i < array.length; i++)
+            {
+                favIds.push(array[i].id);
+            }
+
+            for(var j = 0; j < array2.length; j++)
+            {
+                if(favIds.includes(array2[j].id))
+                {
+                   array2[j].favorite = true;
+                    console.log(array2[j]);
+                }
+            }
+
+
+            sessionStorage.setItem('salesArray',JSON.stringify(array2));
+        }
+    }
+}
+
+
+
+async function apiCallUpdateFavourites(apikey,favourites)
+{
+    return new Promise((resolve, reject) =>
+    {
+        //Declare XML Request variable and request url
+        let xhr = new XMLHttpRequest();
+        let url = "https://wheatley.cs.up.ac.za/u21528790/COS216/PA3/includes/api.php";
+
+        //Declare parameters
+        let params = {
+            type: `updateFavourites`,
+            apikey: apikey,
+            favourites:favourites
+        };
+
+        let requestBody = JSON.stringify(params);
+
+        xhr.open("POST", url, true);
+
+        // Set the Content-Type header
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        let username = "u21528790";
+        let password = "345803Moo";
+        let credentials = `${username}:${password}`;
+        let encodedCredentials = btoa(credentials);
+        xhr.setRequestHeader("Authorization", `Basic ${encodedCredentials}`);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    /*returns an array of property objects*/
+                    let responseData = JSON.parse(xhr.responseText).data;
+                    resolve(responseData);
+
+                } else {
+                    // Handle an error
+                    console.error("Request failed with status:", xhr.status);
+                    reject(new Error("Failed to fetch properties"));
+                }
+            }
+        };
+
+        // Send the request to the API
+        xhr.send(requestBody);
+
+        xhr.onerror = function () {
+            console.error("Request failed due to a network error or server issue.");
+            reject(new Error("Network error or server issue"));
+        };
+    });
+}
+
+async function fetchUpdateFavourites(apikey,favourites) {
+    //Check if the user is logged in
+    try {
+        const promises = [];
+
+        // Push all the API calls into the promises array
+        promises.push(apiCallUpdateFavourites(apikey,favourites));
+
+        // Wait for all the promises to resolve
+        const results = await Promise.all(promises);
+
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+
+
 
 
 

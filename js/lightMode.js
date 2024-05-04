@@ -13,7 +13,7 @@ function listingMode()
         heading4.style.color = "hotpink";
 
         const content = document.getElementById("content");
-        content.style.backgroundImage = `url("../img/lightmode-background.png")`;
+        content.style.backgroundImage = `url("img/lightmode-background.png")`;
 
         const container = document.getElementById("listings-container");
         container.style.backgroundColor = "white";
@@ -30,7 +30,7 @@ function listingMode()
         heading4.style.color = "#0CC0DF";
 
         const content = document.getElementById("content");
-        content.style.backgroundImage = `url("../img/search-background.png")`;
+        content.style.backgroundImage = `url("img/search-background.png")`;
         //
         const container = document.getElementById("listings-container");
         container.style.backgroundColor = "#413D42";
@@ -50,7 +50,7 @@ function agentsMode()
         light = 'true';
         //#agent-heading
         const heading = document.getElementById("agent-heading");
-        heading.style.backgroundImage = `url("../img/lightmode-background.png")`;
+        heading.style.backgroundImage = `url("img/lightmode-background.png")`;
 
         const container = document.getElementById("agents-container");
         container.style.backgroundColor = "white";
@@ -59,7 +59,7 @@ function agentsMode()
         sessionStorage.setItem('light','false');
         light = 'false';
         const heading = document.getElementById("agent-heading");
-        heading.style.backgroundImage = `url("../img/search-background.png")`;
+        heading.style.backgroundImage = `url("img/search-background.png")`;
 
         const container = document.getElementById("agents-container");
         container.style.backgroundColor = "#413D42";
@@ -75,7 +75,7 @@ function calculatorMode()
         light = 'true';
         //#agent-heading
         const heading = document.getElementById("header");
-        heading.style.backgroundImage = `url("../img/lightmode-background.png")`;
+        heading.style.backgroundImage = `url("img/lightmode-background.png")`;
 
         const container = document.getElementsByTagName("section")[1];
         container.style.backgroundColor = "white";
@@ -84,7 +84,7 @@ function calculatorMode()
         sessionStorage.setItem('light','false');
         light = 'false';
         const heading = document.getElementById("header");
-        heading.style.backgroundImage = `url("../img/search-background.png")`;
+        heading.style.backgroundImage = `url("img/search-background.png")`;
 
         const container = document.getElementsByTagName("section")[1];
         container.style.backgroundColor = "#413D42";
@@ -117,8 +117,9 @@ function favouritesMode()
     headerFooterChange(light);
 }
 
-function headerFooterChange(light)
+function headerFooterChange()
 {
+    var light = sessionStorage.getItem('light');
     var mode = "light";
     if(light == 'true'){
         mode = "light";
@@ -230,9 +231,52 @@ async function updateTheme(theme)
     });
 }
 
+function fetchTheme(apikey)
+{
+
+        const params = {
+            type:'GetTheme',
+            apikey:apikey,
+        }
+
+
+        let xhr = new XMLHttpRequest();
+        let url = "https://wheatley.cs.up.ac.za/u21528790/COS216/PA3/includes/api.php";
+
+        let requestBody = JSON.stringify(params);
+        console.log(requestBody);
+        xhr.open("POST", url, false);
+
+        xhr.setRequestHeader("Content-Type", "application/json");
+        let username = "u21528790";
+        let adminpassword = "345803Moo";
+        let credentials = `${username}:${adminpassword}`;
+        let encodedCredentials = btoa(credentials);
+        xhr.setRequestHeader("Authorization", `Basic ${encodedCredentials}`);
+
+        xhr.send(requestBody); // Send the request synchronously
+
+        if (xhr.status === 200) {
+            let responseData = JSON.parse(xhr.responseText).data;
+            if(responseData === 'dark')
+            {
+                sessionStorage.setItem('light','false');
+            }
+            else{
+                sessionStorage.setItem('light','true');
+            }
+            return;
+        } else {
+            console.error("Request failed with status:", xhr.status);
+        }
+
+}
+
 function listingModeInitial(){
-    var light = sessionStorage.getItem('light');
+
     var apikey = document.getElementById('apikey').value;
+    fetchTheme(apikey);
+    var light = sessionStorage.getItem('light');
     if(light == 'true')
     {
         const heading1 = document.getElementById("heading1");
@@ -241,7 +285,7 @@ function listingModeInitial(){
         heading4.style.color = "hotpink";
 
         const content = document.getElementById("content");
-        content.style.backgroundImage = `url("../img/lightmode-background.png")`;
+        content.style.backgroundImage = `url("img/lightmode-background.png")`;
 
         const container = document.getElementById("listings-container");
         container.style.backgroundColor = "white";
@@ -256,7 +300,7 @@ function listingModeInitial(){
         heading4.style.color = "#0CC0DF";
 
         const content = document.getElementById("content");
-        content.style.backgroundImage = `url("../img/search-background.png")`;
+        content.style.backgroundImage = `url("img/search-background.png")`;
         //
         const container = document.getElementById("listings-container");
         container.style.backgroundColor = "#413D42";
@@ -274,14 +318,14 @@ function agentsModeInitial()
     if(light == 'true'){
         //#agent-heading
         const heading = document.getElementById("agent-heading");
-        heading.style.backgroundImage = `url("../img/lightmode-background.png")`;
+        heading.style.backgroundImage = `url("img/lightmode-background.png")`;
 
         const container = document.getElementById("agents-container");
         container.style.backgroundColor = "white";
     }
     else{
         const heading = document.getElementById("agent-heading");
-        heading.style.backgroundImage = `url("../img/search-background.png")`;
+        heading.style.backgroundImage = `url("img/search-background.png")`;
 
         const container = document.getElementById("agents-container");
         container.style.backgroundColor = "#413D42";
@@ -295,14 +339,14 @@ function calculatorModeInitial()
     if(light == 'true'){
         //#agent-heading
         const heading = document.getElementById("header");
-        heading.style.backgroundImage = `url("../img/lightmode-background.png")`;
+        heading.style.backgroundImage = `url("img/lightmode-background.png")`;
 
         const container = document.getElementsByTagName("section")[1];
         container.style.backgroundColor = "white";
     }
     else{
         const heading = document.getElementById("header");
-        heading.style.backgroundImage = `url("../img/search-background.png")`;
+        heading.style.backgroundImage = `url("img/search-background.png")`;
 
         const container = document.getElementsByTagName("section")[1];
         container.style.backgroundColor = "#413D42";
@@ -316,14 +360,14 @@ function favouritesModeInitial()
     if(light == 'true'){
         //#agent-heading
         const heading = document.getElementById("header");
-        heading.style.backgroundImage = `url("../img/lightmode-background.png")`;
+        heading.style.backgroundImage = `url("img/lightmode-background.png")`;
 
         const container = document.getElementById("listings-container");
         container.style.backgroundColor = "white";
     }
     else{
         const heading = document.getElementById("header");
-        heading.style.backgroundImage = `url("../img/search-background.png")`;
+        heading.style.backgroundImage = `url("img/search-background.png")`;
 
         const container = document.getElementById("listings-container");
         container.style.backgroundColor = "#413D42";

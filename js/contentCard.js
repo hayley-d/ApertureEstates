@@ -81,7 +81,7 @@ function createContentCard(property)
     favButtonContainer.appendChild(favButton);
 
     favButton.addEventListener('click', function() {
-        if(property.favorite===false)
+        if(property.favorite === false)
         {
             // Update the property's favorite status
             property.favorite = true;
@@ -90,7 +90,7 @@ function createContentCard(property)
             favButton.style.backgroundImage = `url('../img/Heart/red-heart.png')`;
 
             favProperties.push(property);
-            console.log(favProperties)
+            addFavourite(property.id,property);
         }
         else{
             property.favorite = false;
@@ -99,12 +99,13 @@ function createContentCard(property)
             favButton.style.backgroundImage = `url('../img/Heart/black-filled-heart.png')`;
 
             // Find the index of the property in favProperties
-            const index = favProperties.findIndex(p => p.id === property.id);
+            /*const index = favProperties.findIndex(p => p.id === property.id);
             if (index !== -1) {
                 // Remove the property from the favProperties array
                 favProperties.splice(index, 1);
             }
-            console.log(favProperties)
+            console.log(favProperties)*/
+            removeFavourite(property.id,property);
         }
     });
 
@@ -788,3 +789,122 @@ function checkState(x)
     }
     return x;
 }
+
+function displayFavouriteCards()
+{
+
+    const array = JSON.parse(sessionStorage.getItem('favourites'));
+    const array2 = JSON.parse(sessionStorage.getItem('salesArray'));
+    //console.log("Favourites Array: ",array)
+    var favIds = [];
+
+    for(var i = 0; i < array.length; i++)
+    {
+        favIds.push(array[i].id);
+    }
+    console.log(favIds);
+    //store
+    sessionStorage.setItem('favIds',JSON.stringify(favIds));
+
+    var array3 = [];
+
+    for(var j = 0; j < array2.length; j++)
+    {
+        if(favIds.includes(array2[j].id))
+        {
+            array3.push(array2[j]);
+        }
+    }
+
+    console.log("Favourites Array: ",array3)
+
+
+    toggleSpinner();
+    const container = document.getElementById('listings-container');
+    //Delete Existing cards
+    deleteCards();
+    console.log("All Cards have been Deleted.")
+
+
+    //show message if array is empty
+    if(array3.length === 0)
+    {
+        const message = document.createElement('h2');
+        message.id = 'no-content-message'
+        message.style.display = 'flex';
+        message.style.justifyContent = 'center';
+        message.style.alignItems = 'center';
+        message.style.height = '30vh';
+        message.style.color = 'white';
+        message.textContent = "Sorry no results found :("
+        container.appendChild(message);
+    }
+    else{
+        console.log("Looping through ",array3);
+        array3.forEach(property=>{
+            //create the new card
+            const card = createContentCard(property);
+            //add the card to the container
+            container.appendChild(card);
+        });
+        console.log("Finished looping through");
+
+    }
+    //hide loading symbol
+    toggleSpinner();
+}
+
+function addFavourite(id,property){
+    var apikey = $('#apikey').val();
+    const array = JSON.parse(sessionStorage.getItem('favourites'));
+
+    var favIds = [];
+
+    for(var i = 0; i < array.length; i++)
+    {
+        favIds.push(array[i].id);
+    }
+
+    favIds.push(id);
+
+    array.push(property);
+    sessionStorage.setItem('favourites',JSON.stringify(array));
+
+    //Turn into a string
+    const idsString = favIds.join(',');
+    //call the api
+    fetchUpdateFavourites(apikey, idsString).then(r => console.log("Added to favourites: ",id));
+}
+
+function removeFavourite(id,property){
+    var apikey = $('#apikey').val();
+    const array = JSON.parse(sessionStorage.getItem('favourites'));
+
+    var favIds = [];
+
+    for(var i = 0; i < array.length; i++)
+    {
+        if(array[i].id != id)
+        {
+            favIds.push(array[i].id);
+        }
+        if(array[i].id == id)
+        {
+            array.splice(i, 1);
+        }
+    }
+
+    sessionStorage.setItem('favourites',JSON.stringify(array));
+
+    //new ids
+    console.log("New IDs: ",favIds);
+
+    //turn into a string
+    const idsString = favIds.join(',');
+
+    //call the api
+    fetchUpdateFavourites(apikey, idsString).then(r => console.log("Removed from favourites: ",id));
+}
+
+
+
