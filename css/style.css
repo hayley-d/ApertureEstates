@@ -15,9 +15,10 @@ footer{
 
 #content{
   background-color: white;
-  width: 100%;
+  width: 110vw;
   overflow: hidden;
-  background-image: url("../img/search-background.png");
+  background-image: url("img/search-background.png");
+  /*background-image: url("https://wheatley.cs.up.ac.za/u21528790/COS216/PA4/img/search-background.png");*/
   background-size: cover;
   background-repeat: no-repeat;
   height:fit-content;
@@ -57,6 +58,9 @@ footer{
   display: flex;
   justify-content: center;
   align-items: center;
+  padding:0;
+  margin:0;
+  width:110vw;
 }
 .page-btn{
   border-radius: 10px;

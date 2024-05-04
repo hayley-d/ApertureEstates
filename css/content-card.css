@@ -2,12 +2,35 @@
 #listings-container{
     background-color: #413D42;
     display: grid;
-    width:100vw;
+    width:110vw;
     gap:5vh;
     height:fit-content;
     overflow-x: hidden;
 
 }
+
+#save-btn-container{
+    margin-top:10px;
+    width:90%;
+    height:fit-content;
+    display: flex;
+    justify-content: right;
+}
+
+#save-btn{
+    cursor: pointer;
+    border-radius: 10px;
+    border:none;
+    font-size: 16px;
+    padding:7px;
+    color: #413D42;
+    background-color: lightgrey;
+}
+#save-btn:hover{
+    background-color: hotpink;
+    color: white;
+}
+
 
 .content-card-container{
     display: flex;
@@ -247,6 +270,9 @@
    .squareMeter{
         width:130px;
     }
+}
+a{
+    cursor: pointer;
 }
 
 
