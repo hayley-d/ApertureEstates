@@ -830,7 +830,7 @@ class api
                 }
                 else{
                     header('Content-Type: application/json');
-                    http_response_code(400);
+                    http_response_code(200);
                     $timestamp = round(microtime(true) * 1000);
                     $response = array(
                         "status" => "success",
@@ -982,7 +982,7 @@ class api
                 return;
 
             } else {
-                header('Content-Type: application/json');
+                /*header('Content-Type: application/json');
                 http_response_code(500);
                 $timestamp = round(microtime(true) * 1000);
                 $response = array(
@@ -991,7 +991,7 @@ class api
                     "data" => "Update Error"
                 );
                 echo json_encode($response, JSON_PRETTY_PRINT);
-                die();
+                die();*/
             }
         } else {
             header('Content-Type: application/json');
@@ -1054,7 +1054,7 @@ class api
                 echo json_encode($response, JSON_PRETTY_PRINT);*/
                 return;
             } else {
-                header('Content-Type: application/json');
+                /*header('Content-Type: application/json');
                 http_response_code(500);
                 $timestamp = round(microtime(true) * 1000);
                 $response = array(
@@ -1063,7 +1063,7 @@ class api
                     "data" => "Update Error"
                 );
                 echo json_encode($response, JSON_PRETTY_PRINT);
-                die();
+                die();*/
             }
         } else {
             header('Content-Type: application/json');
@@ -1125,7 +1125,7 @@ class api
                 echo json_encode($response, JSON_PRETTY_PRINT);
 
             } else {
-                header('Content-Type: application/json');
+                /*header('Content-Type: application/json');
                 http_response_code(500);
                 $timestamp = round(microtime(true) * 1000);
                 $response = array(
@@ -1134,7 +1134,16 @@ class api
                     "data" => "Update Error"
                 );
                 echo json_encode($response, JSON_PRETTY_PRINT);
-                die();
+                die();*/
+                header('Content-Type: application/json');
+                http_response_code(201);
+                $timestamp = round(microtime(true) * 1000);
+                $response = array(
+                    "status" => "Success",
+                    "timestamp" => $timestamp,
+                    "data" => "Update Successful"
+                );
+                echo json_encode($response, JSON_PRETTY_PRINT);
             }
         } else {
             header('Content-Type: application/json');
@@ -1467,6 +1476,13 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
         $api->loginImplement($email,$password);
         die();
     }
+    else if($type == "Login2")
+    {
+        $email = $requestData['email'] ?? null;
+        $password = $requestData['password'] ?? null;
+        $api->loginImplement($email,$password);
+        die();
+    }
     else if($type == "updateTheme")
     {
         $apikey = $requestData['apikey'] ?? null;
@@ -1502,6 +1518,13 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQ
         die();
     }
     else if($type == "updateFavourites")
+    {
+        $apikey = $requestData['apikey'] ?? null;
+        $favourites = $requestData['favourites'] ?? null;
+        $api->update_favourites($apikey,$favourites);
+        die();
+    }
+    else if($type == "favourite")
     {
         $apikey = $requestData['apikey'] ?? null;
         $favourites = $requestData['favourites'] ?? null;

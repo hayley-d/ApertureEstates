@@ -3,18 +3,20 @@
 global $currentPage;
 ?>
 <script src = "./js/lightMode.js"></script>
-<input type="hidden" id="apikey" value="<?php
-if(isset($_SESSION['apikey']) && $_SESSION['apikey'] != null){
-    echo $_SESSION['apikey'];
-}else {
-    $_SESSION['apikey'] = false;
-    echo 'none';
-} ?>">
+<input type="hidden" id="apikey" value="">
 <script>
 
 
     document.addEventListener("DOMContentLoaded", function()
     {
+        if(sessionStorage.getItem('apikey') === null)
+        {
+            $('#mode-btn').hide();
+            $('#apikey').val('none');
+        }
+        else{
+            $('#apikey').val(sessionStorage.getItem('apikey'));
+        }
 
         <?php if($currentPage == 'listings')
             {
@@ -33,8 +35,6 @@ if(isset($_SESSION['apikey']) && $_SESSION['apikey'] != null){
         ?>favouritesModeInitial(); <?php
         }
         ?>
-
-
     });
 
     function getTheme()
@@ -103,11 +103,7 @@ if(isset($_SESSION['apikey']) && $_SESSION['apikey'] != null){
     </div>
     <div id = "footer-info">
         <div id = "footer-about">
-            <?php
-            if(isset($_SESSION['apikey']) && $_SESSION['apikey'] != null)
-            {
 
-            ?>
             <button id="mode-btn"
                     <?php if($currentPage == 'listings')
                             {
@@ -127,9 +123,7 @@ if(isset($_SESSION['apikey']) && $_SESSION['apikey'] != null){
                             }
                     ?>
             >Light Mode</button>
-                <?php
-            }
-            ?>
+
         </div>
         <div id = "socials">
             <div class = "footer-heading">Socials<hr></div>

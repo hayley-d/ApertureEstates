@@ -24,11 +24,15 @@ if($_SERVER["REQUEST_METHOD"] === "POST")
         echo 'Invalid Email' . '<br/>';
     }
 
+    /*$email = "makka@proton.me";
+    $password = "123456Woo*";*/
+
     $user_data = [
-        'type' => 'Login_',
+        'type' => 'Login2',
         'email' => $email,
         'password' => $password,
     ];
+
 
 
     $url = 'https://wheatley.cs.up.ac.za/u21528790/COS216/PA3/includes/api.php';
@@ -100,6 +104,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST")
                     $sessionId = $newSessionId . '_' . $apiKey;
                     session_id($sessionId); //sets the session id to the created session id
 
+
+
                     $_SESSION['apikey'] = $apiKey;
                     $_SESSION['email'] = htmlspecialchars($userData['email']);//sanitize result avoid any cross side scripting
                     $_SESSION['password'] = $userData['password'];
@@ -108,12 +114,15 @@ if($_SERVER["REQUEST_METHOD"] === "POST")
                     if($information['theme'] == 'dark')
                     {
                         $_SESSION['light'] = false;
+
                     }
                     else{
                         $_SESSION['light'] = true;
+
                     }
 
                     $_SESSION['last_regeneration'] = time();
+                    $_COOKIE['last_regeneration'] = time();
 
                     header('location: ../listings.php');
                 }
