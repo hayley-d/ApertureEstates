@@ -1,0 +1,6 @@
+ion-tabs {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 9999; /* Ensure the navigation stays above other content */
+}

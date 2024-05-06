@@ -1,3 +1,22 @@
 <ion-app>
   <ion-router-outlet></ion-router-outlet>
-</ion-app>
+
+  <ion-tabs color="primary" >
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button tab="listings">
+        <ion-icon name="list-outline"></ion-icon>
+        <ion-label>Listings</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="search">
+        <ion-icon name="search-outline"></ion-icon>
+        <ion-label>Search</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="logout">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <ion-label>Logout</ion-label>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+  </ion-app>
