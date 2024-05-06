@@ -1,13 +1,69 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>listings</ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title style="color:white; font-weight: bold">Property Listings</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">listings</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content (ionRefresh)="refreshData($event)">
+  <ion-refresher slot="fixed">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+
+  <ion-list *ngFor="let property of getDisplayedListings()">
+
+    <ion-card  style="background-color: #ffffff;">
+      <swiper-container mousewheel-force-to-axis="true" pagination="true"  loop="true" slidesPerView="1">
+        <swiper-slide>
+          <div class="imageCon" [style.backgroundImage]="'url(' + property.images[0] + ')'"></div>
+
+          <!--<ion-img  src="{{property.images[0]}}" alt="Image of Property"></ion-img>-->
+        </swiper-slide>
+        <swiper-slide>
+          <div class="imageCon" [style.backgroundImage]="'url(' + property.images[1] + ')'"></div>
+
+          <!-- <ion-img  src="{{property.images[1]}}" alt="Image of Property"></ion-img>-->
+        </swiper-slide>
+        <swiper-slide>
+          <div class="imageCon" [style.backgroundImage]="'url(' + property.images[2] + ')'"></div>
+
+          <!--<ion-img  src="{{property.images[2]}}" alt="Image of Property"></ion-img>-->
+        </swiper-slide>
+        <swiper-slide>
+          <div class="imageCon" [style.backgroundImage]="'url(' + property.images[3] + ')'"></div>
+
+          <!--<ion-img  src="{{property.images[3]}}" alt="Image of Property"></ion-img>-->
+        </swiper-slide>
+      </swiper-container>
+      <br/>
+
+
+
+      <ion-card-content style="color:#595758;">
+        <ion-card-title style="color:#4e4d4d;  font-size: 20px; color:#FF92C2;font-weight: bold;margin-bottom:10px;">R {{property.price}}</ion-card-title>
+        <!-- Price -->
+        <p style="font-size: 16px;font-weight: bold">{{property.title}} for {{property.type}}</p>
+        <p style="font-size: 14px; ">{{property.location}}</p>
+
+        <div class="propDet">
+          <ion-label>
+            <ion-icon name="bed"></ion-icon> {{property.bedrooms}}
+          </ion-label>
+          <ion-label>
+            <ion-icon name="car-sport"></ion-icon> {{ property.parking_spaces }}
+          </ion-label>
+
+        </div>
+
+
+      </ion-card-content>
+    </ion-card>
+
+  </ion-list>
+
+  <ion-button (click)="prevPage()" [disabled]="currentPage === 1">Previous</ion-button>
+  <ion-button (click)="nextPage()" [disabled]="currentPage === 10">Next</ion-button>
+
 </ion-content>
+
+
